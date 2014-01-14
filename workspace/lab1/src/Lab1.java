@@ -1,5 +1,5 @@
 import lejos.nxt.*;
-
+//hello
 public class Lab1 {
 	//signifies when buttons are not pressed
 	private static final int NOT_PRESSED = 0 ;
