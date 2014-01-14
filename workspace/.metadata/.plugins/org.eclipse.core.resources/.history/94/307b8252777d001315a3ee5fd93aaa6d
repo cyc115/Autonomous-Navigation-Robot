@@ -34,7 +34,7 @@ public class BangBangController implements UltrasonicController{
 		this.distance = distance;
 		//if error is small
 		if (Math.abs(distance - BAND_CENTER ) < BANDWIDTH){
-//			leftMotor.s
+			leftMotor.s
 		}
 		
 	}

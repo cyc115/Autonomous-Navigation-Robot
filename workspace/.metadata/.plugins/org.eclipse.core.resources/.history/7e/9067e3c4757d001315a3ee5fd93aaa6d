@@ -3,8 +3,8 @@ import lejos.nxt.*;
 
 public class BangBangController implements UltrasonicController{
 	
-	private final int BAND_CENTER, 	// ideal distance from the wall 
-						BANDWIDTH;	// The epsilon 
+	private final int BAND_CENTER, 
+						BANDWIDTH;	// the epsilon 
 	private final int MOTOR_LOW, MOTOR_HIGH; 	//speed of motors
 	
 	private final int MOTOR_STRAIGHT = 200;//speed of the motor when going straight 
@@ -13,7 +13,7 @@ public class BangBangController implements UltrasonicController{
 			leftMotor = Motor.A,
 			rightMotor = Motor.C;
 	
-	private int distance;		
+	private int distance;		//
 	private int currentLeftSpeed;
 	
 	public BangBangController(int bandCenter, int bandwith, int motorLow, int motorHigh) {
@@ -32,10 +32,7 @@ public class BangBangController implements UltrasonicController{
 	@Override
 	public void processUSData(int distance) {
 		this.distance = distance;
-		//if error is small
-		if (Math.abs(distance - BAND_CENTER ) < BANDWIDTH){
-//			leftMotor.s
-		}
+		// TODO: process a movement based on the us distance passed in (BANG-BANG style)
 		
 	}
 

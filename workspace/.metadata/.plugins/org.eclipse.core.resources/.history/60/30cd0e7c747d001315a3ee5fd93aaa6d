@@ -2,26 +2,19 @@ import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.*;
 
 public class BangBangController implements UltrasonicController{
-	
-	private final int BAND_CENTER, 	// ideal distance from the wall 
-						BANDWIDTH;	// The epsilon 
-	private final int MOTOR_LOW, MOTOR_HIGH; 	//speed of motors
-	
-	private final int MOTOR_STRAIGHT = 200;//speed of the motor when going straight 
-	
-	private final NXTRegulatedMotor 
-			leftMotor = Motor.A,
-			rightMotor = Motor.C;
-	
-	private int distance;		
+	private final int bandCenter, bandwith;
+	private final int motorLow, motorHigh;
+	private final int MOTOR_STRAIGHT = 200;
+	private final NXTRegulatedMotor leftMotor = Motor.A, rightMotor = Motor.C;
+	private int distance;
 	private int currentLeftSpeed;
 	
 	public BangBangController(int bandCenter, int bandwith, int motorLow, int motorHigh) {
 		//Default Constructor
-		this.BAND_CENTER = bandCenter;
-		this.BANDWIDTH = bandwith;
-		this.MOTOR_LOW = motorLow;
-		this.MOTOR_HIGH = motorHigh;
+		this.bandCenter = bandCenter;
+		this.bandwith = bandwith;
+		this.motorLow = motorLow;
+		this.motorHigh = motorHigh;
 		leftMotor.setSpeed(MOTOR_STRAIGHT);
 		rightMotor.setSpeed(MOTOR_STRAIGHT);
 		leftMotor.forward();
@@ -32,10 +25,7 @@ public class BangBangController implements UltrasonicController{
 	@Override
 	public void processUSData(int distance) {
 		this.distance = distance;
-		//if error is small
-		if (Math.abs(distance - BAND_CENTER ) < BANDWIDTH){
-//			leftMotor.s
-		}
+		// TODO: process a movement based on the us distance passed in (BANG-BANG style)
 		
 	}
 
