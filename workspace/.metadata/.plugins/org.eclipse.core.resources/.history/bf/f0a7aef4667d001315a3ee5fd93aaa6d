@@ -26,6 +26,7 @@ public class Printer extends Thread {
 			else if (this.option == Button.ID_RIGHT)
 				LCD.drawString("P type", 0, 1);
 			LCD.drawString("US Distance: " + cont.readUSDistance(), 0, 2 );
+						
 			try {
 				Thread.sleep(200);
 			} catch (Exception e) {

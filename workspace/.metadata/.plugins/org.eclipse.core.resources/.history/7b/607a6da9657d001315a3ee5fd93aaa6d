@@ -1,7 +1,7 @@
 import lejos.nxt.*;
 
 public class Lab1 {
-	//signifies when buttons are not pressed
+	
 	private static final int NOT_PRESSED = 0 ;
 	
 	private static final SensorPort usPort = SensorPort.S1;

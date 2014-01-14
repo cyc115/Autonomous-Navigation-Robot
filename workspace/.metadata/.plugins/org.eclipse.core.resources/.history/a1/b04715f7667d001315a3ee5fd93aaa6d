@@ -54,6 +54,7 @@ public class Lab1 {
 			break;
 		default:
 			System.out.println("Error - invalid button");
+			usPoller = new UltrasonicPoller(usSensor, null);
 			System.exit(-1);
 			break;
 		}

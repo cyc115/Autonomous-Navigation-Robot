@@ -1,7 +1,7 @@
 import lejos.nxt.*;
 
 public class Lab1 {
-	//signifies when buttons are not pressed
+	
 	private static final int NOT_PRESSED = 0 ;
 	
 	private static final SensorPort usPort = SensorPort.S1;
@@ -23,10 +23,10 @@ public class Lab1 {
 		 * signifies which button (left or right ) is pressed. 
 		 * 0 signifies unpressed button.
 		 */
-		int buttonOption = NOT_PRESSED;
+		int buttonOption = 0;
 		Printer.printMainMenu();
 		
-		while (buttonOption == NOT_PRESSED)
+		while (buttonOption == 0)
 			buttonOption = Button.waitForAnyPress();
 		
 		// Setup controller

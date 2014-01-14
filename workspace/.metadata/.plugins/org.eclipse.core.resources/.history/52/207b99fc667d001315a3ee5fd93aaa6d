@@ -54,6 +54,7 @@ public class Lab1 {
 			break;
 		default:
 			System.out.println("Error - invalid button");
+			printer = new Printer(buttonOption, bangbang);
 			System.exit(-1);
 			break;
 		}
