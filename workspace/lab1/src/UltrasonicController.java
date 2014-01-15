@@ -1,10 +1,15 @@
 
 public interface UltrasonicController {
 	
-	public void processUSData(int distance);
+	public void processUSData(Distance distance);
 	
 	/**
 	 * @return returns the last read Distance from the ultrasonic sensor 
 	 */
-	public int readUSDistance();
+	public Distance readUSDistance();
+	
+	/**
+	 * get the direction of ultrasonic sensor 
+	 */
+	public Distance.Direction getDirection ();
 }

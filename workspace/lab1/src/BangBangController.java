@@ -1,4 +1,3 @@
-import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.*;
 
 public class BangBangController implements UltrasonicController{
@@ -18,7 +17,7 @@ public class BangBangController implements UltrasonicController{
 	
 	private int lftDist;	//distance measured from left wall	
 	private int topDist;	//dist measured from top wall 
-	private int currentDist; 	//stores the latest distance reading, should be equal to either one of the above two 
+	private Distance currentDist; 	//stores the latest distance reading and the distance
 	private int currentLeftSpeed;	
 	
 	public BangBangController(int bandCenter, int bandwith, int motorLow, int motorHigh) {
@@ -38,15 +37,12 @@ public class BangBangController implements UltrasonicController{
 	 * Fault tolerance for gaps not yet implemented.
 	 * Sensor motion not yet implemented
 	 */
-	public void processUSData(int distance) {
+	public void processUSData(Distance distance) {
 		while (true){
 			//first rotate to default (left facing location)
 			sensorMotor.rotateTo(-90);
 			
 		}
-		
-		
-		
 
 /*
 		while (true){
@@ -73,9 +69,6 @@ public class BangBangController implements UltrasonicController{
 		}
 		
 */
-
-		
-		
 		
 	}
 	
@@ -93,7 +86,13 @@ public class BangBangController implements UltrasonicController{
 		sensorMotor.rotate(90);
 	}
 	
-	public int readUSDistance() {
+	public Distance readUSDistance() {
 		return this.currentDist;
+	}
+
+	@Override
+	public Distance.Direction getDirection() {
+		// TODO Auto-generated method stub
+		return currentDist.direction;
 	}
 }
