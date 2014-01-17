@@ -1,17 +1,11 @@
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
-/**
- * Object used to print on the Screen of the NJX brick
- */
+
 public class Printer extends Thread {
 	
 	private UltrasonicController cont;
 	private final int option;
-	/**
-	 * create a new printer object 
-	 * @param option button click option code , 0 , 2, 4
-	 * @param cont
-	 */
+	
 	public Printer(int option, UltrasonicController cont) {
 		this.cont = cont;
 		this.option = option;
@@ -26,6 +20,9 @@ public class Printer extends Thread {
 			else if (this.option == Button.ID_RIGHT)
 				LCD.drawString("P type", 0, 1);
 			LCD.drawString("US Distance: " + cont.readUSDistance(), 0, 2 );
+			LCD.drawString("LmotorSpeed:" + cont.getLeftMotorSpeed(),0,3); 
+			LCD.drawString("RmotorSpeed:" + cont.getLeftMotorSpeed(),0,4); 
+						
 			try {
 				Thread.sleep(200);
 			} catch (Exception e) {

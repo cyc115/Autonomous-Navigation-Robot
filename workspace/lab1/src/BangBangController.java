@@ -1,98 +1,84 @@
+import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.*;
 
 public class BangBangController implements UltrasonicController{
-	
-	private final int BAND_CENTER, 	// ideal distance from the wall 
-						BANDWIDTH;	// The epsilon 
-	private final int MOTOR_LOW, MOTOR_HIGH; 	//speed of motors
-
-	private final int MOTOR_STRAIGHT = 200;//speed of the motor when going straight 
-	private final int INCREMENT = MOTOR_STRAIGHT/20; //5% INCREMENT
-	
-	private final NXTRegulatedMotor 
-			leftMotor = Motor.A,
-			rightMotor = Motor.C;
-
-	private final NXTRegulatedMotor sensorMotor = Motor.B; 	//Motor used to move sensor
-	
-	private int lftDist;	//distance measured from left wall	
-	private int topDist;	//dist measured from top wall 
-	private Distance currentDist; 	//stores the latest distance reading and the distance
-	private int currentLeftSpeed;	
+	private final int bandCenter, bandwith;
+	private final int MOTOR_LOW, MOTOR_HIGH;
+	private final int motorStraight = 100;
+	private final NXTRegulatedMotor leftMotor = Motor.A, rightMotor = Motor.C;
+	private int distance;
+	private int currentLeftSpeed;
+	private final int CHANGE_SPEED_FACTOR = 20 ;
 	
 	public BangBangController(int bandCenter, int bandwith, int motorLow, int motorHigh) {
 		//Default Constructor
-		this.BAND_CENTER = bandCenter;
-		this.BANDWIDTH = bandwith;
+		this.bandCenter = bandCenter;
+		this.bandwith = bandwith;
 		this.MOTOR_LOW = motorLow;
 		this.MOTOR_HIGH = motorHigh;
-		leftMotor.setSpeed(MOTOR_STRAIGHT);
-		rightMotor.setSpeed(MOTOR_STRAIGHT);
+		leftMotor.setSpeed(motorStraight);
+		rightMotor.setSpeed(motorStraight);
 		leftMotor.forward();
 		rightMotor.forward();
 		currentLeftSpeed = 0;
 	}
 	
-	/**
-	 * Fault tolerance for gaps not yet implemented.
-	 * Sensor motion not yet implemented
-	 */
-	public void processUSData(Distance distance) {
-		while (true){
-			//first rotate to default (left facing location)
-			sensorMotor.rotateTo(-90);
-			
-		}
-
-/*
-		while (true){
-			//first rotate to default (left facing location)
-			sensorMotor.rotateTo(-90);
-			this.distance = distance;
-			//if too far
-			if ((distance - BAND_CENTER ) > BANDWIDTH){
-				leftMotor.setSpeed(leftMotor.getSpeed() + INCREMENT);
-				rightMotor.setSpeed(rightMotor.getSpeed() - INCREMENT);
-			}
-			//if too near
-			else if ((distance - BAND_CENTER) < BANDWIDTH){
-				leftMotor.setSpeed(leftMotor.getSpeed() - INCREMENT);
-				rightMotor.setSpeed(rightMotor.getSpeed() + INCREMENT);
-			}
-			else{
-				//do nothing
-				}
-			
-			//rotate to front 
-			sensorMotor.rotateTo(0);
-			if 
-		}
-		
-*/
-		
-	}
-	
-	/**
-	 * move sensor left 90 deg
-	 */
-	private void moveSensorLeft(){
-		sensorMotor.rotate(-90);
-	}
-	
-	/**
-	 * move sensor right 90 deg
-	 */
-	private void moveSensorRight(){
-		sensorMotor.rotate(90);
-	}
-	
-	public Distance readUSDistance() {
-		return this.currentDist;
-	}
-
 	@Override
-	public Distance.Direction getDirection() {
-		// TODO Auto-generated method stub
-		return currentDist.direction;
+	public void processUSData(int distance) {
+		this.distance = distance;
+		//Just right 
+		if ( Math.abs(distance - bandCenter) < bandwith )
+		{
+			//do nothing 
+		}
+		//make correction 
+		else
+		{	double speedFactor = 1.4; //control the overall speed 
+			int fast = 240 ; //control the correction 
+			int slow = 150 ;
+			
+			/**
+			 * the distance where we're probably facing a wall. 
+			 */
+			int criticalDistance = 20;
+			
+			if (distance < criticalDistance ){
+				rightMotor.setSpeed( 10 );
+				leftMotor.setAcceleration(fast );
+			}
+			//too close -- go right
+			else if (distance < bandCenter ) {
+				rightMotor.setSpeed((int) (slow *speedFactor) ); 
+				leftMotor.setSpeed((int) (fast * speedFactor) ); 
+//				rightMotor.setSpeed(rightMotor.getSpeed() - motorStraight/CHANGE_SPEED_FACTOR ); 
+//				leftMotor.setSpeed(leftMotor.getSpeed() + motorStraight/CHANGE_SPEED_FACTOR ); 
+			}
+			// too far -- go left 
+			else if (distance > bandCenter ){
+				rightMotor.setSpeed((int) (fast * speedFactor) ); 
+				leftMotor.setSpeed((int) (slow *speedFactor)); 
+				
+//				rightMotor.setSpeed(rightMotor.getSpeed() + motorStraight/CHANGE_SPEED_FACTOR ); 
+//				leftMotor.setSpeed(leftMotor.getSpeed() - motorStraight/CHANGE_SPEED_FACTOR ); 
+			}  
+			else {
+				System.out.println("error");
+			}
+				
+		}
+		
+		
+		
+	}
+
+	public int getLeftMotorSpeed(){
+		return leftMotor.getSpeed();
+	}
+	public int getRightMotorSpeed(){
+		return rightMotor.getSpeed();
+	}
+	@Override
+	public int readUSDistance() {
+		return this.distance;
 	}
 }

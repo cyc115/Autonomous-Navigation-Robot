@@ -1,15 +1,16 @@
 import lejos.nxt.*;
-//hello
+
 public class Lab1 {
-	//signifies when buttons are not pressed
-	private static final int NOT_PRESSED = 0 ;
 	
 	private static final SensorPort usPort = SensorPort.S1;
 	//private static final SensorPort lightPort = SensorPort.S2;
+	//for Bang Bang
+	private static final int BAND_CENTER = 30, BAND_WIDTH = 3;
 	
-	private static final int bandCenter = 20, bandWidth = 3;
-	private static final int motorLow = 100, motorHigh = 400;
+	//for Pcontrol
+	private static final int P_BAND_CENTER = 28, P_BAND_WIDTH = 3;
 	
+	private static final int MOTOR_LOW = 100, MOTOR_HIGH = 400;
 	
 	
 	public static void main(String [] args) {
@@ -19,19 +20,14 @@ public class Lab1 {
 		 * Button.ID_RIGHT = P Type
 		 */
 		
-		/**
-		 * signifies which button (left or right ) is pressed. 
-		 * 0 signifies unpressed button.
-		 */
-		int buttonOption = NOT_PRESSED;
+		int option = 0;
 		Printer.printMainMenu();
+		while (option == 0)
+			option = Button.waitForAnyPress();
 		
-		while (buttonOption == NOT_PRESSED)
-			buttonOption = Button.waitForAnyPress();
-		
-		// Setup controller
-		BangBangController bangbang = new BangBangController(bandCenter, bandWidth, motorLow, motorHigh);
-		PController p = new PController(bandCenter, bandWidth);
+		// Setup controller objects
+		BangBangController bangbang = new BangBangController(BAND_CENTER, BAND_WIDTH, MOTOR_LOW, MOTOR_HIGH);
+		PController p = new PController(P_BAND_CENTER, P_BAND_WIDTH);
 		
 		// Setup ultrasonic sensor
 		UltrasonicSensor usSensor = new UltrasonicSensor(usPort);
@@ -42,15 +38,14 @@ public class Lab1 {
 		// Setup Ultrasonic Poller
 		UltrasonicPoller usPoller = null;
 		
-		//if button is pressed : 
-		switch(buttonOption) {
+		switch(option) {
 		case Button.ID_LEFT:
 			usPoller = new UltrasonicPoller(usSensor, bangbang);
-			printer = new Printer(buttonOption, bangbang);
+			printer = new Printer(option, bangbang);
 			break;
 		case Button.ID_RIGHT:
 			usPoller = new UltrasonicPoller(usSensor, p);
-			printer = new Printer(buttonOption, p);
+			printer = new Printer(option, p);
 			break;
 		default:
 			System.out.println("Error - invalid button");

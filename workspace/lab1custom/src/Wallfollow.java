@@ -45,7 +45,6 @@ public class Wallfollow {
 			break;
 		}
 		printer.start();
-		bangControl.start();
 		
 		//Wait for another button press to exit
 		Button.waitForAnyPress();
