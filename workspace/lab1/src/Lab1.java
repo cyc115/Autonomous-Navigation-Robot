@@ -5,10 +5,10 @@ public class Lab1 {
 	private static final SensorPort usPort = SensorPort.S1;
 	//private static final SensorPort lightPort = SensorPort.S2;
 	//for Bang Bang
-	private static final int BAND_CENTER = 30, BAND_WIDTH = 3;
+	private static final int BAND_CENTER = 29, BAND_WIDTH = 3;
 	
 	//for Pcontrol
-	private static final int P_BAND_CENTER = 28, P_BAND_WIDTH = 3;
+	private static final int P_BAND_CENTER = 29, P_BAND_WIDTH = 3;
 	
 	private static final int MOTOR_LOW = 100, MOTOR_HIGH = 400;
 	

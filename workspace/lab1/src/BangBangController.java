@@ -34,13 +34,13 @@ public class BangBangController implements UltrasonicController{
 		//make correction 
 		else
 		{	double speedFactor = 1.4; //control the overall speed 
-			int fast = 240 ; //control the correction 
-			int slow = 150 ;
+			int fast = 270 ; //control the correction 250
+			int slow = 110 ;  //150
 			
 			/**
 			 * the distance where we're probably facing a wall. 
 			 */
-			int criticalDistance = 20;
+			int criticalDistance = 23;
 			
 			if (distance < criticalDistance ){
 				rightMotor.setSpeed( 10 );

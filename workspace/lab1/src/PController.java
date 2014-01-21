@@ -42,8 +42,9 @@ public class PController implements UltrasonicController {
 		
 //		only move the left motor 
 		double correctionFactor;
-		double smallCorrection = 0.9 ;
-		double bigCorrection = 1.5;
+		double smallCorrection = 0.7 ;
+		double smallerCorrection = 0.4;
+		double bigCorrection =1.7 ;// 1.3;
 		int error = distance - BAND_CENTER;
 	/*	
 		//set corresponding correction Factor 
@@ -55,7 +56,7 @@ public class PController implements UltrasonicController {
 		
 		//if WITHIN BAND
 		if( Math.abs(error) <= BAND_WIDTH ){
-			correctionFactor = 0 ;
+			correctionFactor = bigCorrection ;
 		} 
 		//right turn 
 		else if (error < 0 ){
@@ -64,6 +65,9 @@ public class PController implements UltrasonicController {
 		//if too far
 		else if (error >= 25 && error <= 90){
 			correctionFactor = bigCorrection;
+		}
+		else if (error > 90 ){
+			correctionFactor = smallerCorrection;
 		}
 		//if off but not too far off 
 		else {
