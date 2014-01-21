@@ -3,24 +3,17 @@ import lejos.nxt.*;
 
 public class BangBangController implements UltrasonicController{
 	private final int bandCenter, bandwith;
-	private final int MOTOR_LOW, MOTOR_HIGH;
 	private final int motorStraight = 100;
 	private final NXTRegulatedMotor leftMotor = Motor.A, rightMotor = Motor.C;
 	private int distance;
-	private int currentLeftSpeed;
-	private final int CHANGE_SPEED_FACTOR = 20 ;
-	
 	public BangBangController(int bandCenter, int bandwith, int motorLow, int motorHigh) {
 		//Default Constructor
 		this.bandCenter = bandCenter;
 		this.bandwith = bandwith;
-		this.MOTOR_LOW = motorLow;
-		this.MOTOR_HIGH = motorHigh;
 		leftMotor.setSpeed(motorStraight);
 		rightMotor.setSpeed(motorStraight);
 		leftMotor.forward();
 		rightMotor.forward();
-		currentLeftSpeed = 0;
 	}
 	
 	@Override
@@ -50,16 +43,11 @@ public class BangBangController implements UltrasonicController{
 			else if (distance < bandCenter ) {
 				rightMotor.setSpeed((int) (slow *speedFactor) ); 
 				leftMotor.setSpeed((int) (fast * speedFactor) ); 
-//				rightMotor.setSpeed(rightMotor.getSpeed() - motorStraight/CHANGE_SPEED_FACTOR ); 
-//				leftMotor.setSpeed(leftMotor.getSpeed() + motorStraight/CHANGE_SPEED_FACTOR ); 
 			}
 			// too far -- go left 
 			else if (distance > bandCenter ){
 				rightMotor.setSpeed((int) (fast * speedFactor) ); 
 				leftMotor.setSpeed((int) (slow *speedFactor)); 
-				
-//				rightMotor.setSpeed(rightMotor.getSpeed() + motorStraight/CHANGE_SPEED_FACTOR ); 
-//				leftMotor.setSpeed(leftMotor.getSpeed() - motorStraight/CHANGE_SPEED_FACTOR ); 
 			}  
 			else {
 				System.out.println("error");
