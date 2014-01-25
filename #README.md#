@@ -8,7 +8,14 @@ light sensor correction algo:
 ```java
  move forward ;
 boolean firstLineDetection = false ;
+int tachoFromFirstLine = 0 ;
 
 while (true){
       if (Odometer.getPositive() == true){
       	 firstLineDetection = true ;
+   	 tachoFromFirstLine = Motor.A.getTachoCount();
+       }
+       
+       //tacho 
+
+	 
