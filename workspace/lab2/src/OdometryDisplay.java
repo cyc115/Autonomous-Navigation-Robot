@@ -6,10 +6,15 @@ import lejos.nxt.LCD;
 public class OdometryDisplay extends Thread {
 	private static final long DISPLAY_PERIOD = 250;
 	private Odometer odometer;
+	private OdometryCorrection odoCorrection; 
+	private double offSet = 11.66,rotationOffset = 2.5 ; //offset btn sensor and wheels
+
+
 
 	// constructor
-	public OdometryDisplay(Odometer odometer) {
+	public OdometryDisplay(Odometer odometer,OdometryCorrection currection ) {
 		this.odometer = odometer;
+		this.odoCorrection = currection;
 	}
 
 	// run method (required for Thread)
@@ -19,37 +24,49 @@ public class OdometryDisplay extends Thread {
 
 		// clear the display once
 		LCD.clearDisplay();
+		
 
 		while (true) {
 			displayStart = System.currentTimeMillis();
-
+			String l0 = "disXCov" + odoCorrection.distXCovered,					
+			l1= "disYCov" + odoCorrection.distYCovered,			
+			l2= "finX" + (15.24 - odoCorrection.distXCovered + offSet -2.5*2  ),
+			l3= "finY: " + (15.24 - odoCorrection.distYCovered - 2.5) ,	//the x and y covered distance in the first sqr
+			l4="line: " + odoCorrection.getLineNumber();
+			
 			// clear the lines for displaying odometry information
-			LCD.drawString("X:              ", 0, 0);
-			LCD.drawString("Y:              ", 0, 1);
-			LCD.drawString("T:              ", 0, 2);
+			LCD.drawString("X: " + formattedDoubleToString(position[0],2), 0, 0);
+			LCD.drawString("Y: "+ formattedDoubleToString(position[1],2), 0, 1);
+			LCD.drawString("T: "+ formattedDoubleToString(wrap(position[2],2*Math.PI),2), 0, 2);
+			LCD.drawString(l0, 0, 3);
+			LCD.drawString(l1, 0, 4);
+			LCD.drawString(l2, 0, 5);
+			LCD.drawString(l3, 0, 6);
+			LCD.drawString(l4, 0, 7);
 
 			// get the odometry information
 			odometer.getPosition(position, new boolean[] { true, true, true });
-
-			// display odometry information
-			for (int i = 0; i < 3; i++) {
-				LCD.drawString(formattedDoubleToString(position[i], 2), 3, i);
-			}
-
+			
 			// throttle the OdometryDisplay
 			displayEnd = System.currentTimeMillis();
 			if (displayEnd - displayStart < DISPLAY_PERIOD) {
 				try {
 					Thread.sleep(DISPLAY_PERIOD - (displayEnd - displayStart));
 				} catch (InterruptedException e) {
-					// there is nothing to be done here because it is not
-					// expected that OdometryDisplay will be interrupted
-					// by another thread
 				}
 			}
 		}
 	}
-	
+	/**
+	 * wrap value wrt to wrapN
+	 * @param value
+	 * @param wrapN
+	 * @return
+	 */
+	private static double wrap(double value , double wrapN){
+		double multiples = value / wrapN ;
+		return (multiples - (int)multiples) * wrapN ;
+	}
 	private static String formattedDoubleToString(double x, int places) {
 		String result = "";
 		String stack = "";

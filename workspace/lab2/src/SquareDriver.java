@@ -4,8 +4,10 @@
 import lejos.nxt.*;
 
 public class SquareDriver {
-	private static final int FORWARD_SPEED = 250;
-	private static final int ROTATE_SPEED = 150;
+	private static final int FORWARD_SPEED = 150;
+	private static final int ROTATE_SPEED = 130;
+	private static boolean isCompleted = false ;
+
 
 	public static void drive(NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor,
 			double leftRadius, double rightRadius, double width) {
@@ -24,6 +26,7 @@ public class SquareDriver {
 		}
 
 		for (int i = 0; i < 4; i++) {
+			
 			// drive forward two tiles
 			leftMotor.setSpeed(FORWARD_SPEED);
 			rightMotor.setSpeed(FORWARD_SPEED);
@@ -38,6 +41,9 @@ public class SquareDriver {
 			leftMotor.rotate(convertAngle(leftRadius, width, 90.0), true);
 			rightMotor.rotate(-convertAngle(rightRadius, width, 90.0), false);
 		}
+		
+		isCompleted = true ;
+		
 	}
 
 	/**
@@ -52,5 +58,13 @@ public class SquareDriver {
 
 	private static int convertAngle(double radius, double width, double angle) {
 		return convertDistance(radius, Math.PI * width * angle / 360.0);
+	}
+	
+	/**
+	 * the 4 square movement is completed
+	 * @return 
+	 */
+	public static boolean isCompleted() {
+		return isCompleted;
 	}
 }

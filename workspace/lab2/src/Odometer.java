@@ -27,8 +27,6 @@ public class Odometer extends Thread {
 		theta = 0.0;
 		lock = new Object();
 	}
-
-
 	
 	/**
 	 * Calculate the arc length of movement (in degree) taking into the account of the wheel radius 
@@ -36,7 +34,6 @@ public class Odometer extends Thread {
 	 * @return distance in cm 
 	 */
 	private double getArcLen(int deltaTachometerCount,double radius) {
-
 		return Math.toRadians(deltaTachometerCount) * radius;
 	}
 	
@@ -225,7 +222,13 @@ public class Odometer extends Thread {
 		this.separation = separation;
 		return this;
 	}
-	
+	/**
+	 * returns the average tachoCount of both motors 
+	 * @return the average tacho count 
+	 */
+	public int getTachoCount(){
+		return ((lMotor.getTachoCount() + rMotor.getTachoCount() )/2) ;
+	}
 	
 	/*
 	 * =============================================================================

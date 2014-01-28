@@ -11,7 +11,7 @@ public class LightSenseLine extends Thread{
 	
 	public void run(){
 		while (true){
-			lightSensor.readNormalizedValue() 
+			lightSensor.readNormalizedValue() ;
 		}
 	}
 }
