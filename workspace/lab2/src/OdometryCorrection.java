@@ -80,6 +80,8 @@ public class OdometryCorrection extends Thread {
 					//determin the final position 
 					finalPosition.setX(Lab2.TOP_CORNER.getX() - distXCovered);
 					finalPosition.setY(Lab2.TOP_CORNER.getY() - distYCovered);
+					
+					clean();
 					break;
 				}				
 		
@@ -95,7 +97,13 @@ public class OdometryCorrection extends Thread {
 			}
 		}
 	}
-	
+	/**
+	 * shuts off the light and do what ever we need to do to finalize the robot when it stops 
+	 */
+private void clean() {
+	colorSensor.setFloodlight(false);
+	}
+
 //	public String finalDistToString(){
 //		return distBtwnFinalAndOrigin.toString();
 //	}
