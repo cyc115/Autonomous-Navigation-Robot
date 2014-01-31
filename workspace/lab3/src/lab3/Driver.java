@@ -1,5 +1,7 @@
 package lab3;
 
+import lejos.nxt.Button;
+import lejos.nxt.LCD;
 import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
 
@@ -10,47 +12,100 @@ import lejos.nxt.NXTRegulatedMotor;
  * @author yuechuan
  *
  */
-public class Driver implements Lab3{
+public class Driver implements Lab3, RobotConfigration{
 	
+	private static int buttonChoice;
 	public static final double WIDTH_OF_SQUARE = 30.48; 
+	private static Driver d; // this is the singleton of this class 
 	
 	private NXTRegulatedMotor leftMotor;
 	private NXTRegulatedMotor rightMotor;
 	private double leftRadius, rightRadius, width;	
 	//this zigzag does the driving , see more at ZigZag class
 	private Drivable drive ;
-	
+	private Odometer odometer;
 
 	public Driver(Drivable drive,NXTRegulatedMotor leftMotor,
 			NXTRegulatedMotor rightMotor, double leftRadius , 
 			double rightRadius , double width){
 		
-		//set up this class 
-		this.drive = drive;
+		//set up odo
+		odometer = new Odometer();
+		odometer.setMotors(leftMotor ,rightMotor)
+				.setRadius(leftRadius, rightRadius)
+				.setSeparation(width);
+		
+		//set up correction
+//		OdometryCorrection odometryCorrection = new OdometryCorrection(odometer,colorSensor);
+		//set up display
+//		OdometryDisplay odometryDisplay = new OdometryDisplay(odometer, odometryCorrection);
+		
+		//set up motor and wheels		
 		this.leftMotor = leftMotor;
 		this.rightMotor = rightMotor;
 		this.leftRadius = leftRadius;
 		this.rightRadius = rightRadius;
 		this.width = width;
+		
 		//set up zigzag
-		drive.setLeftMotor(leftMotor);
-		drive.setRightMotor(rightMotor);
-		drive.setLeftRadius(leftRadius);
-		drive.setRightRadius(rightRadius);
-		drive.setWidth(width);
+		this.drive.setConfiguration(this);
 		
 	}
 	
 	public static void main (){
+		
 		Drivable zigzag = new ZigZag();
 		
-		Driver d = new Driver(zigzag,Motor.A, Motor.B, 
-				2.09, 2.09 , 15.24);
+		d = new Driver(zigzag,Motor.A, Motor.B, 
+				2.09, 2.09 , 15.24);	//radius and width 
 		
-		d.drive();
-//cm
+
+		
+		do {
+			
+			// clear the display
+			LCD.clear();
+
+			// ask the user whether the motors should drive in a square or float
+			LCD.drawString("< Left | Right >", 0, 0);
+			LCD.drawString("       |        ", 0, 1);
+			LCD.drawString(" Float | Drive  ", 0, 2);
+			LCD.drawString("motors | zigZag", 0, 3);
+			LCD.drawString("       | ......", 0, 4);
+
+			buttonChoice = Button.waitForAnyPress();
+		} while (buttonChoice != Button.ID_LEFT
+				&& buttonChoice != Button.ID_RIGHT);
+
+		if (buttonChoice == Button.ID_LEFT) {
+			for (NXTRegulatedMotor motor : new NXTRegulatedMotor[] { Motor.A, Motor.B, Motor.C }) {
+				motor.forward();
+				motor.flt();
+			}
+
+			// start only the odometer and the odometry display
+			d.startOdometer();;
+			//TODO add odoDisplay
+		}
+		else {
+			// start the odometer
+			d.startOdometer();
+			//TODO add odoDisplay
+
+			// spawn a new Thread to avoid SquareDriver.drive() from blocking
+			(new Thread() {
+				public void run() {
+					d.drive();
+				}
+			}).start();
+		}
+		
+		while (Button.waitForAnyPress() != Button.ID_ESCAPE);
+		System.exit(0);
+	}
 		
 		
+
 		/*
 		//angle in rad
 		double firstAngle = Math.atan(Math.toRadians(30)/Math.toRadians(60));//first turning ang 
@@ -69,11 +124,19 @@ public class Driver implements Lab3{
 		driver.travelTo(60, 0);
 		
 		*/
+	public Odometer getOdometer() {
+		return odometer;
 	}
-
-
-
-	private void drive() {
+	
+	public void startOdometer(){
+		odometer.start();
+	}
+	
+	/**
+	 * start to drive the robot. 
+	 * in this case it should run the zigZag 
+	 */
+	public void drive() {
 		drive.start();
 	}
 
@@ -92,7 +155,7 @@ public class Driver implements Lab3{
 	 * @theata in rad 
 	 */
 	public void turnTo(double theata) {
-leftMotor.rotate(convertAngle(leftRadius, width, 90.0), true);
+		leftMotor.rotate(convertAngle(leftRadius, width, 90.0), true);
 		
 	}
 	
@@ -110,7 +173,7 @@ leftMotor.rotate(convertAngle(leftRadius, width, 90.0), true);
 	 * 
 	 * @param radius radius of the wheel 
 	 * @param distance distance we want to cover 
-	 * @return 
+	 * @return  
 	 */
 	private static int convertDistance(double radius, double distance) {
 		return (int) ((180.0 * distance) / (Math.PI * radius));
@@ -118,6 +181,54 @@ leftMotor.rotate(convertAngle(leftRadius, width, 90.0), true);
 
 	private static int convertAngle(double radius, double width, double angle) {
 		return convertDistance(radius, Math.PI * width * angle / 360.0);
+	}
+
+	public NXTRegulatedMotor getLeftMotor() {
+		return leftMotor;
+	}
+
+	public void setLeftMotor(NXTRegulatedMotor leftMotor) {
+		this.leftMotor = leftMotor;
+	}
+
+	public NXTRegulatedMotor getRightMotor() {
+		return rightMotor;
+	}
+
+	public void setRightMotor(NXTRegulatedMotor rightMotor) {
+		this.rightMotor = rightMotor;
+	}
+
+	public double getLeftRadius() {
+		return leftRadius;
+	}
+
+	public void setLeftRadius(double leftRadius) {
+		this.leftRadius = leftRadius;
+	}
+
+	public double getRightRadius() {
+		return rightRadius;
+	}
+
+	public void setRightRadius(double rightRadius) {
+		this.rightRadius = rightRadius;
+	}
+
+	public double getWidth() {
+		return width;
+	}
+
+	public void setWidth(double width) {
+		this.width = width;
+	}
+
+	public Drivable getDrive() {
+		return drive;
+	}
+
+	public void setDrive(Drivable drive) {
+		this.drive = drive;
 	}
 	
 

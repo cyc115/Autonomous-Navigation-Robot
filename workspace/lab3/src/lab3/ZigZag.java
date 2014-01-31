@@ -8,6 +8,7 @@ public class ZigZag extends Thread implements Drivable   {
 	private static final int ROTATE_SPEED = 130;
 	private static boolean isCompleted = false ;
 	
+	private RobotConfigration configuration ;
 	private NXTRegulatedMotor leftMotor, rightMotor;
 	private double leftRadius, rightRadius, width;
 	
@@ -22,11 +23,35 @@ public class ZigZag extends Thread implements Drivable   {
 		
 	}
 	/**
-	 * empty constructor 
+	 * usage : create an object first with the empty constructor,
+	 *  then set the configuration with setConfiguration
 	 */
 	public ZigZag() {
 
 	}
+	@Override
+	/**
+	 * usage : create an object first with the empty constructor, 
+	 * then set the configuration with setConfiguration
+	 */
+	public void setConfiguration(RobotConfigration configuration) {
+		this.configuration = configuration;
+		this.leftMotor = configuration.getLeftMotor();
+		this.rightMotor = configuration.getRightMotor();
+		this.width = configuration.getWidth() ;
+		this.rightRadius = configuration.getRightRadius();
+		this.leftRadius = configuration.getLeftRadius();
+		
+	}
+	public ZigZag(RobotConfigration config){
+		this.configuration = config;
+		this.leftMotor = config.getLeftMotor();
+		this.rightMotor = config.getRightMotor();
+		this.width = config.getWidth() ;
+		this.rightRadius = config.getRightRadius();
+		this.leftRadius = config.getLeftRadius();
+	}
+
 	/**
 	 * do the drive
 	 */
@@ -146,6 +171,7 @@ public class ZigZag extends Thread implements Drivable   {
 	public boolean isCompleted() {
 		return isCompleted;
 	}
+
 	
 	
 }

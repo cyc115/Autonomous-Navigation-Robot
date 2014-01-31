@@ -7,7 +7,7 @@ public interface Drivable {
 	 * drive the robot 
 	 */
 	void drive ();
-	
+	public void setConfiguration(RobotConfigration configuration);
 	public NXTRegulatedMotor getLeftMotor() ;
 	public void setLeftMotor(NXTRegulatedMotor leftMotor);
 	public NXTRegulatedMotor getRightMotor() ;
@@ -19,5 +19,8 @@ public interface Drivable {
 	public double getWidth() ;
 	public void setWidth(double width) ;
 	public boolean isCompleted();
+	/**
+	 * start driving the robot
+	 */
 	public void start(); //inherited from thread
 }
