@@ -8,16 +8,16 @@ public class ZigZag extends Thread implements Driver {
 	private Coordinate currentCoordinate;
 	private NXTRegulatedMotor leftMotor , rightMotor;
 	
-	ZigZag (RobotConfiguration config,Coordinate startLocation){
+	ZigZag (RobotConfiguration config){
 		this.config = config ;
 		leftMotor = RobotConfiguration.LEFT_MOTOR;	// this is very frequently used
 		rightMotor = RobotConfiguration.RIGHT_MOTOR;
 
-		currentCoordinate = startLocation;
+		currentCoordinate = config.getStartingCoordinate();
 	}
 	
 	public void run(){
-		
+		travelTo(new Coordinate(0,30,0)); //up 30 cm 
 	}
 
 	/**
@@ -33,6 +33,7 @@ public class ZigZag extends Thread implements Driver {
 	 * @param nextLocation
 	 */
 	public void travelTo(Coordinate nextLocation){
+
 		double distance = Coordinate.calculateDistance(currentCoordinate, nextLocation);
 		double turningAngle = Coordinate.calculateRotationAngle(currentCoordinate, nextLocation);
 		
@@ -45,6 +46,12 @@ public class ZigZag extends Thread implements Driver {
 		rightMotor.rotate(
 				convertDistance(RobotConfiguration.RIGHT_RADIUS, distance), 
 				false
+				);
+		
+		//TODO use odometry values in the future
+		Coordinate temp = new Coordinate(
+					nextLocation.getX(), nextLocation.getY() ,
+					Coordinate.normalize((currentCoordinate.getTheta() + turningAngle))
 				);
 	}
 	
@@ -59,7 +66,7 @@ public class ZigZag extends Thread implements Driver {
 		
 		if (degree < 0){		//if degree is negative then rotate back ward
 			leftMotor.backward();
-			rightMotor.backward();//TODO optimize by setting global motor var
+			rightMotor.backward();
 		}
 		leftMotor.rotate(
 				convertAngle(RobotConfiguration.LEFT_RADIUS, config.getWidth(), degree)

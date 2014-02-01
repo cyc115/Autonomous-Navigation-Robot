@@ -5,6 +5,7 @@ import lejos.nxt.NXTRegulatedMotor;
 
 public class Configuration implements RobotConfiguration{
 	private double WIDTH = 15.24 ;
+	private Coordinate start  = new Coordinate(0,0,0); // starting location
 	private Odometer odometer;
 	private LCDWriter monitor;
 	
@@ -49,5 +50,15 @@ public class Configuration implements RobotConfiguration{
 	}
 	public double getWidth() {
 		return WIDTH;
+	}
+
+	@Override
+	public Coordinate getStartingCoordinate() {
+		// TODO Auto-generated method stub
+		return start;
+	}
+
+	public void setStartingCoordinate(Coordinate c ) {
+		start = c;
 	}
 }

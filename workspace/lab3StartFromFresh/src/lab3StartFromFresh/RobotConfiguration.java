@@ -10,7 +10,9 @@ public interface RobotConfiguration {
 	NXTRegulatedMotor RIGHT_MOTOR = Motor.B;
 	static double LEFT_RADIUS = 2.09 ;
 	static double RIGHT_RADIUS =2.0900;
-
+	
+	public Coordinate getStartingCoordinate ();
+	public void setStartingCoordinate (Coordinate c);
 	public double getAvgRadius();
 	public Odometer getOdometer();
 	public void setOdometer(Odometer odometer);

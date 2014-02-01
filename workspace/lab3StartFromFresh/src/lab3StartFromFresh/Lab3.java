@@ -16,6 +16,7 @@ public class Lab3 {
 	
 	public static void main (String [] args){
 		Lab3 lab3 = new Lab3();  //the top most monitor class
+		ZigZag drive = new ZigZag(lab3.config);
 		
 		int buttonChoice ;
 		
@@ -42,7 +43,7 @@ public class Lab3 {
 			}
 			lab3.startLCDMonitor();
 			lab3.writeToMonitor("hello world", 0);
-			
+			drive.start();
 			
 		}
 		else {

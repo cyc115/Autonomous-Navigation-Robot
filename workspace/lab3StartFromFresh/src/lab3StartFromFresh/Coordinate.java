@@ -6,18 +6,18 @@ package lab3StartFromFresh;
  *
  */
 public class Coordinate extends Point{
-	int theta;
+	double theta;
 	
-	Coordinate(double x, double y , int theta ){
+	Coordinate(double x, double y , double d ){
 		super (x,y);
-		this.theta = theta ;
+		this.theta = d ;
 	}
 
 	/**
 	 * in degrees 
 	 * @return
 	 */
-	public int getTheta() {
+	public double getTheta() {
 		return theta;
 	}
 
