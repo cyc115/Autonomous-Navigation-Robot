@@ -223,6 +223,12 @@ public class Odometer extends Thread implements OdometerInterface {
 		this.separation = separation;
 		return this;
 	}
+	
+	/*
+	 * =============================================================================
+	 * END OF BUILDER 
+	 * =============================================================================
+	 */
 	/**
 	 * returns the average tachoCount of both motors 
 	 * @return the average tacho count 
@@ -231,9 +237,5 @@ public class Odometer extends Thread implements OdometerInterface {
 		return ((lMotor.getTachoCount() + rMotor.getTachoCount() )/2) ;
 	}
 	
-	/*
-	 * =============================================================================
-	 * END OF BUILDER 
-	 * =============================================================================
-	 */
+
 }

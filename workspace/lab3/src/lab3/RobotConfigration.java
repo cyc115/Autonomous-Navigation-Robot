@@ -5,7 +5,6 @@ import lejos.nxt.NXTRegulatedMotor;
 public interface RobotConfigration {
 
 	public NXTRegulatedMotor getLeftMotor();
-
 	public void setLeftMotor(NXTRegulatedMotor leftMotor) ;
 	public NXTRegulatedMotor getRightMotor();
 	public void setRightMotor(NXTRegulatedMotor rightMotor);
@@ -15,6 +14,11 @@ public interface RobotConfigration {
 	public void setRightRadius(double rightRadius);
 	public double getWidth() ;
 	public void setWidth(double width) ;
-	public Drivable getDrive();
-	public void setDrive(Drivable drive) ;
+	public void setDriver(Drivable drive) ;
+	public double getAvgRadius();
+	/**
+	 * returns the Drivable(interface) object that makes the actual drive of this robot
+	 * @return
+	 */
+	public Drivable getDriver();
 }

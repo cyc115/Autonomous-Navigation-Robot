@@ -4,6 +4,7 @@ import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
+import lejos.nxt.comm.LCPBTResponder;
 
 
 
@@ -24,6 +25,8 @@ public class Driver implements Lab3, RobotConfigration{
 	//this zigzag does the driving , see more at ZigZag class
 	private Drivable drive ;
 	private Odometer odometer;
+	
+	LCPBTResponder lcpThread ; //blue tooth debugging 
 
 	public Driver(Drivable drive,NXTRegulatedMotor leftMotor,
 			NXTRegulatedMotor rightMotor, double leftRadius , 
@@ -50,56 +53,58 @@ public class Driver implements Lab3, RobotConfigration{
 		//set up zigzag
 		this.drive.setConfiguration(this);
 		
+		//set up communication via bluetooth
+		 lcpThread = new LCPBTResponder();
+		lcpThread.setDaemon(true);
+		lcpThread.start();
 	}
 	
-	public static void main (){
+	public static void main (String [] args){
 		
+		//initialize variables 
 		Drivable zigzag = new ZigZag();
-		
 		d = new Driver(zigzag,Motor.A, Motor.B, 
 				2.09, 2.09 , 15.24);	//radius and width 
-		
-
-		
-		do {
-			
-			// clear the display
-			LCD.clear();
-
-			// ask the user whether the motors should drive in a square or float
-			LCD.drawString("< Left | Right >", 0, 0);
-			LCD.drawString("       |        ", 0, 1);
-			LCD.drawString(" Float | Drive  ", 0, 2);
-			LCD.drawString("motors | zigZag", 0, 3);
-			LCD.drawString("       | ......", 0, 4);
-
-			buttonChoice = Button.waitForAnyPress();
-		} while (buttonChoice != Button.ID_LEFT
-				&& buttonChoice != Button.ID_RIGHT);
-
-		if (buttonChoice == Button.ID_LEFT) {
-			for (NXTRegulatedMotor motor : new NXTRegulatedMotor[] { Motor.A, Motor.B, Motor.C }) {
-				motor.forward();
-				motor.flt();
-			}
-
-			// start only the odometer and the odometry display
-			d.startOdometer();;
-			//TODO add odoDisplay
-		}
-		else {
-			// start the odometer
-			d.startOdometer();
-			//TODO add odoDisplay
-
-			// spawn a new Thread to avoid SquareDriver.drive() from blocking
-			(new Thread() {
-				public void run() {
-					d.drive();
-				}
-			}).start();
-		}
-		
+//
+//		do {
+//			
+//			// clear the display
+//			LCD.clear();
+//
+//			// ask the user whether the motors should drive in a square or float
+//			LCD.drawString("< Left | Right >", 0, 0);
+//			LCD.drawString("       |        ", 0, 1);
+//			LCD.drawString(" Float | Drive  ", 0, 2);
+//			LCD.drawString("motors | zigZag", 0, 3);
+//			LCD.drawString("       | ......", 0, 4);
+//
+//			buttonChoice = Button.waitForAnyPress();
+//		} while (buttonChoice != Button.ID_LEFT
+//				&& buttonChoice != Button.ID_RIGHT);
+//
+//		if (buttonChoice == Button.ID_LEFT) {
+//			for (NXTRegulatedMotor motor : new NXTRegulatedMotor[] { Motor.A, Motor.B, Motor.C }) {
+//				motor.forward();
+//				motor.flt();
+//			}
+//
+//			// start only the odometer and the odometry display
+//			d.startOdometer();;
+//			//TODO add odoDisplay
+//		}
+//		else {
+//			// start the odometer
+//			d.startOdometer();
+//			//TODO add odoDisplay
+//
+//			// spawn a new Thread to avoid SquareDriver.drive() from blocking
+//			(new Thread() {
+//				public void run() {
+//					d.drive();
+//				}
+//			}).start();
+//		}
+//		
 		while (Button.waitForAnyPress() != Button.ID_ESCAPE);
 		System.exit(0);
 	}
@@ -223,12 +228,18 @@ public class Driver implements Lab3, RobotConfigration{
 		this.width = width;
 	}
 
-	public Drivable getDrive() {
-		return drive;
+	public void setDriver(Drivable drive) {
+		this.drive = drive;
 	}
 
-	public void setDrive(Drivable drive) {
-		this.drive = drive;
+	//TODO make this a actual return method 
+	public double getAvgRadius() {
+		return (leftRadius + rightRadius)/2;
+	}
+
+	@Override
+	public Drivable getDriver() {
+		return drive;
 	}
 	
 

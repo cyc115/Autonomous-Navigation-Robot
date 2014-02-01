@@ -50,7 +50,6 @@ public class Odometer extends Thread {
 		
 		while (true) {
 			updateStart = System.currentTimeMillis();
-			// put (some of) your odometer code here
 
 			synchronized (lock) {
 				updateStart = System.currentTimeMillis();

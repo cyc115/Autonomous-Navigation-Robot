@@ -14,21 +14,26 @@ public class OdometryCorrection extends Thread {
 	private int normalizedHight = -1, normalizedLow = -1;
 	private int lineNumber = 0;		//count the number of square passed 
 	private int previousSensedValue, currentSensedValue = 55;
-	private long lastDetectionTime;  //the time of last detection
+	private long lastDetectionTime;  //the time of last6cx detection
 	private long diffInDectectionTime ; // time between positive feedbacks from sensor 
+	private double defaultSqrLen = 30.48; //the width of the square
 	
 	//final position of the robot wrt to the TOP_CORNER
 	private Coordinate finalPosition = new Coordinate();
 	private Odometer odometer;	//odo 
+	private RobotConfigration config;
+	private Drivable drive ;
 	private ColorSensor colorSensor ; //color sensor
 	
 	//following var is used to calculate robot angle wrt t
 	int beginTachoCount = -1 , endTachoCount = -1 ; //temp variables used to calc dist covered per sqr
 	double distXCovered =-1 , distYCovered = -1; //distance X, y covered in the first sqr
 
-	public OdometryCorrection(Odometer odometer,ColorSensor lightSensor) {
+	public OdometryCorrection(Odometer odometer,ColorSensor lightSensor,RobotConfigration config) {
 		this.odometer = odometer;
 		this.colorSensor = lightSensor;
+		this.config = config;
+		drive = config.getDriver();
 	}
 	
 	public void run() {
@@ -37,16 +42,37 @@ public class OdometryCorrection extends Thread {
 		//INITIALIZE THE LAST DETECTION TIME TO AVOID false positive at the beginning of the robot movement 
 		lastDetectionTime =2000; 
 		
+		double robotOffset = 12.5; //length of the robot
+		
 		while (true) {
-
+			//set up 
 				correctionStart = System.currentTimeMillis();
 				previousSensedValue = currentSensedValue;
 				currentSensedValue = colorSensor.getLightValue();
 				
 				//count number of lines
+				/*
+				
 				if (hasPassedLine(currentSensedValue,previousSensedValue)){
 					lineNumber++;
+					if (SquareDriver.getCurrentMovementDirection() == SquareDriver.MOVEMENT_UP ){
+						odometer.setX(lineNumber * defaultSqrLen + robotOffset);
+					}
+					else if (SquareDriver.getCurrentMovementDirection() == SquareDriver.MOVEMENT_RIGHT ){
+						odometer.setY((lineNumber - 2 ) * defaultSqrLen + robotOffset);
+					}
+					else if (SquareDriver.getCurrentMovementDirection() == SquareDriver.MOVEMENT_DOWN ){
+						odometer.setX( ((7-lineNumber ) * defaultSqrLen) - robotOffset) ; //7 is the line where x = 0
+					}
+
+					else if (SquareDriver.getCurrentMovementDirection() == SquareDriver.MOVEMENT_LEFT ){
+						odometer.setY(((9-lineNumber) * defaultSqrLen) - robotOffset);
+					}
+					
 				}
+				 */
+				
+				
 				
 				/**
 				 * measure the x distance covered from the first line. 
@@ -58,7 +84,7 @@ public class OdometryCorrection extends Thread {
 				else if (lineNumber == 1 && (endTachoCount == -1 )){
 					endTachoCount = odometer.getTachoCount() ;
 					//calculate actual covered dist on the X axis in the first sqr
-					distXCovered = 2* Math.PI * Lab2.getAvgRadius() * (endTachoCount - beginTachoCount) /360;
+					distXCovered = 2* Math.PI * config.getAvgRadius() * (endTachoCount - beginTachoCount) /360;
 				}
 				//reset the variables for the next two else if cases 
 				else if (lineNumber == 2 && beginTachoCount != -1  ){
@@ -70,21 +96,24 @@ public class OdometryCorrection extends Thread {
 				/**
 				 * Measure the y distance covered.
 				 */
-				else if (lineNumber == 8 && (beginTachoCount == -1 )&& !SquareDriver.isCompleted()){
+				else if (lineNumber == 8 && (beginTachoCount == -1 )&& !drive.isCompleted()){
 					beginTachoCount = odometer.getTachoCount();
 				}
-				else if (lineNumber == 8 && (endTachoCount == -1) && SquareDriver.isCompleted()){
+				else if (lineNumber == 8 && (endTachoCount == -1) && drive.isCompleted()){
 					endTachoCount = odometer.getTachoCount();
 					//calculate actual covered dist on the Y axis in the first sqr
-					distYCovered = 2* Math.PI * Lab2.getAvgRadius() * (endTachoCount - beginTachoCount) / 360 ;
+					distYCovered = 2* Math.PI * config.getAvgRadius() * (endTachoCount - beginTachoCount) / 360 ;
 				
 					//determin the final position 
-					finalPosition.setX(Lab2.TOP_CORNER.getX() - distXCovered);
-					finalPosition.setY(Lab2.TOP_CORNER.getY() - distYCovered);
 					
-					clean();
+					//original is this 
+//					finalPosition.setX(Lab2.TOP_CORNER.getX() - distXCovered);
+//					finalPosition.setY(Lab2.TOP_CORNER.getY() - distYCovered);
+					
+					finalPosition.setX(100 - distXCovered); //TODO this 100 is jst a bogus value
+					finalPosition.setY(100 - distYCovered);
 					break;
-				}				
+				}		
 		
 			// this ensure the odometry correction occurs only once every period
 			correctionEnd = System.currentTimeMillis();
@@ -98,13 +127,7 @@ public class OdometryCorrection extends Thread {
 			}
 		}
 	}
-	/**
-	 * shuts off the light and do what ever we need to do to finalize the robot when it stops 
-	 */
-private void clean() {
-	colorSensor.setFloodlight(false);
-	}
-
+	
 //	public String finalDistToString(){
 //		return distBtwnFinalAndOrigin.toString();
 //	}

@@ -21,6 +21,14 @@ public class ZigZag extends Thread implements Drivable   {
 		this.rightRadius = rightRadius;
 		this.leftRadius = leftRadius;
 		
+		//start after 1 second 
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
 	}
 	/**
 	 * usage : create an object first with the empty constructor,
