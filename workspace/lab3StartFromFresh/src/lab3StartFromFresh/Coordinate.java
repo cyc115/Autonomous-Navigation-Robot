@@ -96,4 +96,8 @@ public class Coordinate extends Point{
 		return normalized;
 	}
 	
+	public Coordinate clone(){
+		return new Coordinate(this.getX(),this.getY() , this.getTheta());
+	}
+	
 }

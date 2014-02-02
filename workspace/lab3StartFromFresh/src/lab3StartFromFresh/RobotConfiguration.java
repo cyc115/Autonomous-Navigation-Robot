@@ -31,5 +31,9 @@ public interface RobotConfiguration {
 	public double getWidth();
 	public boolean driveComplete();
 	public void setDriveComplete(boolean comp);
+	public Coordinate getCurrentLocation();
+	public void setCurrentLocation(Coordinate loc);
+	public Coordinate getNextLocation();
+	public void setNextLocation(Coordinate loc);
 	
 }

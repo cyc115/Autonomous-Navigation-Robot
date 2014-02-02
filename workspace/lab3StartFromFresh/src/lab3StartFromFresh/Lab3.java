@@ -37,7 +37,7 @@ public class Lab3 {
 			buttonChoice = Button.waitForAnyPress();
 		} while (buttonChoice != Button.ID_LEFT
 				&& buttonChoice != Button.ID_RIGHT);
-		
+
 		if (buttonChoice == Button.ID_LEFT) {
 			for(NXTRegulatedMotor motor : lab3.getAllMotors()){
 				motor.forward();
@@ -45,14 +45,13 @@ public class Lab3 {
 			}
 			
 			lab3.startLCDMonitor();
-//			lab3.writeToMonitor("hello world", 0);
-			
 			drive.start();
 			
 			Odometer odo = lab3.config.getOdometer();
+			int i = 0 ; 
 			while(!lab3.config.driveComplete()){
 				//TODO odo display 0 0 0 , maybe it's not working or maybe it's not printing proprely 
-				lab3.config.writeToMonitor("X:"+odo.getX(), 5);
+				lab3.config.writeToMonitor("X:"+i++, 5);
 				lab3.config.writeToMonitor("Y:"+odo.getY(), 6);
 				lab3.config.writeToMonitor("T:"+odo.getTheta(), 7);
 			}

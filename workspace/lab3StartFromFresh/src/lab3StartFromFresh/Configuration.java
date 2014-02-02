@@ -8,6 +8,8 @@ import lejos.nxt.comm.LCPBTResponder;
 public class Configuration implements RobotConfiguration{
 
 	private Coordinate start  = new Coordinate(0,0,0); // starting location
+	private Coordinate currentLocation = start.clone(); //current location ;
+	private Coordinate nextLocation; //current location ;
 	private Odometer odometer;
 	private LCDWriter monitor;
 	private LCPBTResponder lcpThread;
@@ -82,5 +84,26 @@ public class Configuration implements RobotConfiguration{
 	
 	public void setDriveComplete(boolean comp) {
 		driveComplete = comp;
+	}
+
+	@Override
+	public Coordinate getCurrentLocation() {
+		return currentLocation;
+	}
+
+	@Override
+	public void setCurrentLocation(Coordinate loc) {
+		currentLocation = loc;
+		
+	}
+
+	@Override
+	public Coordinate getNextLocation() {
+		return nextLocation;
+	}
+
+	@Override
+	public void setNextLocation(Coordinate loc) {
+		nextLocation = loc;
 	}
 }
