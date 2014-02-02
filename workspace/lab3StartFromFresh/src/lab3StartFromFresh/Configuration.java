@@ -7,6 +7,7 @@ import lejos.nxt.comm.LCPBTResponder;
 
 public class Configuration implements RobotConfiguration{
 
+	private Object lock ;
 	private Coordinate start  = new Coordinate(0,0,0); // starting location
 	private Coordinate currentLocation = start.clone(); //current location ;
 	private Coordinate nextLocation; //current location ;
@@ -16,15 +17,17 @@ public class Configuration implements RobotConfiguration{
 	static boolean driveComplete  = false ;
 	
 	public static Configuration getNewDefaultConfiguration(){
-		return new Configuration();
+		Configuration config = new Configuration();
+		config.odometer = new Odometer(config);
+		config.monitor = new LCDWriter(config);
+		return config;
 	}
 	
 	public Configuration(){
-		odometer = new Odometer(this);
-		monitor = new LCDWriter(this);
-		lcpThread = new LCPBTResponder();
-		lcpThread.setDaemon(true);
-		lcpThread.start();
+		lock = new Object();
+//		lcpThread = new LCPBTResponder();
+//		lcpThread.setDaemon(true);
+//		lcpThread.start();
 	}
 	@Override
 	public double getAvgRadius() {
