@@ -7,6 +7,7 @@ public class ZigZag extends Thread implements Driver {
 	private RobotConfiguration config ;
 	private Coordinate currentCoordinate;
 	private NXTRegulatedMotor leftMotor , rightMotor;
+
 	
 	ZigZag (RobotConfiguration config){
 		this.config = config ;
@@ -18,8 +19,12 @@ public class ZigZag extends Thread implements Driver {
 	
 	
 	public void run(){
-		travelTo(new Coordinate(30,30,1)); //up 30 cm 
-//		travelTo(new Coordinate())
+		travelTo(new Coordinate(60,30,0)); //up 30 cm 
+		travelTo(new Coordinate(30,30,0));
+		travelTo(new Coordinate(30,60,0));
+		travelTo(new Coordinate(60,0,0));
+		//end of the run
+		config.setDriveComplete(true);
 	}
 
 	/**
@@ -62,6 +67,7 @@ public class ZigZag extends Thread implements Driver {
 					nextLocation.getX(), nextLocation.getY() ,
 					Coordinate.normalize((currentCoordinate.getTheta() + turningAngle))
 				);
+		currentCoordinate = temp ;
 	}
 	
 	/**
@@ -130,4 +136,6 @@ public class ZigZag extends Thread implements Driver {
 	public void setCurrentCoordinatel(Coordinate currentCoordinate) {
 		this.currentCoordinate = currentCoordinate;
 	}
+
+
 }

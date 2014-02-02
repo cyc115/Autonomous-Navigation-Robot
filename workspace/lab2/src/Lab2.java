@@ -7,7 +7,7 @@ public class Lab2 {
 	private static ColorSensor colorSensor = new ColorSensor(SensorPort.S2); //light sensor at port2
 		
 	private static NXTRegulatedMotor LEFT_MOTOR = Motor.A, RIGHT_MOTOR = Motor.B;
-	public static final double LEFT_RADIUS = 2.09,RIGHT_RADIUS =2.0900 ;
+	public static final double LEFT_RADIUS = 2.09,RIGHT_RADIUS =2.09 ;
 	public static final double SEPARATION = 15.24 ;
 	public static final double WIDTH_OF_SQUARE = 30.48; //cm
 	public static final Coordinate ORIGIN = new Coordinate(15.24, 15.24);
@@ -62,7 +62,7 @@ public class Lab2 {
 			// spawn a new Thread to avoid SquareDriver.drive() from blocking
 			(new Thread() {
 				public void run() {
-					SquareDriver.drive(Motor.A, Motor.B, 2.09, 2.0995, 15.24);
+					SquareDriver.drive(Motor.A, Motor.B, 2.065, 2.0995, 15.24);
 				}
 			}).start();
 		}

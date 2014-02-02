@@ -17,6 +17,8 @@ public class Lab3 {
 	public static void main (String [] args){
 		Lab3 lab3 = new Lab3();  //the top most monitor class
 		ZigZag drive = new ZigZag(lab3.config);
+//		Odometer odo = new Odometer(lab3.config);
+//		lab3.config.setOdometer(odo);
 		
 		int buttonChoice ;
 		
@@ -41,9 +43,19 @@ public class Lab3 {
 				motor.forward();
 				motor.flt();
 			}
+			
 			lab3.startLCDMonitor();
-			lab3.writeToMonitor("hello world", 0);
+//			lab3.writeToMonitor("hello world", 0);
+			
 			drive.start();
+			
+			Odometer odo = lab3.config.getOdometer();
+			while(!lab3.config.driveComplete()){
+				//TODO odo display 0 0 0 , maybe it's not working or maybe it's not printing proprely 
+				lab3.config.writeToMonitor("X:"+odo.getX(), 5);
+				lab3.config.writeToMonitor("Y:"+odo.getY(), 6);
+				lab3.config.writeToMonitor("T:"+odo.getTheta(), 7);
+			}
 			
 		}
 		else {

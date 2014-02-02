@@ -6,12 +6,14 @@ public class LCDWriter extends Thread implements Monitor{
 	private static final long DISPLAY_PERIOD = 250;
 	private RobotConfiguration config;
 	public String [] s ;
+	private Object lock ;
 	
 	LCDWriter(RobotConfiguration config){
+		lock = new Object();;
 		s = new String[8];
 		this.config = config;
 		for(int i = 0 ; i < 8 ; i++){
-			s[i] = " ";
+			s[i] = "";
 		}
 	}
 	
@@ -24,14 +26,9 @@ public class LCDWriter extends Thread implements Monitor{
 
 			
 			// clear the lines for displaying odometry information
-			LCD.drawString(s[0], 0, 0);
-			LCD.drawString(s[1], 0, 1);
-			LCD.drawString(s[2], 0, 2);
-			LCD.drawString(s[3], 0, 3);
-			LCD.drawString(s[4], 0, 4);
-			LCD.drawString(s[5], 0, 5);
-			LCD.drawString(s[6], 0, 6);
-			LCD.drawString(s[7], 0, 7);
+			for (int i = 0; i < 8; i++) {
+				LCD.drawString(s[7-i], 0, i);
+			}
 			
 			// throttle the OdometryDisplay
 			displayEnd = System.currentTimeMillis();
@@ -45,7 +42,10 @@ public class LCDWriter extends Thread implements Monitor{
 	}
 	@Override
 	public void writeToScreen(String str, int lineNumber) {
-		s[lineNumber] = str;
+		synchronized (lock){
+			s[lineNumber] = ""+str;
+		}
+
 	}
 	public static String formattedDoubleToString(double x, int places) {
 		String result = "";

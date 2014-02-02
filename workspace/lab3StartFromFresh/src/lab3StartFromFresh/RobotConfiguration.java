@@ -8,8 +8,9 @@ public interface RobotConfiguration {
 	public int ROTATE_SPEED = 150;
 	NXTRegulatedMotor LEFT_MOTOR = Motor.A;
 	NXTRegulatedMotor RIGHT_MOTOR = Motor.B;
-	static double LEFT_RADIUS = 2.09 ;
-	static double RIGHT_RADIUS =2.0900;
+	static double LEFT_RADIUS = 2.065 ;
+	static double RIGHT_RADIUS =2.0995;
+	static double WIDTH = 15.24 ;
 	
 	public Coordinate getStartingCoordinate ();
 	public void setStartingCoordinate (Coordinate c);
@@ -28,5 +29,7 @@ public interface RobotConfiguration {
 	public void setMonitor(LCDWriter monitor);
 	public void writeToMonitor(String str, int ln);
 	public double getWidth();
+	public boolean driveComplete();
+	public void setDriveComplete(boolean comp);
 	
 }
