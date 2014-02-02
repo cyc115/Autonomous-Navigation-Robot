@@ -40,8 +40,8 @@ public class ZigZag extends Thread implements Driver {
 	 * @param nextLocation
 	 */
 	public void travelTo(Coordinate nextLocation){
-		config.writeToMonitor(currentCoordinate.toString(), 3);
-		config.writeToMonitor(nextLocation.toString(), 4);
+//		config.writeToMonitor(currentCoordinate.toString(), 3);
+//		config.writeToMonitor(nextLocation.toString(), 4);
 		
 		double distance = Coordinate.calculateDistance(currentCoordinate, nextLocation);
 		double turningAngle = Coordinate.calculateRotationAngle(currentCoordinate, nextLocation);

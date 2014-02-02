@@ -9,6 +9,7 @@ public class Odometer extends Thread {
 	
 
 	private RobotConfiguration config;
+	private Coordinate cCoord ;  //current location
 	private NXTRegulatedMotor lMotor; // left motor 
 	private NXTRegulatedMotor rMotor;
 	private int lTCount, rTCount;	// the previous tacho meter counts of left and right motor
@@ -18,6 +19,8 @@ public class Odometer extends Thread {
 		lock = new Object();
 		lMotor = RobotConfiguration.LEFT_MOTOR;
 		rMotor = RobotConfiguration.RIGHT_MOTOR;
+		
+		cCoord = config.getCurrentLocation();
 	}
 	
 	/**
@@ -40,7 +43,6 @@ public class Odometer extends Thread {
 		
 		while (true) {
 			updateStart = System.currentTimeMillis();
-			// put (some of) your odometer code here
 
 			synchronized (lock) {
 				updateStart = System.currentTimeMillis();
@@ -102,11 +104,11 @@ public class Odometer extends Thread {
 		// ensure that the values don't change while the odometer is running
 		synchronized (lock) {
 			if (update[0])
-				position[0] = config.getCurrentLocation().getX();
+				position[0] = cCoord.getX();
 			if (update[1])
-				position[1] = config.getCurrentLocation().getY();
+				position[1] = cCoord.getY();
 			if (update[2])
-				position[2] = config.getCurrentLocation().getTheta(); 
+				position[2] = cCoord.getTheta(); 
 		}
 	}
 	
@@ -114,7 +116,7 @@ public class Odometer extends Thread {
 		double result;
 
 		synchronized (lock) {
-			result = config.getCurrentLocation().getX();
+			result = cCoord.getX();
 		}
 
 		return result;
@@ -124,7 +126,7 @@ public class Odometer extends Thread {
 		double result;
 
 		synchronized (lock) {
-			result = config.getCurrentLocation().getY();
+			result = cCoord.getY();
 		}
 
 		return result;
@@ -134,7 +136,7 @@ public class Odometer extends Thread {
 		double result;
 
 		synchronized (lock) {
-			result = config.getCurrentLocation().getTheta();
+			result = cCoord.getTheta();
 		}
 
 		return result;
@@ -145,29 +147,29 @@ public class Odometer extends Thread {
 		// ensure that the values don't change while the odometer is running
 		synchronized (lock) {
 			if (update[0])
-				config.getCurrentLocation().setX(position[0]);
+				cCoord.setX(position[0]);
 			if (update[1])
-				config.getCurrentLocation().setY(position[1]);
+				cCoord.setY(position[1]);
 			if (update[2])
-				config.getCurrentLocation().setTheta(position[2]);
+				cCoord.setTheta(position[2]);
 		}
 	}
 
 	public void setX(double x) {
 		synchronized (lock) {
-			config.getCurrentLocation().setX(x);
+			cCoord.setX(x);
 		}
 	}
 
 	public void setY(double y) {
 		synchronized (lock) {
-			config.getCurrentLocation().setY(y);
+			cCoord.setY(y);
 		}
 	}
 
 	public void setTheta(double theta) {
 		synchronized (lock) {
-			config.getCurrentLocation().setTheta(theta);
+			cCoord.setTheta(theta);
 		}
 	}
 	
