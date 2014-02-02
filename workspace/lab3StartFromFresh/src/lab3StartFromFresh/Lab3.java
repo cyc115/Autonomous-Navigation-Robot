@@ -47,9 +47,11 @@ public class Lab3 {
 			
 			Odometer odo = lab3.config.getOdometer();
 			while(!lab3.config.driveComplete()){
+				lab3.config.writeToMonitor(lab3.config.getNextLocation().toString(), 2);
+				lab3.config.writeToMonitor(lab3.config.getCurrentLocation().toString(), 4);
 				lab3.config.writeToMonitor("X:"+odo.getX(), 5);
 				lab3.config.writeToMonitor("Y:"+odo.getY(), 6);
-				lab3.config.writeToMonitor("T:"+odo.getTheta(), 7);
+				lab3.config.writeToMonitor("T:"+odo.getThetaInDeg(), 7);
 			}
 			
 		}

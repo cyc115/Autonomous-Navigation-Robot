@@ -4,7 +4,7 @@ import lejos.nxt.*;
 
 public class PController implements UltrasonicController {
 	
-	private final int BAND_CENTER, BAND_WIDTH;
+	private final int BAND_CENTER = 29 , BAND_WIDTH = 3;
 	private RobotConfiguration config;
 	private final int FILTER_OUT = 20;
 	private final NXTRegulatedMotor leftMotor , rightMotor;	
@@ -12,10 +12,8 @@ public class PController implements UltrasonicController {
 	
 	PController(RobotConfiguration config,int bandCenter, int bandwith){
 		this.config = config;
-		leftMotor = config.LEFT_MOTOR;
-		rightMotor = config.RIGHT_MOTOR;
-		this.BAND_CENTER = bandCenter;
-		this.BAND_WIDTH = bandwith;
+		leftMotor = RobotConfiguration.LEFT_MOTOR;
+		rightMotor = RobotConfiguration.RIGHT_MOTOR;
 	}
 	
 	/**

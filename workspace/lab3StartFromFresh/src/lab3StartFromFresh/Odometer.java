@@ -112,7 +112,7 @@ public class Odometer extends Thread {
 		}
 	}
 	
-	public double getX() {
+	public double getY() {
 		double result;
 
 		synchronized (lock) {
@@ -122,7 +122,7 @@ public class Odometer extends Thread {
 		return result;
 	}
 
-	public double getY() {
+	public double getX() {
 		double result;
 
 		synchronized (lock) {
@@ -155,13 +155,13 @@ public class Odometer extends Thread {
 		}
 	}
 
-	public void setX(double x) {
+	public void setY(double x) {
 		synchronized (lock) {
 			cCoord.setX(x);
 		}
 	}
 
-	public void setY(double y) {
+	public void setX(double y) {
 		synchronized (lock) {
 			cCoord.setY(y);
 		}
@@ -171,6 +171,10 @@ public class Odometer extends Thread {
 		synchronized (lock) {
 			cCoord.setTheta(theta);
 		}
+	}
+	
+	public double getThetaInDeg(){
+		return getTheta() * 57.2957795131;
 	}
 	
 	/*
