@@ -66,18 +66,22 @@ public class Configuration implements RobotConfiguration{
 
 	@Override
 	public Coordinate getStartingCoordinate() {
-		// TODO Auto-generated method stub
-		return start;
+		Coordinate coord ;
+		synchronized(lock){
+			coord = start;
+		}
+		return coord;
 	}
 
 	public void setStartingCoordinate(Coordinate c ) {
-		start = c;
+		synchronized (lock) {
+			start = c;
+		}
 	}
 
 	@Override
 	public void writeToMonitor(String str,int ln) {
 		this.getMonitor().writeToScreen(str, ln);
-
 	}
 
 	@Override
@@ -91,13 +95,18 @@ public class Configuration implements RobotConfiguration{
 
 	@Override
 	public Coordinate getCurrentLocation() {
-		return currentLocation;
+		Coordinate coord ;
+		synchronized(lock){
+			coord = currentLocation;
+		}
+		return coord;
 	}
 
 	@Override
 	public void setCurrentLocation(Coordinate loc) {
-		currentLocation = loc;
-		
+		synchronized(lock){
+			currentLocation = loc;
+		}
 	}
 
 	@Override
