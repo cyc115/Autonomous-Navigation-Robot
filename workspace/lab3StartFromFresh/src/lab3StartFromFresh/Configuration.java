@@ -13,13 +13,17 @@ public class Configuration implements RobotConfiguration{
 	private Coordinate nextLocation; //current location ;
 	private Odometer odometer;
 	private LCDWriter monitor;
-	private LCPBTResponder lcpThread;
+//	private LCPBTResponder lcpThread;   /pc debugging
+	private Driver driver ;
 	static boolean driveComplete  = false ;
 	
 	public static Configuration getNewDefaultConfiguration(){
 		Configuration config = new Configuration();
 		config.odometer = new Odometer(config);
 		config.monitor = new LCDWriter(config);
+		
+		//really important ... don't forget to start 
+		config.odometer.start();
 		return config;
 	}
 	
@@ -117,5 +121,17 @@ public class Configuration implements RobotConfiguration{
 	@Override
 	public void setNextLocation(Coordinate loc) {
 		nextLocation = loc;
+	}
+
+	@Override
+	public RobotConfiguration setDriver(Driver driver) {
+		this.driver = driver;
+		return this;
+	}
+
+	@Override
+	public Driver getDriver() {
+
+		return driver;
 	}
 }

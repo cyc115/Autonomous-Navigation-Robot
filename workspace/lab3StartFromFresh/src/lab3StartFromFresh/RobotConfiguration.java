@@ -35,5 +35,7 @@ public interface RobotConfiguration {
 	public void setCurrentLocation(Coordinate loc);
 	public Coordinate getNextLocation();
 	public void setNextLocation(Coordinate loc);
+	public RobotConfiguration setDriver(Driver driver);
+	public Driver getDriver();
 	
 }

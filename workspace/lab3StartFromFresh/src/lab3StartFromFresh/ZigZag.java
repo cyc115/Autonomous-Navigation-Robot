@@ -13,7 +13,9 @@ public class ZigZag extends Thread implements Driver {
 		this.config = config ;
 		leftMotor = RobotConfiguration.LEFT_MOTOR;	// this is very frequently used
 		rightMotor = RobotConfiguration.RIGHT_MOTOR;
-
+		
+		config.setDriver(this);
+		
 		currentCoordinate = config.getStartingCoordinate();
 	}
 	
