@@ -26,5 +26,7 @@ public interface RobotConfiguration {
 	
 	public LCDWriter getMonitor ();
 	public void setMonitor(LCDWriter monitor);
+	public void writeToMonitor(String str, int ln);
 	public double getWidth();
+	
 }

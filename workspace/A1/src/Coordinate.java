@@ -39,18 +39,17 @@ public class Coordinate extends Point{
 				currentAngle = currentLocation.getTheta();
 		
 		double result = -currentAngle ;		//not yet finished 
-//		double result = 0;
 		if (dX > 0 ){
 			if (dY > 0) 
-				result += (Math.atan(dX/dY) * 180 /Math.PI);
+				result += Math.atan(dX/dY);
 			else // (dY <= 0) 
-				result += (90 - (Math.atan(dY/dX) * 180 /Math.PI));
+				result += (90 - Math.atan(dY/dX));
 		}
 		else if (dX < 0){
 			if (dY > 0)
-				result +=(-(Math.atan(dX/dY) * 180 /Math.PI) -90);
+				result +=(-Math.atan(dX/dY) -90);
 			else //(dY <=0)
-				result +=(-90-(Math.atan(dY/dX) * 180 /Math.PI));
+				result +=(-90-Math.atan(dY/dX));
 		}
 		//should never reach this case, but keep it to make sure nothing goes wrong
 		else if (dX==0 && dY == 0){

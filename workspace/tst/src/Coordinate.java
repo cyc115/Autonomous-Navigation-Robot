@@ -1,4 +1,5 @@
-package lab3StartFromFresh;
+
+
 
 /**
  * location x , y and theata in degrees 
@@ -7,6 +8,11 @@ package lab3StartFromFresh;
  */
 public class Coordinate extends Point{
 	double theta;
+	
+	public static void main(String[] args) {
+		double output = calculateRotationAngle(new Coordinate(0, 0, 0), new Coordinate(30, 30, 0));
+		System.out.println(output);
+	}
 	
 	Coordinate(double x, double y , double d ){
 		super (x,y);

@@ -16,8 +16,10 @@ public class ZigZag extends Thread implements Driver {
 		currentCoordinate = config.getStartingCoordinate();
 	}
 	
+	
 	public void run(){
-		travelTo(new Coordinate(0,30,0)); //up 30 cm 
+		travelTo(new Coordinate(30,30,1)); //up 30 cm 
+//		travelTo(new Coordinate())
 	}
 
 	/**
@@ -33,9 +35,16 @@ public class ZigZag extends Thread implements Driver {
 	 * @param nextLocation
 	 */
 	public void travelTo(Coordinate nextLocation){
-
+		config.writeToMonitor(currentCoordinate.toString(), 3);
+		config.writeToMonitor(nextLocation.toString(), 4);
+		
 		double distance = Coordinate.calculateDistance(currentCoordinate, nextLocation);
 		double turningAngle = Coordinate.calculateRotationAngle(currentCoordinate, nextLocation);
+		
+		config.writeToMonitor( ((Double)distance).toString(), 1);
+		config.writeToMonitor( ((Double)turningAngle).toString(), 2);//TODO delete
+
+		
 		
 		rotateToRelativly(turningAngle);
 		

@@ -2,13 +2,14 @@ package lab3StartFromFresh;
 
 import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
+import lejos.nxt.comm.LCPBTResponder;
 
 public class Configuration implements RobotConfiguration{
 	private double WIDTH = 15.24 ;
 	private Coordinate start  = new Coordinate(0,0,0); // starting location
 	private Odometer odometer;
 	private LCDWriter monitor;
-	
+	private LCPBTResponder lcpThread;
 	public static Configuration getNewDefaultConfiguration(){
 		return new Configuration();
 	}
@@ -16,6 +17,9 @@ public class Configuration implements RobotConfiguration{
 	public Configuration(){
 		odometer = new Odometer(this);
 		monitor = new LCDWriter(this);
+		lcpThread = new LCPBTResponder();
+		lcpThread.setDaemon(true);
+		lcpThread.start();
 	}
 	@Override
 	public double getAvgRadius() {
@@ -60,5 +64,10 @@ public class Configuration implements RobotConfiguration{
 
 	public void setStartingCoordinate(Coordinate c ) {
 		start = c;
+	}
+
+	@Override
+	public void writeToMonitor(String str,int ln) {
+		this.getMonitor().writeToScreen(str, ln);
 	}
 }
