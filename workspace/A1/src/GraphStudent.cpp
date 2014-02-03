@@ -47,7 +47,7 @@ int compareTo(const Edge* e1 , const Edge* e2){
 void print(Edge* root){
 	if (root == NULL)	cout << "END" << endl;
 	else {
-		cout << "<" << (root->v1) << " |Wei:"<< root->weight << "| " << (root->v2) << ">" << "\t" ;
+		cout << "<" << (root->v1) << " |"<< root->weight << "| " << (root->v2) << ">" << "\t" ;
 		print(root->nxt);
 	}
 }
@@ -108,36 +108,36 @@ void deleteList (Edge* root){
 		delete root;
 	}
 }
-
-int main() {
-
-	struct Edge *e1 = new Edge(NULL, 1,2,-1);
-	struct Edge *e2 = new Edge(e1, 1,3,-1);
-	struct Edge *e3 = new Edge(e2, 1,2,-1);
-	struct Edge *e4 = NULL ;
-	//	print(e4);
-	/**
-	 * Added the -std=c++0x compiler argument under Project Properties
-	 * -> C/C++ Build -> Settings -> GCC C++ Compiler ->
-	 * Miscellaneous. It works now!
-	 */
-	e4 = append(NULL,1,5,3); //TODO will not append to null
-	//	print(e4);
-	//	cout << e3->v1 <<endl;
-	//	cout << e3->v2 <<endl;
-	//	cout << e3->weight << endl;
-	//	cout << e3->nxt << endl;
-	//	print(e3);
-	//	print(deleteList(e3));
-	//	cout << compareTo(e1,e2) << endl;
-	Edge ** array ;
-	array = new Edge* [6];
-	//	print(array[1]);
-	//	print(array[0]);
-	//array = orgList(e3,5,array);
-	cout << "========="<<endl;
-	printOrganized(array,5);
-	  cout << "Adding all elements" << endl;
-	  Edge* e = append(NULL, 1,4,5);
-	return 0;
-}
+//
+//int main() {
+//
+//	struct Edge *e1 = new Edge(NULL, 1,2,-1);
+//	struct Edge *e2 = new Edge(e1, 1,3,-1);
+//	struct Edge *e3 = new Edge(e2, 1,2,-1);
+//	struct Edge *e4 = NULL ;
+////		print(e4);
+//	/**
+//	 * Added the -std=c++0x compiler argument under Project Properties
+//	 * -> C/C++ Build -> Settings -> GCC C++ Compiler ->
+//	 * Miscellaneous. It works now!
+//	 */
+//	e4 = append(NULL,1,5,3); //TODO will not append to null
+//		print(e4);
+//	//	cout << e3->v1 <<endl;
+//	//	cout << e3->v2 <<endl;
+//	//	cout << e3->weight << endl;
+//	//	cout << e3->nxt << endl;
+//		print(e3);
+//	//	print(deleteList(e3));
+//	//	cout << compareTo(e1,e2) << endl;
+//	Edge ** array ;
+//	array = new Edge* [6];
+//	//	print(array[1]);
+//	//	print(array[0]);
+//	array = orgList(e3,5,array);
+//	cout << "========="<<endl;
+//	printOrganized(array,5);
+//	  cout << "Adding all elements" << endl;
+//	  Edge* e = append(NULL, 1,4,5);
+//	return 0;
+//}

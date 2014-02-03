@@ -1,19 +1,22 @@
 package lab3StartFromFresh;
-import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.*;
 
-public class PController implements UltrasonicController {
+public class PController extends Thread implements UltrasonicController {
 	
 	private final int BAND_CENTER = 29 , BAND_WIDTH = 3;
 	private RobotConfiguration config;
 	private final int FILTER_OUT = 20;
 	private final NXTRegulatedMotor leftMotor , rightMotor;	
 	private int distance;	// distance measured by the sensor 
+	private Planner  planner ;
+	private UltrasonicSensor uSensor = new UltrasonicSensor(SensorPort.S1);
 	
-	PController(RobotConfiguration config,int bandCenter, int bandwith){
+	PController(RobotConfiguration config, Planner planner){
 		this.config = config;
 		leftMotor = RobotConfiguration.LEFT_MOTOR;
 		rightMotor = RobotConfiguration.RIGHT_MOTOR;
+		this.planner = planner;
+
 	}
 	
 	/**
@@ -26,6 +29,25 @@ public class PController implements UltrasonicController {
 	private final double bigCorrection =1.7 ;
 	private final double hugeCorrection = 30;
 	
+	
+	public void run(){
+		
+		//motor go straight
+		leftMotor.setSpeed(RobotConfiguration.FORWARD_SPEED);
+		rightMotor.setSpeed(RobotConfiguration.FORWARD_SPEED);
+		//start motor 
+		leftMotor.forward();
+		rightMotor.forward();
+		while (true){
+			if (planner.wallFollow()){
+				processUSData(uSensor.getDistance());
+			}
+			else //break the control back to planner
+				break;
+		}
+
+	}
+	
 	/**
 	 * make movement decisions based on the distance from the wall.
 	 *  <br>In this example we have not used the given filter for the gaps, instead, we have chosen a 
@@ -33,6 +55,8 @@ public class PController implements UltrasonicController {
 	 * @param distance to the wall,
 	 */
 	public void processUSData(int distance) {
+		
+		
 		
 		this.distance = distance;
 
@@ -58,8 +82,8 @@ public class PController implements UltrasonicController {
 			correctionFactor = smallCorrection;
 		}
 		//move motor 
-		leftMotor.setSpeed((int) (config.FORWARD_SPEED - correctionFactor * error) );
-		rightMotor.setSpeed((int) (config.FORWARD_SPEED + correctionFactor * error));
+		leftMotor.setSpeed((int) (RobotConfiguration.FORWARD_SPEED - correctionFactor * error) );
+		rightMotor.setSpeed((int) (RobotConfiguration.FORWARD_SPEED + correctionFactor * error));
 		
 	}
 

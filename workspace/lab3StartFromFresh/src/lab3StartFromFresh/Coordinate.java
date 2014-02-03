@@ -95,6 +95,9 @@ public class Coordinate extends Point{
 		}
 		return normalized;
 	}
+	public double calcSlop(Coordinate c){
+		return (c.getY() - this.getY()) / (c.getX() - this.getX());
+	}
 	
 	public Coordinate clone(){
 		return new Coordinate(this.getX(),this.getY() , this.getTheta());

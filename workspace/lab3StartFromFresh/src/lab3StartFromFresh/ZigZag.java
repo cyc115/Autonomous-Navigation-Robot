@@ -5,8 +5,9 @@ import lejos.nxt.NXTRegulatedMotor;
 public class ZigZag extends Thread implements Driver {
 	
 	private RobotConfiguration config ;
-	private Coordinate currentCoordinate;
+	private Coordinate currentCoordinate, nextCoordinate , prevCoordinate;
 	private NXTRegulatedMotor leftMotor , rightMotor;
+	private boolean pause = false ;
 
 	
 	ZigZag (RobotConfiguration config){
@@ -17,6 +18,7 @@ public class ZigZag extends Thread implements Driver {
 		config.setDriver(this);
 		
 		currentCoordinate = config.getCurrentLocation();
+		prevCoordinate = config.getStartingCoordinate();
 	}
 	
 	
@@ -43,6 +45,8 @@ public class ZigZag extends Thread implements Driver {
 	 */
 	public void travelTo(Coordinate nextLocation){
 		config.setNextLocation(nextLocation);
+		config.setStartingCoordinate(currentCoordinate);
+		
 		
 		double distance = Coordinate.calculateDistance(currentCoordinate, nextLocation);
 		double turningAngle = Coordinate.calculateRotationAngle(currentCoordinate, nextLocation);
@@ -61,7 +65,6 @@ public class ZigZag extends Thread implements Driver {
 				false
 				);
 		
-		//TODO use odometry values in the future
 		Coordinate temp = new Coordinate(
 					nextLocation.getX(), nextLocation.getY() ,
 					Coordinate.normalize((currentCoordinate.getTheta() + turningAngle))
@@ -136,5 +139,13 @@ public class ZigZag extends Thread implements Driver {
 		this.currentCoordinate = currentCoordinate;
 	}
 
+
+	@Override
+	public void pause() {
+		pause = true;
+	}
+	public void unpause(){
+		pause = false ;
+	}
 
 }

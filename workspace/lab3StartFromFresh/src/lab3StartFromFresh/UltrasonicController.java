@@ -26,4 +26,6 @@ public interface UltrasonicController {
 	 * returns the left motor speed 
 	 */
 	public int getLeftMotorSpeed();
+	
+	public void start();
 }

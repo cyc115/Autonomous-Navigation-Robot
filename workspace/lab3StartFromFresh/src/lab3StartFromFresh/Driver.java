@@ -35,5 +35,8 @@ turnTo() and the method has yet to return; false otherwise.
 turnTo()
 	 */
 	boolean isNagivating ();
+
+	void pause();
+	void unpause();
 	
 }
