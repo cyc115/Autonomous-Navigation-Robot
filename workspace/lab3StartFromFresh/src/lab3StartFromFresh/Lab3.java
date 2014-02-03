@@ -3,6 +3,8 @@ package lab3StartFromFresh;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.NXTRegulatedMotor;
+import lejos.nxt.SensorPort;
+import lejos.nxt.UltrasonicSensor;
 
 public class Lab3 {
 	RobotConfiguration config ;
@@ -46,13 +48,23 @@ public class Lab3 {
 			drive.start();
 			
 			Odometer odo = lab3.config.getOdometer();
-			while(!lab3.config.driveComplete()){
-
-				lab3.config.writeToMonitor(lab3.config.getCurrentLocation().toString(), 4);
-				lab3.config.writeToMonitor("X:"+odo.getX(), 5);
-				lab3.config.writeToMonitor("Y:"+odo.getY(), 6);
-				lab3.config.writeToMonitor("T:"+odo.getThetaInDeg(), 7);
-			}
+			
+			//TODO refactor those below
+			Planner plan = new UltraSonicPlanner(lab3.config);
+			plan.start();
+			
+			UsPoller poller = new UsPoller(lab3.config);
+			poller.start();
+			
+//			while(!lab3.config.driveComplete()){
+////				lab3.config.writeToMonitor(String.valueOf(UsPoller.getDistance()),3);
+//				lab3.config.writeToMonitor(String.valueOf(plan.wallFollow()),4);
+////				lab3.config.writeToMonitor(lab3.config.getCurrentLocation().toString(), 4);
+//				lab3.config.writeToMonitor("X:"+odo.getX(), 5);
+//				lab3.config.writeToMonitor("Y:"+odo.getY(), 6);
+//				lab3.config.writeToMonitor("T:"+odo.getThetaInDeg(), 7);
+//
+//			}
 			
 		}
 		else {

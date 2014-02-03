@@ -52,7 +52,7 @@ public class ZigZag extends Thread implements Driver {
 		double turningAngle = Coordinate.calculateRotationAngle(currentCoordinate, nextLocation);
 		
 		config.writeToMonitor( ((Double)distance).toString(), 1);
-		config.writeToMonitor( ((Double)turningAngle).toString(), 2);		
+		config.writeToMonitor( ((Double)turningAngle).toString(), 2);	
 		
 		rotateToRelativly(turningAngle);
 		

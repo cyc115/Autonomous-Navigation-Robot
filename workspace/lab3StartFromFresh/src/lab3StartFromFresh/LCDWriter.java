@@ -24,10 +24,10 @@ public class LCDWriter extends Thread implements Monitor{
 		while (true) {
 			displayStart = System.currentTimeMillis();
 
-			
+			LCD.clear();
 			// clear the lines for displaying odometry information
 			for (int i = 0; i < 8; i++) {
-				LCD.drawString(s[7-i], 0, i);
+				LCD.drawString(s[i], 0, i);
 			}
 			
 			// throttle the OdometryDisplay
