@@ -10,6 +10,7 @@ public class PController extends Thread implements UltrasonicController {
 	private int distance;	// distance measured by the sensor 
 	private Planner  planner ;
 	private UltrasonicSensor uSensor = new UltrasonicSensor(SensorPort.S1);
+	private boolean isStarted = false ;
 	
 	PController(RobotConfiguration config, Planner planner){
 		this.config = config;
@@ -31,7 +32,26 @@ public class PController extends Thread implements UltrasonicController {
 	
 	
 	public void run(){
+		while (!config.driveComplete() ){
+			if ( config.getPlanner().isWallFollow() &&
+					//config.getDriver().isPaused() &&
+					!isStarted){
+				
+				//sleep for .2 sec
+				try {Thread.sleep(200);	} catch (InterruptedException e) {}
+				startWallFollowing();
+				isStarted = true ;
+			} 
+		}
+
+
 		
+		
+		
+
+	}
+	
+	public void startWallFollowing(){
 		//motor go straight
 		leftMotor.setSpeed(RobotConfiguration.FORWARD_SPEED);
 		rightMotor.setSpeed(RobotConfiguration.FORWARD_SPEED);
@@ -44,6 +64,7 @@ public class PController extends Thread implements UltrasonicController {
 			}
 			else{
 				config.resetMotorSpeed();
+				isStarted = false ;
 				break;
 				//break the control back to planner
 			}

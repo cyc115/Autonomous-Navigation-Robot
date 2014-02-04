@@ -38,6 +38,7 @@ turnTo()
 
 	void pause();
 	void unpause();
+	public boolean isPaused() ;
 	void start();
 	
 }

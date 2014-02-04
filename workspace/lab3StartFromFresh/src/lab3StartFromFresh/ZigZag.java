@@ -8,6 +8,7 @@ public class ZigZag extends Thread implements Driver {
 	private Coordinate currentCoordinate, startCoord , endCoord;
 	private NXTRegulatedMotor leftMotor , rightMotor;
 	private boolean pause = false ;
+	private final int CHECK_DISTANCE = 1;
 
 	
 	ZigZag (RobotConfiguration config){
@@ -23,7 +24,7 @@ public class ZigZag extends Thread implements Driver {
 	
 	
 	public void run(){
-		boolean run = false ; //@TODO remove this on final this is to disable zigzag
+		boolean run = true ; //@TODO remove this on final this is to disable zigzag
 		if (run ){
 			travelTo(new Coordinate(60,30,0)); //up 30 cm 
 			travelTo(new Coordinate(30,30,0));
@@ -48,15 +49,12 @@ public class ZigZag extends Thread implements Driver {
 	 * travel to wrt to the global (0,0) coordinate
 	 * @param nextLocation
 	 */
-	public void travelTo(Coordinate nextLocation){
+	public void travelTo(Coordinate nextLocation) {
 		config.setNextLocation(nextLocation);
-		endCoord = nextLocation;
+//		endCoord = nextLocation;
 		config.setStartingCoordinate(currentCoordinate.clone());
-		startCoord = currentCoordinate.clone() ;
-		
-		
-		
-		
+//		startCoord = currentCoordinate.clone() ;
+				
 		double distance = Coordinate.calculateDistance(currentCoordinate, nextLocation);
 		double turningAngle = Coordinate.calculateRotationAngle(currentCoordinate, nextLocation);
 		
@@ -64,7 +62,46 @@ public class ZigZag extends Thread implements Driver {
 		config.writeToMonitor( ((Double)distance).toString(), 1);
 		config.writeToMonitor( ((Double)turningAngle).toString(), 2);	
 		
+		//make turn
 		rotateToRelativly(turningAngle);
+		boolean finishedTravelTo = false ;
+		while(!finishedTravelTo){
+			
+			//when navigating
+			while(!config.getPlanner().isWallFollow()){
+				pause = false ;
+				double moveDist;
+				//move 1 cm forward if distance is bigger then 1cm
+				if (distance > CHECK_DISTANCE ){
+					moveDist = 1;
+					distance -= 1;					//minus 1cm from distance
+				}
+				else {
+					moveDist = distance ;
+					finishedTravelTo = true ;
+					break;
+				}
+				
+				leftMotor.rotate(
+						convertDistance(RobotConfiguration.LEFT_RADIUS, moveDist), 
+						true
+						);
+				rightMotor.rotate(
+						convertDistance(RobotConfiguration.RIGHT_RADIUS, moveDist), 
+						false
+						);
+			}
+			//if wall follows 
+			if (!config.getPlanner().isWallFollow()){
+				pause = true ;
+				//sleep for 0.5 sec and check again 
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {}
+			}
+			
+		}
+		
 		
 		leftMotor.rotate(
 				convertDistance(RobotConfiguration.LEFT_RADIUS, distance), 
@@ -81,7 +118,7 @@ public class ZigZag extends Thread implements Driver {
 				);
 		currentCoordinate = temp ;
 	}
-	
+
 	/**
 	 * rotate to the angle wrt to the current robot angle 
 	 * @param degree
@@ -156,6 +193,12 @@ public class ZigZag extends Thread implements Driver {
 	}
 	public void unpause(){
 		pause = false ;
+	}
+
+
+	@Override
+	public boolean isPaused() {
+		return pause;
 	}
 
 }
