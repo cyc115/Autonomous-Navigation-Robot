@@ -5,7 +5,7 @@ import lejos.nxt.NXTRegulatedMotor;
 public class ZigZag extends Thread implements Driver {
 	
 	private RobotConfiguration config ;
-	private Coordinate currentCoordinate, nextCoordinate , prevCoordinate;
+	private Coordinate currentCoordinate, startCoord , endCoord;
 	private NXTRegulatedMotor leftMotor , rightMotor;
 	private boolean pause = false ;
 
@@ -18,7 +18,7 @@ public class ZigZag extends Thread implements Driver {
 		config.setDriver(this);
 		
 		currentCoordinate = config.getCurrentLocation();
-		prevCoordinate = config.getStartingCoordinate();
+		endCoord = config.getStartingCoordinate();
 	}
 	
 	
@@ -50,7 +50,11 @@ public class ZigZag extends Thread implements Driver {
 	 */
 	public void travelTo(Coordinate nextLocation){
 		config.setNextLocation(nextLocation);
-		config.setStartingCoordinate(currentCoordinate);
+		endCoord = nextLocation;
+		config.setStartingCoordinate(currentCoordinate.clone());
+		startCoord = currentCoordinate.clone() ;
+		
+		
 		
 		
 		double distance = Coordinate.calculateDistance(currentCoordinate, nextLocation);

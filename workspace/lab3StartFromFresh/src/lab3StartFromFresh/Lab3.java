@@ -51,9 +51,7 @@ public class Lab3 {
 			lab3.config.leftButtonPressed(); 
 			
 			while(!lab3.config.driveComplete()){
-				//TODO test if the wall following swtich is right or not 
-//				lab3.config.writeToMonitor(String.valueOf(lab3.config.getPlanner().wallFollow()),3);
-				lab3.config.writeToMonitor(String.valueOf(lab3.config.getPlanner().wallFollow()),4);
+				lab3.config.writeToMonitor(String.valueOf(lab3.config.getPlanner().isWallFollow()),4);
 //				lab3.config.writeToMonitor(lab3.config.getCurrentLocation().toString(), 4);
 				lab3.config.writeToMonitor("X:"+odo.getX(), 5);
 				lab3.config.writeToMonitor("Y:"+odo.getY(), 6);

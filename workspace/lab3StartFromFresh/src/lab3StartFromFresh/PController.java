@@ -39,7 +39,7 @@ public class PController extends Thread implements UltrasonicController {
 		leftMotor.forward();
 		rightMotor.forward();
 		while (true){
-			if (planner.wallFollow()){
+			if (planner.isWallFollow()){
 				processUSData(uSensor.getDistance());
 			}
 			else{
