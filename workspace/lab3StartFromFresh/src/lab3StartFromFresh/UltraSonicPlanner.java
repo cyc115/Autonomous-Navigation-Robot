@@ -29,25 +29,22 @@ public class UltraSonicPlanner extends Thread implements Planner{
 		
 		//start the poller 
 		usPoller.start();
-		pcontrol.start();
+//		pcontrol.start();
 		
-		//check wall following 
-		while (true){
-			if (usPoller.getDistance() < THRESHOLD){
-				setWallFollow(true);
-			}
-			else {
-				setWallFollow(false);
-			}
-			//sleep 20 ms 
-			try {
-				Thread.sleep(20);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
+//		//check wall following 
+//		while (true){
+//			if (usPoller.getDistance() < THRESHOLD){
+//				setWallFollow(true);
+//			}
+//			else {
+//				setWallFollow(false);
+//			}
+//			//sleep 20 ms 
+//			try {
+//				Thread.sleep(20);
+//			} catch (InterruptedException e) { 			}
+//		}
+//		
 
 		
 //		while(!config.driveComplete()){
@@ -106,9 +103,10 @@ public class UltraSonicPlanner extends Thread implements Planner{
 	
 	
 	public boolean isWallFollow() {
-		synchronized(lock){
-			return wallFollow;
-		}
+		return false ;
+	//		synchronized(lock){
+//			return wallFollow;
+//		}
 	}
 
 	public void setWallFollow(boolean wallFollow) {

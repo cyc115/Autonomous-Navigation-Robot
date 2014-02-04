@@ -8,7 +8,7 @@ public class ZigZag extends Thread implements Driver {
 	private Coordinate currentCoordinate, startCoord , endCoord;
 	private NXTRegulatedMotor leftMotor , rightMotor;
 	private boolean pause = false ;
-	private final int CHECK_DISTANCE = 1;
+	private final int CHECK_DISTANCE = 100;
 
 	
 	ZigZag (RobotConfiguration config){
@@ -29,7 +29,8 @@ public class ZigZag extends Thread implements Driver {
 			travelTo(new Coordinate(60,30,0)); //up 30 cm 
 			travelTo(new Coordinate(30,30,0));
 			travelTo(new Coordinate(30,60,0));
-			travelTo(new Coordinate(60,0,0));
+			travelTo(new Coordinate(60,-2,0));
+			
 			//end of the run
 			config.setDriveComplete(true);
 		}
@@ -73,8 +74,8 @@ public class ZigZag extends Thread implements Driver {
 				double moveDist;
 				//move 1 cm forward if distance is bigger then 1cm
 				if (distance > CHECK_DISTANCE ){
-					moveDist = 1;
-					distance -= 1;					//minus 1cm from distance
+					moveDist = CHECK_DISTANCE;
+					distance -= CHECK_DISTANCE;					//minus 1cm from distance
 				}
 				else {
 					moveDist = distance ;

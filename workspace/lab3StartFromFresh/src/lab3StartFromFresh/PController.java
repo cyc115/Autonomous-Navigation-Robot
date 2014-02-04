@@ -43,12 +43,6 @@ public class PController extends Thread implements UltrasonicController {
 				isStarted = true ;
 			} 
 		}
-
-
-		
-		
-		
-
 	}
 	
 	public void startWallFollowing(){
