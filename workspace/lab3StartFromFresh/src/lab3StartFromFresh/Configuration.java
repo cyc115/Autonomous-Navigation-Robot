@@ -13,6 +13,7 @@ public class Configuration implements RobotConfiguration{
 	private Coordinate nextLocation; //current location ;
 	private Odometer odometer;
 	private LCDWriter monitor;
+	private Planner planner ;
 //	private LCPBTResponder lcpThread;   /pc debugging
 	private Driver driver ;
 	static boolean driveComplete  = false ;
@@ -21,9 +22,7 @@ public class Configuration implements RobotConfiguration{
 		Configuration config = new Configuration();
 		config.odometer = new Odometer(config);
 		config.monitor = new LCDWriter(config);
-		
-		//really important ... don't forget to start 
-		config.odometer.start();
+		config.planner = new UltraSonicPlanner(config);
 		return config;
 	}
 	
@@ -133,5 +132,44 @@ public class Configuration implements RobotConfiguration{
 	public Driver getDriver() {
 
 		return driver;
+	}
+
+	@Override
+	public Planner getPlanner() {
+		return planner;
+	}
+
+	@Override
+	public void setPlanner(Planner p) {
+		planner = p;
+	}
+	
+	public void leftButtonPressed(){
+		//really important ... don't forget to start 
+		monitor.start();
+		odometer.start();
+		planner.start();//ultrasonic poller and pCOntrol are started implicitly by planner 
+		driver.start();
+		
+	}
+	@Override
+	/**
+	 * reset the motot speed to default forward_speed and motor rotation to forward
+	 */
+	public void resetMotorSpeed() {
+		RobotConfiguration.LEFT_MOTOR.stop();
+		RobotConfiguration.RIGHT_MOTOR.stop();
+		
+		RobotConfiguration.LEFT_MOTOR.setSpeed(FORWARD_SPEED);
+		RobotConfiguration.RIGHT_MOTOR.setSpeed(FORWARD_SPEED);
+		
+		RobotConfiguration.LEFT_MOTOR.forward();
+		RobotConfiguration.RIGHT_MOTOR.forward();
+	}
+
+	@Override
+	public void rightButtonPressed() {
+		// TODO Auto-generated method stub
+		
 	}
 }

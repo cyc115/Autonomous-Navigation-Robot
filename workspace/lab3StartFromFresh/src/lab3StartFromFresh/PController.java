@@ -42,8 +42,12 @@ public class PController extends Thread implements UltrasonicController {
 			if (planner.wallFollow()){
 				processUSData(uSensor.getDistance());
 			}
-			else //break the control back to planner
+			else{
+				config.resetMotorSpeed();
 				break;
+				//break the control back to planner
+			}
+
 		}
 
 	}

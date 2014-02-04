@@ -44,27 +44,22 @@ public class Lab3 {
 				motor.flt();
 			}
 			
-			lab3.startLCDMonitor();
-			drive.start();
-			
 			Odometer odo = lab3.config.getOdometer();
-			
-			//TODO refactor those below
-			Planner plan = new UltraSonicPlanner(lab3.config);
-			plan.start();
-			
 			UsPoller poller = new UsPoller(lab3.config);
-			poller.start();
 			
-//			while(!lab3.config.driveComplete()){
-////				lab3.config.writeToMonitor(String.valueOf(UsPoller.getDistance()),3);
-//				lab3.config.writeToMonitor(String.valueOf(plan.wallFollow()),4);
-////				lab3.config.writeToMonitor(lab3.config.getCurrentLocation().toString(), 4);
-//				lab3.config.writeToMonitor("X:"+odo.getX(), 5);
-//				lab3.config.writeToMonitor("Y:"+odo.getY(), 6);
-//				lab3.config.writeToMonitor("T:"+odo.getThetaInDeg(), 7);
-//
-//			}
+			//start 
+			lab3.config.leftButtonPressed(); 
+			
+			while(!lab3.config.driveComplete()){
+				//TODO test if the wall following swtich is right or not 
+//				lab3.config.writeToMonitor(String.valueOf(lab3.config.getPlanner().wallFollow()),3);
+				lab3.config.writeToMonitor(String.valueOf(lab3.config.getPlanner().wallFollow()),4);
+//				lab3.config.writeToMonitor(lab3.config.getCurrentLocation().toString(), 4);
+				lab3.config.writeToMonitor("X:"+odo.getX(), 5);
+				lab3.config.writeToMonitor("Y:"+odo.getY(), 6);
+				lab3.config.writeToMonitor("T:"+odo.getThetaInDeg(), 7);
+
+			}
 			
 		}
 		else {
@@ -82,12 +77,6 @@ public class Lab3 {
 		return config.getAllMotors();
 	}
 	
-	/**
-	 * start to monitor the device
-	 */
-	void startLCDMonitor(){
-		this.config.getMonitor().start();
-	}
 	void writeToMonitor(String s, int lineNumber){
 		this.config.getMonitor().writeToScreen(s, lineNumber);
 	}

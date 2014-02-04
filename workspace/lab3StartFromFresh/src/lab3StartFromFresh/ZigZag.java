@@ -23,12 +23,17 @@ public class ZigZag extends Thread implements Driver {
 	
 	
 	public void run(){
-		travelTo(new Coordinate(60,30,0)); //up 30 cm 
-		travelTo(new Coordinate(30,30,0));
-		travelTo(new Coordinate(30,60,0));
-		travelTo(new Coordinate(60,0,0));
-		//end of the run
-		config.setDriveComplete(true);
+		boolean run = false ; //@TODO remove this on final this is to disable zigzag
+		if (run ){
+			travelTo(new Coordinate(60,30,0)); //up 30 cm 
+			travelTo(new Coordinate(30,30,0));
+			travelTo(new Coordinate(30,60,0));
+			travelTo(new Coordinate(60,0,0));
+			//end of the run
+			config.setDriveComplete(true);
+		}
+		
+
 	}
 
 	/**
@@ -51,6 +56,7 @@ public class ZigZag extends Thread implements Driver {
 		double distance = Coordinate.calculateDistance(currentCoordinate, nextLocation);
 		double turningAngle = Coordinate.calculateRotationAngle(currentCoordinate, nextLocation);
 		
+		//TODO remove debugging information 
 		config.writeToMonitor( ((Double)distance).toString(), 1);
 		config.writeToMonitor( ((Double)turningAngle).toString(), 2);	
 		
@@ -115,7 +121,7 @@ public class ZigZag extends Thread implements Driver {
 	 */
 	@Override
 	public void turnTo(double theata) {
-		// TODO Auto-generated method stub
+		rotateToRelativly(theata);
 		
 	}
 

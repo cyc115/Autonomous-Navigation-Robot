@@ -38,4 +38,10 @@ public interface RobotConfiguration {
 	public RobotConfiguration setDriver(Driver driver);
 	public Driver getDriver();
 	
+	public Planner getPlanner();
+	public void setPlanner(Planner p);
+	public void resetMotorSpeed();
+	public void leftButtonPressed();
+	public void rightButtonPressed();
+	
 }
