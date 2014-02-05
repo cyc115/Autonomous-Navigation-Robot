@@ -44,9 +44,10 @@ public class Lab3 {
 
 //			TODO remove for the 4th lab 
 			Odometer odo = lab3.config.getOdometer();
+			UsPoller poller = new UsPoller(lab3.config);
 			while(!lab3.config.driveComplete()){
-				lab3.config.writeToMonitor("Dis" + lab3.config.getUsPoller().getDistance(), 3);
-				lab3.config.writeToMonitor("WF: "+ String.valueOf(lab3.config.getPlanner().isWallFollow()),4);
+				lab3.config.writeToMonitor(String.valueOf(lab3.config.getPlanner().isWallFollow()),4);
+//				lab3.config.writeToMonitor(lab3.config.getCurrentLocation().toString(), 4);
 				lab3.config.writeToMonitor("X:"+odo.getX(), 5);
 				lab3.config.writeToMonitor("Y:"+odo.getY(), 6);
 				lab3.config.writeToMonitor("T:"+odo.getThetaInDeg(), 7);

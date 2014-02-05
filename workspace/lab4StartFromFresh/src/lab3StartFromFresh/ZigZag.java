@@ -2,14 +2,16 @@ package lab3StartFromFresh;
 
 import lejos.nxt.NXTRegulatedMotor;
 
-public abstract class Driver extends Thread implements Drivable {
-	protected RobotConfiguration config ;
-	protected Coordinate currentCoordinate, startCoord , endCoord;
-	protected NXTRegulatedMotor leftMotor , rightMotor;
-	protected boolean pause = false ;
+public class ZigZag extends Thread implements Drivable {
+	
+	private RobotConfiguration config ;
+	private Coordinate currentCoordinate, startCoord , endCoord;
+	private NXTRegulatedMotor leftMotor , rightMotor;
+	private boolean pause = false ;
 	private final int CHECK_DISTANCE = 100;
 
-	public Driver(RobotConfiguration config){
+	
+	ZigZag (RobotConfiguration config){
 		this.config = config ;
 		leftMotor = RobotConfiguration.LEFT_MOTOR;	// this is very frequently used
 		rightMotor = RobotConfiguration.RIGHT_MOTOR;
@@ -17,11 +19,25 @@ public abstract class Driver extends Thread implements Drivable {
 		currentCoordinate = config.getCurrentLocation();
 		endCoord = config.getStartingCoordinate();
 	}
+	
+	
+	public void run(){
+		boolean run = true ; //@TODO remove this on final this is to disable zigzag
+		if (run ){
+			travelTo(new Coordinate(60,30,0)); //up 30 cm 
+			travelTo(new Coordinate(30,30,0));
+			travelTo(new Coordinate(30,60,0));
+			travelTo(new Coordinate(60,-2,0));
+			
+			//end of the run
+			config.setDriveComplete(true);
+		}
+		
 
+	}
 
 	/**
-	 * travel to wrt to the global (0,0) coordinate.
-	 * TODO this will check for 
+	 * travel to wrt to the global (0,0) coordinate
 	 * @param nextLocation
 	 */
 	public void travelTo(double x, double y) {
@@ -54,7 +70,7 @@ public abstract class Driver extends Thread implements Drivable {
 			while(!config.getPlanner().isWallFollow()){
 				pause = false ;
 				double moveDist;
-				//move x cm forward if distance is bigger then 1cm
+				//move 1 cm forward if distance is bigger then 1cm
 				if (distance > CHECK_DISTANCE ){
 					moveDist = CHECK_DISTANCE;
 					distance -= CHECK_DISTANCE;					//minus 1cm from distance
@@ -140,7 +156,6 @@ public abstract class Driver extends Thread implements Drivable {
 	}
 	
 	
-	
 	/**
 	 * turn to angle wrt to the y axies 
 	 */
@@ -149,7 +164,6 @@ public abstract class Driver extends Thread implements Drivable {
 		rotateToRelativly(theata);
 		
 	}
-	
 
 	@Override
 	public boolean isNagivating() {
@@ -170,6 +184,8 @@ public abstract class Driver extends Thread implements Drivable {
 	public void setCurrentCoordinatel(Coordinate currentCoordinate) {
 		this.currentCoordinate = currentCoordinate;
 	}
+
+
 	@Override
 	public void pause() {
 		pause = true;
@@ -177,8 +193,11 @@ public abstract class Driver extends Thread implements Drivable {
 	public void unpause(){
 		pause = false ;
 	}
+
+
 	@Override
 	public boolean isPaused() {
 		return pause;
 	}
+
 }

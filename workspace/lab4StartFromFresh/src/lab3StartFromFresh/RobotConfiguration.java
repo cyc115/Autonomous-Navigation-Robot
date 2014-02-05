@@ -123,7 +123,5 @@ public interface RobotConfiguration {
 	 * this will be called when rightButton is pressed on the brick
 	 */
 	public void rightButtonPressed();
-	public UsPoller getUsPoller();
-	public void setUsPoller(UsPoller ultrasonicPoller);
 	
 }

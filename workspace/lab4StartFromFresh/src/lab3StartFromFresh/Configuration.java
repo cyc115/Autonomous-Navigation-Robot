@@ -17,9 +17,7 @@ public class Configuration implements RobotConfiguration{
 	private Planner planner ;
 	private Drivable driver ;
 	private UsPoller usPoller ;
-	
-
-	//	private LCPBTResponder lcpThread;   //pc debugging not used in this demo
+//	private LCPBTResponder lcpThread;   //pc debugging not used in this demo
 	static boolean driveComplete  = false ;
 	
 	public static Configuration getDefaultLab3Config(){
@@ -171,14 +169,4 @@ public class Configuration implements RobotConfiguration{
 	public void rightButtonPressed() {
 		
 	}
-	
-	public UsPoller getUsPoller() {
-		return usPoller;
-	}
-
-	public void setUsPoller(UsPoller ultrasonicPoller) {
-		this.usPoller = ultrasonicPoller;
-	}
-
-	
 }
