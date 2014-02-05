@@ -80,7 +80,7 @@ public class UltraSonicPlanner extends Thread implements Planner{
 
 	
 	
-	public boolean isWallFollow() {
+	public boolean hasWallAhead() {
 		return false ;
 	//		synchronized(lock){
 //			return wallFollow;

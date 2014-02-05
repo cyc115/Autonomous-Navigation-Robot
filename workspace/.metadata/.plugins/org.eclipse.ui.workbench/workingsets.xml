@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workingSetManager>
+<workingSet editPageId="org.eclipse.mylyn.tasks.ui.workingSet" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1391623414720_3" label="task" name="task">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/lab4StartFromFresh" type="4"/>
+</workingSet>
 <workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1389735100343_0" label="Window Working Set" name="Aggregate for window 1389735100343"/>
 <workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1389818594837_1" label="Window Working Set" name="Aggregate for window 1389818594837"/>
-<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1389820814075_2" label="Window Working Set" name="Aggregate for window 1389820814075"/>
+<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1389820814075_2" label="Window Working Set" name="Aggregate for window 1389820814075">
+<workingSet IMemento.internal.id="task"/>
+</workingSet>
 </workingSetManager>

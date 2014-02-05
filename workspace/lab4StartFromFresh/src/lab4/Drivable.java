@@ -1,4 +1,4 @@
-package lab3StartFromFresh;
+package lab4;
 /**
  * interface description of the tasks to be done in the third lab
  * @goal Write a program to travel to the waypoints (60, 30), (30, 30), (30, 60), and

@@ -1,4 +1,4 @@
-package lab3StartFromFresh;
+package lab4;
 
 /**
  * location x , y and theata in degrees 

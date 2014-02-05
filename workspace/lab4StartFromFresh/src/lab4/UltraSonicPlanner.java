@@ -1,4 +1,4 @@
-package lab3StartFromFresh;
+package lab4;
 
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
@@ -12,7 +12,7 @@ public class UltraSonicPlanner extends Thread implements Planner{
 	private UsPoller usPoller ;
 	private UltrasonicController pcontrol; 
 	private Object lock ;
-	private boolean wallFollow = false ;
+	private boolean wallAhead = false ;
 
 	public UltraSonicPlanner(RobotConfiguration config) {
 		this.config= config; 
@@ -102,16 +102,15 @@ public class UltraSonicPlanner extends Thread implements Planner{
 
 	
 	
-	public boolean isWallFollow() {
-		return false ;
-	//		synchronized(lock){
-//			return wallFollow;
-//		}
+	public boolean hasWallAhead() {
+		synchronized(lock){
+			return wallAhead;
+		}
 	}
 
-	public void setWallFollow(boolean wallFollow) {
+	public void setWallFollow(boolean wallAhead) {
 		synchronized(lock){
-			this.wallFollow = wallFollow;
+			this.wallAhead = wallAhead;
 		}
 	}
 

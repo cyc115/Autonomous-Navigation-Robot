@@ -30,7 +30,7 @@ public abstract class Driver extends Thread implements Drivable {
 
 	/**
 	 * travel to wrt to the global (0,0) coordinate
-	 * @param nextLocation
+	 * @param nextLocationg
 	 */
 	public void travelTo(Coordinate nextLocation) {
 		config.setNextLocation(nextLocation);
@@ -51,7 +51,7 @@ public abstract class Driver extends Thread implements Drivable {
 		while(!finishedTravelTo){
 			
 			//when navigating
-			while(!config.getPlanner().isWallFollow()){
+			while(!config.getPlanner().hasWallAhead()){
 				pause = false ;
 				double moveDist;
 				//move x cm forward if distance is bigger then 1cm
@@ -75,7 +75,7 @@ public abstract class Driver extends Thread implements Drivable {
 						);
 			}
 			//if wall follows 
-			if (!config.getPlanner().isWallFollow()){
+			if (!config.getPlanner().hasWallAhead()){
 				pause = true ;
 				//sleep for 0.5 sec and check again 
 				try {

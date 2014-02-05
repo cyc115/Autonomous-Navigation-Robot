@@ -1,4 +1,4 @@
-package lab3StartFromFresh;
+package lab4;
 
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;

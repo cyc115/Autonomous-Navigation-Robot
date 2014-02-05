@@ -1,4 +1,4 @@
-package lab3StartFromFresh;
+package lab4;
 
 public class Point {
 	private double x , y ;

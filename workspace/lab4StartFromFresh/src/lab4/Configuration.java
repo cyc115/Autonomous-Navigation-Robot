@@ -1,4 +1,4 @@
-package lab3StartFromFresh;
+package lab4;
 
 import lejos.nxt.LCD;
 import lejos.nxt.Motor;
@@ -167,6 +167,17 @@ public class Configuration implements RobotConfiguration{
 
 	@Override
 	public void rightButtonPressed() {
+		
+	}
+
+	@Override
+	public UsPoller getUsPoller() {
+		return usPoller;
+	}
+
+	@Override
+	public void setUsPoller(UsPoller ultrasonicPoller) {
+		usPoller  = ultrasonicPoller;
 		
 	}
 }

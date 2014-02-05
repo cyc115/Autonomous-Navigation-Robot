@@ -46,7 +46,7 @@ public class Lab3 {
 			Odometer odo = lab3.config.getOdometer();
 			while(!lab3.config.driveComplete()){
 				lab3.config.writeToMonitor("Dis" + lab3.config.getUsPoller().getDistance(), 3);
-				lab3.config.writeToMonitor("WF: "+ String.valueOf(lab3.config.getPlanner().isWallFollow()),4);
+				lab3.config.writeToMonitor("WF: "+ String.valueOf(lab3.config.getPlanner().hasWallAhead()),4);
 				lab3.config.writeToMonitor("X:"+odo.getX(), 5);
 				lab3.config.writeToMonitor("Y:"+odo.getY(), 6);
 				lab3.config.writeToMonitor("T:"+odo.getThetaInDeg(), 7);

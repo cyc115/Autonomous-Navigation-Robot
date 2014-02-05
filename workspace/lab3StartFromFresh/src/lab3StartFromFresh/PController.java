@@ -33,7 +33,7 @@ public class PController extends Thread implements UltrasonicController {
 	
 	public void run(){
 		while (!config.driveComplete() ){
-			if ( config.getPlanner().isWallFollow() &&
+			if ( config.getPlanner().hasWallAhead() &&
 					//config.getDriver().isPaused() &&
 					!isStarted){
 				
@@ -53,7 +53,7 @@ public class PController extends Thread implements UltrasonicController {
 		leftMotor.forward();
 		rightMotor.forward();
 		while (true){
-			if (planner.isWallFollow()){
+			if (planner.hasWallAhead()){
 				processUSData(uSensor.getDistance());
 			}
 			else{

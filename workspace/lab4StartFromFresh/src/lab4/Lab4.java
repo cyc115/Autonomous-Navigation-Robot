@@ -1,4 +1,4 @@
-package lab3StartFromFresh;
+package lab4;
 
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
@@ -6,18 +6,18 @@ import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
 
-public class Lab3 {
+public class Lab4 {
 	RobotConfiguration config ;
 	
-	Lab3(RobotConfiguration config){
+	Lab4(RobotConfiguration config){
 		this.config = config;
 	}
-	Lab3(){
+	Lab4(){
 		this.config = Configuration.getDefaultLab3Config();
 	}
 	
 	public static void main (String [] args){
-		Lab3 lab3 = new Lab3();  //the top most monitor class	
+		Lab4 lab3 = new Lab4();  //the top most monitor class	
 		
 		int buttonChoice ;
 		
@@ -42,12 +42,10 @@ public class Lab3 {
 			lab3.initializeMotor();			//start 
 			lab3.config.leftButtonPressed(); 
 
-//			TODO remove for the 4th lab 
 			Odometer odo = lab3.config.getOdometer();
-			UsPoller poller = new UsPoller(lab3.config);
 			while(!lab3.config.driveComplete()){
-				lab3.config.writeToMonitor(String.valueOf(lab3.config.getPlanner().isWallFollow()),4);
-//				lab3.config.writeToMonitor(lab3.config.getCurrentLocation().toString(), 4);
+				lab3.config.writeToMonitor("DIS" + lab3.config.getUsPoller().getDistance(), 3);
+				lab3.config.writeToMonitor("WALL" + String.valueOf(lab3.config.getPlanner().hasWallAhead()),4);
 				lab3.config.writeToMonitor("X:"+odo.getX(), 5);
 				lab3.config.writeToMonitor("Y:"+odo.getY(), 6);
 				lab3.config.writeToMonitor("T:"+odo.getThetaInDeg(), 7);
