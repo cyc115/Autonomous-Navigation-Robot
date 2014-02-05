@@ -18,5 +18,11 @@ public class ZigZag extends Driver implements Drivable {
 			config.setDriveComplete(true);
 	}
 
+	@Override
+	protected void handleObsticle() {
+		//what happens when there are walls detected 
+		
+	}
+
 
 }
