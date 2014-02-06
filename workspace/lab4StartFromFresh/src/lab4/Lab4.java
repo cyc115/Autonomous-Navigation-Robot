@@ -29,7 +29,7 @@ public class Lab4 {
 			// ask the user whether the motors should drive in a square or float
 			LCD.drawString("< Left | Right >", 0, 0);
 			LCD.drawString("       |        ", 0, 1);
-			LCD.drawString(" part 1| Drive  ", 0, 2);
+			LCD.drawString(" rising| Drive  ", 0, 2);
 			LCD.drawString("       | in a   ", 0, 3);
 			LCD.drawString("       | square ", 0, 4);
 
@@ -46,9 +46,7 @@ public class Lab4 {
 			while(!lab3.config.driveComplete()){
 				lab3.config.writeToMonitor("DIS" + lab3.config.getUsPoller().getDistance(), 3);
 				lab3.config.writeToMonitor("WALL" + String.valueOf(lab3.config.getPlanner().hasWallAhead()),4);
-				lab3.config.writeToMonitor("X:"+odo.getX(), 5);
-				lab3.config.writeToMonitor("Y:"+odo.getY(), 6);
-				lab3.config.writeToMonitor("T:"+odo.getThetaInDeg(), 7);
+				lab3.config.writeToMonitor("O " + lab3.config.getCurrentLocation(), 7);
 
 			}
 			

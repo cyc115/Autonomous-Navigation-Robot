@@ -1,8 +1,10 @@
 package lab4;
 
 import lejos.nxt.LCD;
+import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
+import lejos.nxt.SensorPort;
 import lejos.nxt.comm.LCPBTResponder;
 
 public class Configuration implements RobotConfiguration{
@@ -17,6 +19,7 @@ public class Configuration implements RobotConfiguration{
 	private Planner planner ;
 	private Drivable driver ;
 	private UsPoller usPoller ;
+	private LightSensor lightSensor ;
 //	private LCPBTResponder lcpThread;   //pc debugging not used in this demo
 	static boolean driveComplete  = false ;
 	
@@ -25,16 +28,24 @@ public class Configuration implements RobotConfiguration{
 		config.startLocation = new Coordinate(0,0,0); 
 		config.currentLocation = config.startLocation.clone();
 		
-//		config.lcpThread = new LCPBTResponder();
 		config.odometer = new Odometer(config);
 		config.monitor = new LCDWriter(config);
 		config.planner = new UltraSonicPlanner(config);
 		config.usPoller = new UsPoller(config);
 		config.driver = new ZigZag(config);
+		config.lightSensor = new LightSensor(SensorPort.S2);
 		
 		return config;
 	}
 	
+	public LightSensor getLightSensor() {
+		return lightSensor;
+	}
+
+	public void setLightSensor(LightSensor ls) {
+		this.lightSensor = ls;
+	}
+
 	public Configuration(){
 		lock = new Object();
 

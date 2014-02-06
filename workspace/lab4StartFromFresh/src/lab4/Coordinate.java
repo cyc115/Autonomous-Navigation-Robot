@@ -61,7 +61,7 @@ public class Coordinate extends Point{
 	}
 	@Override
 	public String toString() {
-		return "t" + String.valueOf(getTheta()).substring(0, 3) + ",X" + String.valueOf(getX()).substring(0, 3) 
+		return "t" + String.valueOf(Math.toDegrees(getTheta())).substring(0, 3) + ",X" + String.valueOf(getX()).substring(0, 3) 
 				+ ",Y" + String.valueOf(getY()).substring(0, 3);
 	}
 

@@ -1,6 +1,7 @@
 package lab4;
 
 import lejos.nxt.I2CPort;
+import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.SensorPort;
@@ -128,5 +129,9 @@ public interface RobotConfiguration {
 	public UsPoller getUsPoller();
 
 	public void setUsPoller(UsPoller ultrasonicPoller);
+	
+	public LightSensor getLightSensor();
+
+	public void setLightSensor(LightSensor ls);
 	
 }

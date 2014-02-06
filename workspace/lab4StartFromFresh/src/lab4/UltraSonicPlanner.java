@@ -5,7 +5,7 @@ import lejos.nxt.UltrasonicSensor;
 
 public class UltraSonicPlanner extends Thread implements Planner{
 
-	private static final int THRESHOLD = 20;	//start wall following 
+	private static final int THRESHOLD = 40;	//start wall following 
 	private static final int TAN_TOLORANCE = 3;
 	private RobotConfiguration config ;
 	private Coordinate currentPos ,nextPos , prevPos;
@@ -25,49 +25,24 @@ public class UltraSonicPlanner extends Thread implements Planner{
 	
 	public void run(){
 		//initialized here to try 
-		pcontrol = new PController(config,this);
+//		pcontrol = new PController(config,this);
 		
 		//start the poller 
 		usPoller.start();
-//		pcontrol.start();
 		
-//		//check wall following 
-//		while (true){
-//			if (usPoller.getDistance() < THRESHOLD){
-//				setWallFollow(true);
-//			}
-//			else {
-//				setWallFollow(false);
-//			}
-//			//sleep 20 ms 
-//			try {
-//				Thread.sleep(20);
-//			} catch (InterruptedException e) { 			}
-//		}
-//		
-
-		
-//		while(!config.driveComplete()){
-//			
-//			if (wallFollow()){
-//				//pause to let navigation to finish for now 
-//				try {
-//					Thread.sleep(1000);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-//				
-//				//run wall following 
-//
-//				}
-//			
-//			else {
-//				//run navigation
-//				// the navigation is started automatically because
-//				//it listens to the wall follow
-//			}
-
-			
+		//check wall following 
+		while (true){
+			if (usPoller.getDistance() < THRESHOLD){
+				setWallFollow(true);
+			}
+			else {
+				setWallFollow(false);
+			}
+			//sleep 20 ms 
+			try {
+				Thread.sleep(20);
+			} catch (InterruptedException e) { 			}
+		}
 
 	}
 	
