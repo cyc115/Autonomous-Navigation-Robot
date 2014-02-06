@@ -23,6 +23,11 @@ public class Configuration implements RobotConfiguration{
 //	private LCPBTResponder lcpThread;   //pc debugging not used in this demo
 	static boolean driveComplete  = false ;
 	
+	/**
+	 * this returns a default config for lab 3
+	 * 
+	 * @return
+	 */
 	public static Configuration getDefaultLab3Config(){
 		Configuration config = new Configuration();
 		config.startLocation = new Coordinate(0,0,0); 
@@ -32,11 +37,28 @@ public class Configuration implements RobotConfiguration{
 		config.monitor = new LCDWriter(config);
 		config.planner = new UltraSonicPlanner(config);
 		config.usPoller = new UsPoller(config);
-		config.driver = new ZigZag(config);
+//		config.driver = new ZigZag(config);
 		config.lightSensor = new LightSensor(SensorPort.S2);
 		
 		return config;
 	}
+	
+	public static Configuration getDefaultLab4(){
+		Configuration config = new Configuration();
+		config.startLocation = new Coordinate(0,0,0); 
+		config.currentLocation = config.startLocation.clone();
+		
+		config.odometer = new Odometer(config);
+		config.monitor = new LCDWriter(config);
+
+		config.usPoller = new UsPoller(config);
+		config.lightSensor = new LightSensor(SensorPort.S2);
+		config.driver = new LocateOriginDriver(config);
+
+		
+		return config;
+	}
+	
 	
 	public LightSensor getLightSensor() {
 		return lightSensor;
@@ -157,13 +179,13 @@ public class Configuration implements RobotConfiguration{
 		//really important ... don't forget to start 
 		monitor.start();
 		odometer.start();
-		planner.start();//ultrasonic poller and pCOntrol are started implicitly by planner 
 		driver.start();
 		usPoller.start();
 	}
 	@Override
 	/**
 	 * reset the motot speed to default forward_speed and motor rotation to forward
+	 * and start the motor 
 	 */
 	public void resetMotorSpeed() {
 		RobotConfiguration.LEFT_MOTOR.stop();
@@ -189,6 +211,13 @@ public class Configuration implements RobotConfiguration{
 	@Override
 	public void setUsPoller(UsPoller ultrasonicPoller) {
 		usPoller  = ultrasonicPoller;
+		
+	}
+
+	@Override
+	public void stopMotor() {
+		LEFT_MOTOR.stop();
+		RIGHT_MOTOR.stop();
 		
 	}
 }

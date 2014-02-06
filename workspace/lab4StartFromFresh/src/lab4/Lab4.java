@@ -9,15 +9,12 @@ import lejos.nxt.UltrasonicSensor;
 public class Lab4 {
 	RobotConfiguration config ;
 	
-	Lab4(RobotConfiguration config){
-		this.config = config;
-	}
 	Lab4(){
-		this.config = Configuration.getDefaultLab3Config();
+		this.config = Configuration.getDefaultLab4();
 	}
 	
 	public static void main (String [] args){
-		Lab4 lab3 = new Lab4();  //the top most monitor class	
+		Lab4 lab4 = new Lab4();  //the top most monitor class	
 		
 		int buttonChoice ;
 		
@@ -29,9 +26,9 @@ public class Lab4 {
 			// ask the user whether the motors should drive in a square or float
 			LCD.drawString("< Left | Right >", 0, 0);
 			LCD.drawString("       |        ", 0, 1);
-			LCD.drawString(" rising| Drive  ", 0, 2);
-			LCD.drawString("       | in a   ", 0, 3);
-			LCD.drawString("       | square ", 0, 4);
+			LCD.drawString(" rising| Fallin ", 0, 2);
+			LCD.drawString("       |        ", 0, 3);
+			LCD.drawString("       |        ", 0, 4);
 
 			buttonChoice = Button.waitForAnyPress();
 		} while (buttonChoice != Button.ID_LEFT
@@ -39,14 +36,13 @@ public class Lab4 {
 
 		if (buttonChoice == Button.ID_LEFT) {
 
-			lab3.initializeMotor();			//start 
-			lab3.config.leftButtonPressed(); 
+			lab4.initializeMotor();			//start 
+			lab4.config.leftButtonPressed(); 
 
-			Odometer odo = lab3.config.getOdometer();
-			while(!lab3.config.driveComplete()){
-				lab3.config.writeToMonitor("DIS" + lab3.config.getUsPoller().getDistance(), 3);
-				lab3.config.writeToMonitor("WALL" + String.valueOf(lab3.config.getPlanner().hasWallAhead()),4);
-				lab3.config.writeToMonitor("O " + lab3.config.getCurrentLocation(), 7);
+			Odometer odo = lab4.config.getOdometer();
+			while(!lab4.config.driveComplete()){
+//				lab4.config.writeToMonitor("DIS" + lab4.config.getUsPoller().getDistance(), 3);
+				lab4.config.writeToMonitor("O " + lab4.config.getCurrentLocation(), 7);
 
 			}
 			
@@ -57,9 +53,7 @@ public class Lab4 {
 		
 		while (Button.waitForAnyPress() != Button.ID_ESCAPE);
 		System.exit(0);
-		
-		
-		
+
 	}
 	
 	NXTRegulatedMotor [] getAllMotors(){

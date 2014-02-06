@@ -116,6 +116,7 @@ public interface RobotConfiguration {
 	 * change the motor speed to this configuration's default 
 	 */
 	public void resetMotorSpeed();
+	public void stopMotor();
 	/**
 	 * this will be called when leftButton is pressed on the brick
 	 */
@@ -133,5 +134,4 @@ public interface RobotConfiguration {
 	public LightSensor getLightSensor();
 
 	public void setLightSensor(LightSensor ls);
-	
 }
