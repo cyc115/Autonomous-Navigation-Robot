@@ -7,11 +7,12 @@ public class LineReader extends Thread{
 	ColorSensor colorSensor;
 	private RobotConfiguration config;
 	private int previousSensedValue = 55, currentSensedValue = 55;
-	private boolean passedLine;
+	private boolean passedLine = false ;
 	
 
 	LineReader(RobotConfiguration config){
 		colorSensor  = new ColorSensor(RobotConfiguration.LIGHT_SENSOR_PORT);
+
 		this.config = config;
 	}
 	public void run (){
