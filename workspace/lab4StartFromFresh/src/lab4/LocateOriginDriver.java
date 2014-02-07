@@ -15,18 +15,18 @@ public class LocateOriginDriver extends Driver implements Drivable {
 	
 	public void run(){
 		//falling , see nothing -> see something 
-//		
-//		t1 = Math.toDegrees(findAngle1());
-//		t2 = Math.toDegrees(findAngle2());
-//		config.writeToMonitor( "T1: " + String.valueOf(t1), 4);
-//		config.writeToMonitor( "T2: " + String.valueOf(t2), 3);
-//		
-//		//find the slop 
-//			//assume origin is the heading of the beginning robot oritation
-//		double angleFromOrigin = ((t1 + t2)/2) ;
-//		config.writeToMonitor( "AFO " + String.valueOf(angleFromOrigin), 5);
-//		
-//		rotateToRelativly(-(t2-angleFromOrigin));
+		
+		t1 = Math.toDegrees(findAngle1());
+		t2 = Math.toDegrees(findAngle2());
+		config.writeToMonitor( "T1: " + String.valueOf(t1), 4);
+		config.writeToMonitor( "T2: " + String.valueOf(t2), 3);
+		
+		//find the slop 
+			//assume origin is the heading of the beginning robot oritation
+		double angleFromOrigin = ((t1 + t2)/2) ;
+		config.writeToMonitor( "AFO " + String.valueOf(angleFromOrigin), 5);
+		
+		rotateToRelativly(-(t2-angleFromOrigin));
 
 		/**
 		 * TODO line reader need to be initialized here or else it has 
@@ -39,14 +39,20 @@ public class LocateOriginDriver extends Driver implements Drivable {
 		linereader.start();
 		
 		//give some time for color sensor to warm up 
-		try {Thread.sleep(1000);	} catch (InterruptedException e) {}
+		try {Thread.sleep(2000);	} catch (InterruptedException e) {}
 		
 		//MOVE FORWARD UNTIL SEE A LINE 
-		while(!config.getLineReader().isPassedLine()){
+		while( !config.getLineReader().isPassedLine() ){
 			RobotConfiguration.LEFT_MOTOR.forward();
 			RobotConfiguration.RIGHT_MOTOR.forward();
-		}
-
+		} 
+		config.stopMotor();
+		
+		//go back 12 cm for the wheel to be about the center
+		
+		//go back 
+		config.getDriver().travel(-12);
+		
 		config.setDriveComplete(true);
 	}
 

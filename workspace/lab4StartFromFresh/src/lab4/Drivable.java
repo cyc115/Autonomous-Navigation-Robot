@@ -36,5 +36,10 @@ turnTo()
 	 */
 	boolean isNagivating ();
 	void start();
+	/**
+	 * travel forward x cm
+	 * @param dist
+	 */
+	void travel(double dist);
 	
 }

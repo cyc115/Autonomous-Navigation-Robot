@@ -6,7 +6,7 @@ import lejos.nxt.LightSensor;
 public class LineReader extends Thread{
 	ColorSensor colorSensor;
 	private RobotConfiguration config;
-	private int previousSensedValue = 55, currentSensedValue = 55;
+	private int previousSensedValue = 46, currentSensedValue = 46;
 	private boolean passedLine = false ;
 	
 
@@ -20,7 +20,7 @@ public class LineReader extends Thread{
 		
 		//finish loop when run is done 
 		while(!config.driveComplete()){
-
+			
 			previousSensedValue = currentSensedValue;
 			currentSensedValue = colorSensor.getLightValue();
 			
@@ -49,8 +49,8 @@ public class LineReader extends Thread{
 	private boolean hasPassedLine(int currentSensedValue, int previousSensedValue) {
 		//INITIALIZE THE LAST DETECTION TIME TO AVOID false positive
 		// at the beginning of the robot movement 
-		long lastDetectionTime =500; 
-		int lightSensorThreshold = 2 ;// how sensitive sensor should be when it detects changes
+		long lastDetectionTime =2500; 
+		int lightSensorThreshold = 7 ;// how sensitive sensor should be when it detects changes
 		int ignorePeriod = 500 ; //time in ms to ignore further input 
 		boolean hasDetected = ((previousSensedValue - currentSensedValue ) > lightSensorThreshold) ;
 		boolean result;

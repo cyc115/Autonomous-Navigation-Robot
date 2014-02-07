@@ -66,15 +66,7 @@ public abstract class Driver extends Thread {
 					finishedTravelTo = true ;
 					break;
 				}
-				
-				leftMotor.rotate(
-						convertDistance(RobotConfiguration.LEFT_RADIUS, moveDist), 
-						true
-						);
-				rightMotor.rotate(
-						convertDistance(RobotConfiguration.RIGHT_RADIUS, moveDist), 
-						false
-						);
+				travel(moveDist);
 			}
 			//if wall follows 
 			if (!config.getPlanner().hasWallAhead()){
@@ -87,17 +79,7 @@ public abstract class Driver extends Thread {
 			}
 			
 		}
-		
-		
-		leftMotor.rotate(
-				convertDistance(RobotConfiguration.LEFT_RADIUS, distance), 
-				true
-				);
-		rightMotor.rotate(
-				convertDistance(RobotConfiguration.RIGHT_RADIUS, distance), 
-				false
-				);
-		
+		travel(distance);		
 		Coordinate temp = new Coordinate(
 					nextLocation.getX(), nextLocation.getY() ,
 					Coordinate.normalize((currentCoordinate.getTheta() + turningAngle))
@@ -109,8 +91,21 @@ public abstract class Driver extends Thread {
 	 * what to do when there is wall detected ahead 
 	 */
 	protected abstract void handleObsticle();
-
-
+	
+	/**
+	 * move forward x cm 
+	 * @param dist
+	 */
+	public void travel(double dist){
+		leftMotor.rotate(
+				convertDistance(RobotConfiguration.LEFT_RADIUS, dist), 
+				true
+				);
+		rightMotor.rotate(
+				convertDistance(RobotConfiguration.RIGHT_RADIUS, dist), 
+				false
+				);
+	}
 	/**
 	 * rotate to the angle wrt to the current robot angle 
 	 * @param degree
@@ -147,23 +142,16 @@ public abstract class Driver extends Thread {
 	private static int convertAngle(double radius, double width, double angle) {
 		return convertDistance(radius, Math.PI * width * angle / 360.0);
 	}
-	
-	
-	
 	/**
 	 * turn to angle wrt to the y axies 
 	 */
 	public void turnTo(double theata) {
 		rotateToRelativly(theata);
-		
 	}
-	
-
 	public boolean isNagivating() {
 		// TODO Auto-generated method stub
 		return true;
 	}
-
 	
 	public RobotConfiguration getConfig() {
 		return config;

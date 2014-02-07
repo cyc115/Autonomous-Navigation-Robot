@@ -47,6 +47,8 @@ public class Lab4 {
 				
 //				lab4.config.writeToMonitor("DIS" + lab4.config.getUsPoller().getDistance(), 3);
 				lab4.config.writeToMonitor("O " + lab4.config.getCurrentLocation(), 7);
+				lab4.config.writeToMonitor("LT " + String.valueOf(lab4.config.getLineReader().getLightValue()) , 1);
+				lab4.config.writeToMonitor("LT " + String.valueOf(lab4.config.getLineReader().getLightValue()) , 1);
 
 			}
 			
