@@ -3,7 +3,7 @@ package lab4;
 public class LocateOriginDriver extends Driver implements Drivable {
 	int deg = 360 ;
 	int turningDeg = 5;
-	int distance = 25 ; //angle to use when distance from sensor falls below this 
+	int distance = 30 ; //angle to use when distance from sensor falls below this 
 	double t1 = -1 , t2 = -1; //angle 1 and angle 2
 	
 	public LocateOriginDriver(RobotConfiguration config) {
@@ -15,11 +15,21 @@ public class LocateOriginDriver extends Driver implements Drivable {
 		//falling , see nothing -> see something 
 
 		
-		t1 = findAngle1();
-		t2 = findAngle2();
+		t1 = Math.toDegrees(findAngle1());
+		t2 = Math.toDegrees(findAngle2());
 		
 		config.writeToMonitor( "T1: " + String.valueOf(t1), 4);
-		config.writeToMonitor( "T2: " + String.valueOf(t2), 5);
+		config.writeToMonitor( "T2: " + String.valueOf(t2), 3);
+		
+		//find the slop 
+			//assume origin is the heading of the beginning robot oritation
+		double angleFromOrigin = ((t1 + t2)/2) ;
+		config.writeToMonitor( "AFO " + String.valueOf(angleFromOrigin), 5);
+		
+		
+		rotateToRelativly(-(t2-angleFromOrigin));
+		
+
 
 		
 		config.setDriveComplete(true);

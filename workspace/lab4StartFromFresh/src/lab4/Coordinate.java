@@ -14,7 +14,7 @@ public class Coordinate extends Point{
 	}
 	
 	/**
-	 * in degrees 
+	 * theta is in <b> RAD </b>
 	 * @return
 	 */
 	public double getTheta() {
@@ -28,9 +28,9 @@ public class Coordinate extends Point{
 	/**
 	 * @param currentLocation (x,y,theata wrt y axes)
 	 * @param nextLocation (x,y, and some bogus theata)
-	 * @return the concave turning angle where the head of the
+	 * @return the concave turning angle in <b> degree </b>where the head of the
 	 * robot points to the next location. where neg means counter
-	 * clockwise turn and positive means clockwise turns 
+	 * clockwise turn and positive means clockwise turns  
 	 */
 	public static double calculateRotationAngle( Coordinate currentLocation
 										, Coordinate nextLocation){
@@ -81,7 +81,7 @@ public class Coordinate extends Point{
 	}
 	/**
 	 * normalize angle in degress 
-	 * @param angle
+	 * @param angle in deg
 	 * @return cancave angle in deg 
 	 */
 	public static double normalize (double angle ){
