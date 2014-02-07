@@ -18,12 +18,17 @@ public interface RobotConfiguration {
 	NXTRegulatedMotor LEFT_MOTOR = Motor.A;
 	NXTRegulatedMotor RIGHT_MOTOR = Motor.B;
 	public I2CPort ULTRASONIC_SENSOR_PORT = SensorPort.S1;
+	public SensorPort LIGHT_SENSOR_PORT = SensorPort.S2;
+	
 	static double LEFT_RADIUS = 2.065 ;
 	static double RIGHT_RADIUS =2.0995;
 	/**
 	 * width between each wheels 
 	 */
 	static double WIDTH = 15.24 ;
+	
+	public LineReader getLineReader();
+	public void setLineReader(LineReader lineReader);
 	
 	/**
 	 * @return the starting coordinate of the run, should be defined implicitly by the Configuration 
@@ -131,7 +136,4 @@ public interface RobotConfiguration {
 
 	public void setUsPoller(UsPoller ultrasonicPoller);
 	
-	public LightSensor getLightSensor();
-
-	public void setLightSensor(LightSensor ls);
 }

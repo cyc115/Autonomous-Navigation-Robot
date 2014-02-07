@@ -1,7 +1,10 @@
 package lab4;
 
 import lejos.nxt.Button;
+import lejos.nxt.ColorSensor.Color;
+import lejos.nxt.ColorSensor;
 import lejos.nxt.LCD;
+import lejos.nxt.LightSensor;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
@@ -17,7 +20,7 @@ public class Lab4 {
 		Lab4 lab4 = new Lab4();  //the top most monitor class	
 		
 		int buttonChoice ;
-		
+
 		
 		do {
 			// clear the display
@@ -29,7 +32,7 @@ public class Lab4 {
 			LCD.drawString(" rising| Fallin ", 0, 2);
 			LCD.drawString("       |        ", 0, 3);
 			LCD.drawString("       |        ", 0, 4);
-
+			
 			buttonChoice = Button.waitForAnyPress();
 		} while (buttonChoice != Button.ID_LEFT
 				&& buttonChoice != Button.ID_RIGHT);
@@ -41,6 +44,7 @@ public class Lab4 {
 
 			Odometer odo = lab4.config.getOdometer();
 			while(!lab4.config.driveComplete()){
+				
 //				lab4.config.writeToMonitor("DIS" + lab4.config.getUsPoller().getDistance(), 3);
 				lab4.config.writeToMonitor("O " + lab4.config.getCurrentLocation(), 7);
 

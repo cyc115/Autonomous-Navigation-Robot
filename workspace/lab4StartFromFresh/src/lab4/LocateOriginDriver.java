@@ -5,19 +5,20 @@ public class LocateOriginDriver extends Driver implements Drivable {
 	int turningDeg = 5;
 	int distance = 30 ; //angle to use when distance from sensor falls below this 
 	double t1 = -1 , t2 = -1; //angle 1 and angle 2
+	LineReader linereader ;
 	
 	public LocateOriginDriver(RobotConfiguration config) {
 		super(config);
+		
 		
 	}
 	
 	public void run(){
 		//falling , see nothing -> see something 
-
+		linereader = config.getLineReader();
 		
 		t1 = Math.toDegrees(findAngle1());
 		t2 = Math.toDegrees(findAngle2());
-		
 		config.writeToMonitor( "T1: " + String.valueOf(t1), 4);
 		config.writeToMonitor( "T2: " + String.valueOf(t2), 3);
 		
@@ -26,12 +27,22 @@ public class LocateOriginDriver extends Driver implements Drivable {
 		double angleFromOrigin = ((t1 + t2)/2) ;
 		config.writeToMonitor( "AFO " + String.valueOf(angleFromOrigin), 5);
 		
-		
 		rotateToRelativly(-(t2-angleFromOrigin));
-		
 
-
+		/**
+		 * TODO line reader need to be initialized here or else it has 
+		 * a nullpointer exception. I think there is some problem withe 
+		 * the order of which i initialize things in config.
+		 */
 		
+		linereader = new LineReader(config);
+		linereader.start();
+		//MOVE FORWARD UNTIL SEE A LINE 		
+		while(!config.getLineReader().isPassedLine()){
+			RobotConfiguration.LEFT_MOTOR.forward();
+			RobotConfiguration.RIGHT_MOTOR.forward();
+		}
+
 		config.setDriveComplete(true);
 	}
 

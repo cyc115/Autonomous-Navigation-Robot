@@ -19,8 +19,7 @@ public class Configuration implements RobotConfiguration{
 	private Planner planner ;
 	private Drivable driver ;
 	private UsPoller usPoller ;
-	private LightSensor lightSensor ;
-//	private LCPBTResponder lcpThread;   //pc debugging not used in this demo
+	private LineReader lineRreader;
 	static boolean driveComplete  = false ;
 	
 	/**
@@ -38,7 +37,7 @@ public class Configuration implements RobotConfiguration{
 		config.planner = new UltraSonicPlanner(config);
 		config.usPoller = new UsPoller(config);
 //		config.driver = new ZigZag(config);
-		config.lightSensor = new LightSensor(SensorPort.S2);
+//		config.lightSensor = new LightSensor(SensorPort.S2);
 		
 		return config;
 	}
@@ -50,24 +49,13 @@ public class Configuration implements RobotConfiguration{
 		
 		config.odometer = new Odometer(config);
 		config.monitor = new LCDWriter(config);
-
 		config.usPoller = new UsPoller(config);
-		config.lightSensor = new LightSensor(SensorPort.S2);
 		config.driver = new LocateOriginDriver(config);
-
+		config.lineRreader = new LineReader(config);
 		
 		return config;
 	}
 	
-	
-	public LightSensor getLightSensor() {
-		return lightSensor;
-	}
-
-	public void setLightSensor(LightSensor ls) {
-		this.lightSensor = ls;
-	}
-
 	public Configuration(){
 		lock = new Object();
 
@@ -220,4 +208,15 @@ public class Configuration implements RobotConfiguration{
 		RIGHT_MOTOR.stop();
 		
 	}
+
+	@Override
+	public LineReader getLineReader() {
+		return lineRreader;
+	}
+
+	@Override
+	public void setLineReader(LineReader lineReader) {
+		this.lineRreader = lineReader;
+	}
+
 }
