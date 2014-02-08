@@ -54,7 +54,12 @@ public class Lab4 {
 			
 		}
 		else if (buttonChoice == Button.ID_RIGHT){
-			//TODO do something
+			lab4.config.setLineReader(new LineReader(lab4.config));
+			lab4.config.getLineReader().start();
+			lab4.config.getMonitor().start();
+			while(true){
+				lab4.config.writeToMonitor("Lt " + lab4.config.getLineReader().getLightValue(), 1);
+			}
 		}
 		
 		while (Button.waitForAnyPress() != Button.ID_ESCAPE);

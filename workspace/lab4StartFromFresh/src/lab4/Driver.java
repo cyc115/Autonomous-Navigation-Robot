@@ -107,13 +107,26 @@ public abstract class Driver extends Thread {
 				);
 	}
 	/**
-	 * rotate to the angle wrt to the current robot angle 
+	 * rotate to the angle wrt to the current robot angle.
+	 * the method will only finish after rotating is over.
+	 *	<br> this method is here only for comparability.
+	 *	<br> use rotateToRelatively (doubel degree , boolean returnRightAway);
+	 *	when ever possible 
 	 * @param degree
+	 * @deprecated
 	 */
-	public void rotateToRelativly(double degree){
-		
-		rightMotor.setSpeed(RobotConfiguration.ROTATE_SPEED);
-		leftMotor.setSpeed(RobotConfiguration.ROTATE_SPEED);
+	protected void rotateToRelativly(double degree){
+		rotateToRelatively(degree, false);
+	}
+	/**
+	 * rotate to the angle wrt to the current robot angle.
+	 * the method will only finish after rotating is over.
+	 * @param degree 
+	 * @param returnRightAway should the function finish before finishing the turn 
+	 */
+	protected void rotateToRelatively(double degree, boolean returnRightAway){
+		rightMotor.setSpeed(config.ROTATE_SPEED);
+		leftMotor.setSpeed(config.ROTATE_SPEED);
 		
 		if (degree < 0){		//if degree is negative then rotate back ward
 			leftMotor.backward();
@@ -124,10 +137,10 @@ public abstract class Driver extends Thread {
 				, true);
 		rightMotor.rotate(
 				-convertAngle(RobotConfiguration.RIGHT_RADIUS,config.getWidth() , degree)
-				, false);
+				, returnRightAway);
 		
-		rightMotor.setSpeed(RobotConfiguration.FORWARD_SPEED);
-		leftMotor.setSpeed(RobotConfiguration.FORWARD_SPEED);
+		rightMotor.setSpeed(config.FORWARD_SPEED);
+		leftMotor.setSpeed(config.FORWARD_SPEED);
 	}
 	/**
 	 * 

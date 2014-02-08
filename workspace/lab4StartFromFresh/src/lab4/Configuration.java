@@ -9,6 +9,7 @@ import lejos.nxt.comm.LCPBTResponder;
 
 public class Configuration implements RobotConfiguration{
 
+	
 	private Object lock ;
 	private Coordinate startLocation;// starting location
 	private Coordinate currentLocation ; //current location ;

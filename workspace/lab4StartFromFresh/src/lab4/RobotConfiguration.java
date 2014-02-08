@@ -7,21 +7,17 @@ import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.SensorPort;
 
 public interface RobotConfiguration {
-	/**
-	 * the speed when moving forward 
-	 */
-	public int FORWARD_SPEED = 200;
-	/**
-	 * rotating speed
-	 */
-	public int ROTATE_SPEED = 150;
+
 	NXTRegulatedMotor LEFT_MOTOR = Motor.A;
 	NXTRegulatedMotor RIGHT_MOTOR = Motor.B;
 	public I2CPort ULTRASONIC_SENSOR_PORT = SensorPort.S1;
 	public SensorPort LIGHT_SENSOR_PORT = SensorPort.S2;
+	//over written in Configuration
+	int ROTATE_SPEED = 120 ;
+	int FORWARD_SPEED = 200;
 	
-	static double LEFT_RADIUS = 2.065 ;
-	static double RIGHT_RADIUS =2.0995;
+	static double LEFT_RADIUS = 2.090 ;
+	static double RIGHT_RADIUS =2.090;
 	/**
 	 * width between each wheels 
 	 */

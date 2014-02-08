@@ -38,10 +38,10 @@ public class OdometryCorrection extends Thread {
 		
 		while (true) {
 
-				correctionStart = System.currentTimeMillis();
-				previousSensedValue = currentSensedValue;
-				currentSensedValue = colorSensor.getLightValue();
-				
+			correctionStart = System.currentTimeMillis();
+			previousSensedValue = currentSensedValue;
+			currentSensedValue = colorSensor.getLightValue();
+			
 				//count number of lines
 				if (hasPassedLine(currentSensedValue,previousSensedValue)){
 					lineNumber++;
@@ -107,41 +107,41 @@ private void clean() {
 //	public String finalDistToString(){
 //		return distBtwnFinalAndOrigin.toString();
 //	}
+
+/**
+ * derivative if robot has passed line 
+ * @param currentSensedValue
+ * @param previousSensedValue
+ * @return a determination if one has passed a line or not
+ */
+private boolean hasPassedLine(int currentSensedValue, int previousSensedValue) {
+	int lightSensorThreshold = 2 ;// how sensitive sensor should be when it detects changes
+	int ignorePeriod = 5000 ; //time in ms to ignore further input 
+	boolean hasDetected = ((previousSensedValue - currentSensedValue ) > lightSensorThreshold) ;
+	boolean result;
 	
-	/**
-	 * derivative if robot has passed line 
-	 * @param currentSensedValue
-	 * @param previousSensedValue
-	 * @return a determination if one has passed a line or not
-	 */
-	private boolean hasPassedLine(int currentSensedValue, int previousSensedValue) {
-		int lightSensorThreshold = 2 ;// how sensitive sensor should be when it detects changes
-		int ignorePeriod = 5000 ; //time in ms to ignore further input 
-		boolean hasDetected = ((previousSensedValue - currentSensedValue ) > lightSensorThreshold) ;
-		boolean result;
-		
-		//avoid detecting a line twice : two valid detection has to be 800 ms appart 
-		diffInDectectionTime = (System.currentTimeMillis() - lastDetectionTime);
-		
-		//if this is a new line and should be counted
-		if (hasDetected && (diffInDectectionTime > ignorePeriod)){
-			lastDetectionTime = System.currentTimeMillis();
-			result = hasDetected;
-		}
-		//if this is a false positive
-		else if (hasDetected){
-			lastDetectionTime = System.currentTimeMillis();
-			result = false;
-		}
-		//if negative 
-		else{
-			result = false ;
-		}
-		//reset the time between detection .
-		diffInDectectionTime = 0 ;
-		return result ; 
+	//avoid detecting a line twice : two valid detection has to be 800 ms appart 
+	diffInDectectionTime = (System.currentTimeMillis() - lastDetectionTime);
+	
+	//if this is a new line and should be counted
+	if (hasDetected && (diffInDectectionTime > ignorePeriod)){
+		lastDetectionTime = System.currentTimeMillis();
+		result = hasDetected;
 	}
-	
+	//if this is a false positive
+	else if (hasDetected){
+		lastDetectionTime = System.currentTimeMillis();
+		result = false;
+	}
+	//if negative 
+	else{
+		result = false ;
+	}
+	//reset the time between detection .
+	diffInDectectionTime = 0 ;
+	return result ; 
+}
+
 	/**
 	 * Getters and Setters  
 	 **/

@@ -16,7 +16,7 @@ public class LineReader extends Thread{
 		this.config = config;
 	}
 	public void run (){
-		colorSensor.setFloodlight(true); 	//set color on 
+		colorSensor.setFloodlight(true);
 		
 		//finish loop when run is done 
 		while(!config.driveComplete()){
@@ -32,6 +32,9 @@ public class LineReader extends Thread{
 				passedLine = false ;
 			}
 		}
+		
+		//shuts off light to save the earth
+		colorSensor.setFloodlight(false);
 	}
 	
 	public int getLightValue(){

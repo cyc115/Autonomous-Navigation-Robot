@@ -16,8 +16,8 @@ public class LocateOriginDriver extends Driver implements Drivable {
 	public void run(){
 		//falling , see nothing -> see something 
 		
-		t1 = Math.toDegrees(findAngle1());
-		t2 = Math.toDegrees(findAngle2());
+		t1 = Math.toDegrees(findAngle1Falling());
+		t2 = Math.toDegrees(findAngle2Falling());
 		config.writeToMonitor( "T1: " + String.valueOf(t1), 4);
 		config.writeToMonitor( "T2: " + String.valueOf(t2), 3);
 		
@@ -33,13 +33,11 @@ public class LocateOriginDriver extends Driver implements Drivable {
 		 * a nullpointer exception. I think there is some problem withe 
 		 * the order of which i initialize things in config.
 		 */
-		
 		config.setLineReader(new LineReader(config));
 		linereader = config.getLineReader();
 		linereader.start();
-		
 		//give some time for color sensor to warm up 
-		try {Thread.sleep(2000);	} catch (InterruptedException e) {}
+		try {Thread.sleep(1000);	} catch (InterruptedException e) {config.writeToMonitor( "sleep interrupted!", 5); }
 		
 		//MOVE FORWARD UNTIL SEE A LINE 
 		while( !config.getLineReader().isPassedLine() ){
@@ -49,14 +47,25 @@ public class LocateOriginDriver extends Driver implements Drivable {
 		config.stopMotor();
 		
 		//go back 12 cm for the wheel to be about the center
-		
-		//go back 
 		config.getDriver().travel(-12);
+		
+		//rotate left to see line and set that line to be the origin
+		//TODO make the rotation slower 
+
+		rotateToRelatively(-90, true);
+		
+		while(true){
+			if (!config.getLineReader().isPassedLine()){ /*do nothing */}
+			else {//stop motor and break 
+				config.stopMotor();
+				break;
+			}
+		}
 		
 		config.setDriveComplete(true);
 	}
 
-	private double findAngle2() {
+	private double findAngle2Falling() {
 		config.resetMotorSpeed();
 		double result = -1 ;
 		for (int i = 0 ; i <= deg ; i+=turningDeg ){
@@ -75,7 +84,8 @@ public class LocateOriginDriver extends Driver implements Drivable {
 	}
 			
 
-	private double findAngle1() {
+	@SuppressWarnings("deprecation")
+	private double findAngle1Falling() {
 		double result = -1 ;
 		for (int i = 0 ; i <= deg ; i+=turningDeg ){
 			if (config.getUsPoller().getDistance() < distance && config.getUsPoller().getDistance() >0  ){
@@ -88,6 +98,7 @@ public class LocateOriginDriver extends Driver implements Drivable {
 				rotateToRelativly(turningDeg);
 			}
 		}
+		rotateToRelativly(-Math.toDegrees(result)); //turn back deg first to avoid seeing the wall again rightaway
 		return result;
 	}
 	
