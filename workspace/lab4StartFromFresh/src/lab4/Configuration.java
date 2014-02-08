@@ -22,7 +22,7 @@ public class Configuration implements RobotConfiguration{
 	private UsPoller usPoller ;
 	private LineReader lineRreader;
 	static boolean driveComplete  = false ;
-	private static int ROTATE_SPEED = 50 ;
+	private static int ROTATE_SPEED = 100 ;
 	private static int FORWARD_SPEED = 200;
 	
 	/**

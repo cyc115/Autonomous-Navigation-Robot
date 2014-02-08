@@ -30,14 +30,14 @@ public abstract class LocateOriginDriver extends Driver {
 		linereader.start();
 
 		//MOVE FORWARD UNTIL SEE A LINE 
-//		RobotConfiguration.LEFT_MOTOR.forward();
-//		RobotConfiguration.RIGHT_MOTOR.forward();
-//		while( !config.getLineReader().isPassedLine() ){ /*wait*/	} 
-//		
-//		config.stopMotor();
+		RobotConfiguration.LEFT_MOTOR.forward();
+		RobotConfiguration.RIGHT_MOTOR.forward();
+		while( !config.getLineReader().isPassedLine() ){ /*wait*/	} 
+		
+		config.stopMotor();
 		
 		//go back 11 cm for the wheel to be about the center
-//		config.getDriver().travel(-11);
+		config.getDriver().travel(-10.5);
 		
 		//rotate left to see line and set that line to be the origin
 		rotateToRelatively(-180, true);

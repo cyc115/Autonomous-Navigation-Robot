@@ -9,17 +9,17 @@ public class FallingEdge extends LocateOriginDriver implements Drivable {
 	public void run(){
 		//falling , see nothing -> see something 
 		
-//		t1 = Math.toDegrees(findAngle1Falling());
-//		t2 = Math.toDegrees(findAngle2Falling());
-//		config.writeToMonitor( "T1: " + String.valueOf(t1), 4);
-//		config.writeToMonitor( "T2: " + String.valueOf(t2), 3);
-//		
-//		//find the slop 
-//			//assume origin is the heading of the beginning robot oritation
-//		double angleFromOrigin = ((t1 + t2)/2) ;
-//		config.writeToMonitor( "AFO " + String.valueOf(angleFromOrigin), 5);
-//		
-//		rotateToRelatively(-(t2-angleFromOrigin));
+		t1 = Math.toDegrees(findAngle1Falling());
+		t2 = Math.toDegrees(findAngle2Falling());
+		config.writeToMonitor( "T1: " + String.valueOf(t1), 4);
+		config.writeToMonitor( "T2: " + String.valueOf(t2), 3);
+		
+		//find the slop 
+			//assume origin is the heading of the beginning robot oritation
+		double angleFromOrigin = ((t1 + t2)/2) ;
+		config.writeToMonitor( "AFO " + String.valueOf(angleFromOrigin), 5);
+		
+		rotateToRelatively(-(t2-angleFromOrigin));
 
 		//do the rest of localization
 		driveAndLocate();
