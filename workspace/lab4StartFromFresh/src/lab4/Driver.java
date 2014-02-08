@@ -37,10 +37,8 @@ public abstract class Driver extends Thread {
 	 */
 	public void travelTo(Coordinate nextLocation) {
 		config.setNextLocation(nextLocation);
-//		endCoord = nextLocation;
 		config.setStartingCoordinate(currentCoordinate.clone());
-//		startCoord = currentCoordinate.clone() ;
-				
+
 		double distance = Coordinate.calculateDistance(currentCoordinate, nextLocation);
 		double turningAngle = Coordinate.calculateRotationAngle(currentCoordinate, nextLocation);
 		
@@ -50,7 +48,12 @@ public abstract class Driver extends Thread {
 		
 		//make turn
 		rotateToRelatively(turningAngle);
+		//set to forward speed 
+		RobotConfiguration.LEFT_MOTOR.setSpeed(config.getForwardSpeed());
+		RobotConfiguration.RIGHT_MOTOR.setSpeed(config.getForwardSpeed());
+		
 		boolean finishedTravelTo = false ;
+		
 		while(!finishedTravelTo){
 			
 			//when navigating
@@ -97,6 +100,10 @@ public abstract class Driver extends Thread {
 	 * @param dist
 	 */
 	public void travel(double dist){
+		
+		rightMotor.setSpeed(config.getForwardSpeed());
+		leftMotor.setSpeed(config.getForwardSpeed());
+		
 		leftMotor.rotate(
 				convertDistance(RobotConfiguration.LEFT_RADIUS, dist), 
 				true
@@ -125,22 +132,21 @@ public abstract class Driver extends Thread {
 	 * @param returnRightAway should the function finish before finishing the turn 
 	 */
 	public void rotateToRelatively(double degree, boolean returnRightAway){
-		rightMotor.setSpeed(config.ROTATE_SPEED);
-		leftMotor.setSpeed(config.ROTATE_SPEED);
+		rightMotor.setSpeed(config.getRotationSpeed());
+		leftMotor.setSpeed(config.getRotationSpeed());
+		
 		
 		if (degree < 0){		//if degree is negative then rotate back ward
 			leftMotor.backward();
 			rightMotor.backward();
 		}
+		
 		leftMotor.rotate(
 				convertAngle(RobotConfiguration.LEFT_RADIUS, config.getWidth(), degree)
 				, true);
 		rightMotor.rotate(
 				-convertAngle(RobotConfiguration.RIGHT_RADIUS,config.getWidth() , degree)
 				, returnRightAway);
-		
-		rightMotor.setSpeed(config.FORWARD_SPEED);
-		leftMotor.setSpeed(config.FORWARD_SPEED);
 	}
 	/**
 	 * 

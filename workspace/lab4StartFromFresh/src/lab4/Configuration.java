@@ -22,6 +22,8 @@ public class Configuration implements RobotConfiguration{
 	private UsPoller usPoller ;
 	private LineReader lineRreader;
 	static boolean driveComplete  = false ;
+	private static int ROTATE_SPEED = 50 ;
+	private static int FORWARD_SPEED = 200;
 	
 	/**
 	 * this returns a default config for lab 3
@@ -225,6 +227,26 @@ public class Configuration implements RobotConfiguration{
 	@Override
 	public void setLineReader(LineReader lineReader) {
 		this.lineRreader = lineReader;
+	}
+
+	@Override
+	public int getRotationSpeed() {
+		return ROTATE_SPEED;
+	}
+
+	@Override
+	public void setRotationSpeed(int speed ) {
+		ROTATE_SPEED = speed;
+	}
+
+	@Override
+	public int getForwardSpeed() {
+		return FORWARD_SPEED;
+	}
+
+	@Override
+	public void setForwardSpeed(int speed) {
+		FORWARD_SPEED = speed;
 	}
 
 }

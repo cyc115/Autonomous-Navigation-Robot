@@ -11,11 +11,7 @@ public interface RobotConfiguration {
 	NXTRegulatedMotor LEFT_MOTOR = Motor.A;
 	NXTRegulatedMotor RIGHT_MOTOR = Motor.B;
 	public I2CPort ULTRASONIC_SENSOR_PORT = SensorPort.S1;
-	public SensorPort LIGHT_SENSOR_PORT = SensorPort.S2;
-	//over written in Configuration
-	int ROTATE_SPEED = 600 ;
-	int FORWARD_SPEED = 200;
-	
+	public SensorPort LIGHT_SENSOR_PORT = SensorPort.S2;	
 	static double LEFT_RADIUS = 2.090 ;
 	static double RIGHT_RADIUS =2.090;
 	/**
@@ -131,5 +127,9 @@ public interface RobotConfiguration {
 	public UsPoller getUsPoller();
 
 	public void setUsPoller(UsPoller ultrasonicPoller);
+	public int getRotationSpeed();
+	public void setRotationSpeed(int speed);
+	public int getForwardSpeed();
+	public void setForwardSpeed(int speed);
 	
 }
