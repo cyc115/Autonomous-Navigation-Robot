@@ -49,7 +49,7 @@ public abstract class Driver extends Thread {
 		config.writeToMonitor( ((Double)turningAngle).toString(), 2);	
 		
 		//make turn
-		rotateToRelativly(turningAngle);
+		rotateToRelatively(turningAngle);
 		boolean finishedTravelTo = false ;
 		while(!finishedTravelTo){
 			
@@ -115,7 +115,7 @@ public abstract class Driver extends Thread {
 	 * @param degree
 	 * @deprecated
 	 */
-	protected void rotateToRelativly(double degree){
+	protected void rotateToRelatively(double degree){
 		rotateToRelatively(degree, false);
 	}
 	/**
@@ -124,7 +124,7 @@ public abstract class Driver extends Thread {
 	 * @param degree 
 	 * @param returnRightAway should the function finish before finishing the turn 
 	 */
-	protected void rotateToRelatively(double degree, boolean returnRightAway){
+	public void rotateToRelatively(double degree, boolean returnRightAway){
 		rightMotor.setSpeed(config.ROTATE_SPEED);
 		leftMotor.setSpeed(config.ROTATE_SPEED);
 		
@@ -159,7 +159,7 @@ public abstract class Driver extends Thread {
 	 * turn to angle wrt to the y axies 
 	 */
 	public void turnTo(double theata) {
-		rotateToRelativly(theata);
+		rotateToRelatively(theata);
 	}
 	public boolean isNagivating() {
 		// TODO Auto-generated method stub

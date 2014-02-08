@@ -13,7 +13,7 @@ public interface RobotConfiguration {
 	public I2CPort ULTRASONIC_SENSOR_PORT = SensorPort.S1;
 	public SensorPort LIGHT_SENSOR_PORT = SensorPort.S2;
 	//over written in Configuration
-	int ROTATE_SPEED = 120 ;
+	int ROTATE_SPEED = 600 ;
 	int FORWARD_SPEED = 200;
 	
 	static double LEFT_RADIUS = 2.090 ;

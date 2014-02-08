@@ -45,20 +45,24 @@ public class Lab4 {
 			Odometer odo = lab4.config.getOdometer();
 			while(!lab4.config.driveComplete()){
 				
-//				lab4.config.writeToMonitor("DIS" + lab4.config.getUsPoller().getDistance(), 3);
+				lab4.config.writeToMonitor("DIS" + lab4.config.getUsPoller().getDistance(), 3);
 				lab4.config.writeToMonitor("O " + lab4.config.getCurrentLocation(), 7);
 				lab4.config.writeToMonitor("LT " + String.valueOf(lab4.config.getLineReader().getLightValue()) , 1);
-				lab4.config.writeToMonitor("LT " + String.valueOf(lab4.config.getLineReader().getLightValue()) , 1);
+
 
 			}
 			
 		}
 		else if (buttonChoice == Button.ID_RIGHT){
-			lab4.config.setLineReader(new LineReader(lab4.config));
-			lab4.config.getLineReader().start();
+			lab4.initializeMotor();			//start 
+			lab4.config.getDriver().rotateToRelatively(180, true);
 			lab4.config.getMonitor().start();
+			 lab4.config.getLineReader().start();
 			while(true){
+				if(lab4.config.getLineReader().isPassedLine())
+					lab4.config.stopMotor();
 				lab4.config.writeToMonitor("Lt " + lab4.config.getLineReader().getLightValue(), 1);
+				lab4.config.writeToMonitor("PLine " + (lab4.config.getLineReader().isPassedLine() ? String.valueOf(true) : String.valueOf(false)), 0);
 			}
 		}
 		

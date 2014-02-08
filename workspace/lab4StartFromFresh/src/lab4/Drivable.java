@@ -41,5 +41,5 @@ turnTo()
 	 * @param dist
 	 */
 	void travel(double dist);
-	
+	void rotateToRelatively(double degree, boolean returnRightAway);	
 }

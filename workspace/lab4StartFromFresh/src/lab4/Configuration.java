@@ -51,7 +51,7 @@ public class Configuration implements RobotConfiguration{
 		config.odometer = new Odometer(config);
 		config.monitor = new LCDWriter(config);
 		config.usPoller = new UsPoller(config);
-		config.driver = new LocateOriginDriver(config);
+//		config.driver = new FallingEdge(config);
 		config.lineRreader = new LineReader(config);
 		
 		return config;
@@ -165,6 +165,16 @@ public class Configuration implements RobotConfiguration{
 	}
 	
 	public void leftButtonPressed(){
+		this.driver = new FallingEdge(this);
+		//really important ... don't forget to start 
+		monitor.start();
+		odometer.start();
+		driver.start();
+		usPoller.start();
+	}
+	@Override
+	public void rightButtonPressed() {
+		this.driver = new RaisingEdge(this);
 		//really important ... don't forget to start 
 		monitor.start();
 		odometer.start();
@@ -187,10 +197,7 @@ public class Configuration implements RobotConfiguration{
 		RobotConfiguration.RIGHT_MOTOR.forward();
 	}
 
-	@Override
-	public void rightButtonPressed() {
-		
-	}
+
 
 	@Override
 	public UsPoller getUsPoller() {
