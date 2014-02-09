@@ -1,6 +1,7 @@
 package lab4;
 
 import lejos.nxt.NXTRegulatedMotor;
+import lejos.nxt.comm.RConsole;
  
 public abstract class Driver extends Thread {
 
@@ -41,23 +42,29 @@ public abstract class Driver extends Thread {
 
 		double distance = Coordinate.calculateDistance(currentCoordinate, nextLocation);
 		double turningAngle = Coordinate.calculateRotationAngle(currentCoordinate, nextLocation);
-		
-		//TODO remove debugging information 
-		config.writeToMonitor( ((Double)distance).toString(), 1);
-		config.writeToMonitor( ((Double)turningAngle).toString(), 2);	
+		RConsole.println("Driver:travelTo:NxtCoord: " + nextLocation.toString());
+		RConsole.println("Driver:travelTo:traveling dist: " + distance);
+		RConsole.println("Driver:travelTo:turning Angle: " + turningAngle);
 		
 		//make turn
+		RConsole.println("Driver:travelTo:making turn: " + turningAngle);
 		rotateToRelatively(turningAngle);
 		//set to forward speed 
+		RConsole.println("Driver:travelTo:setting speed: " + config.getForwardSpeed());
 		RobotConfiguration.LEFT_MOTOR.setSpeed(config.getForwardSpeed());
 		RobotConfiguration.RIGHT_MOTOR.setSpeed(config.getForwardSpeed());
+		
 		
 		boolean finishedTravelTo = false ;
 		
 		while(!finishedTravelTo){
 			
 			//when navigating
-			while(!config.getPlanner().hasWallAhead()){
+			while( 
+					//!config.getPlanner().hasWallAhead()
+					//check if it has wall ahead, this is disabled because lab 4 has no planner 
+					true
+					){
 				double moveDist;
 				//move x cm forward if distance is bigger then 1cm
 				if (distance > CHECK_DISTANCE ){
@@ -71,8 +78,9 @@ public abstract class Driver extends Thread {
 				}
 				travel(moveDist);
 			}
-			//if wall follows 
-			if (!config.getPlanner().hasWallAhead()){
+			/*if wall follows 
+			 * TODO revert this when we have a planner 
+			if (!config.getPlanner().hasWallAhead()	){
 				
 				handleObsticle();
 				//sleep for 0.5 sec and check again 
@@ -80,14 +88,18 @@ public abstract class Driver extends Thread {
 					Thread.sleep(500);
 				} catch (InterruptedException e) {}
 			}
+			*/
 			
 		}
-		travel(distance);		
+		travel(distance);
 		Coordinate temp = new Coordinate(
 					nextLocation.getX(), nextLocation.getY() ,
 					Coordinate.normalize((currentCoordinate.getTheta() + turningAngle))
 				);
 		currentCoordinate = temp ;
+		RConsole.println("Driver:travelTo:currentCoordinate : x " + config.getCurrentLocation().getX()
+				+"\ty " + config.getCurrentLocation().getY() 
+				+ "\ttheata " +config.getCurrentLocation().getTheta());
 	}
 
 	/**

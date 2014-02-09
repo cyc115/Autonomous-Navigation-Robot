@@ -21,8 +21,9 @@ public class Coordinate extends Point{
 		return theta;
 	}
 
-	public void setTheta(double position) {
+	public Coordinate setTheta(double position) {
 		this.theta = position;
+		return this;
 	}
 	
 	/**

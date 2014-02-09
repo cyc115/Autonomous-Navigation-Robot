@@ -73,7 +73,7 @@ public class LineReader extends Thread{
 	private boolean hasPassedLine(int currentSensedValue, int previousSensedValue) {
 		//TIME TO AVOID false positive at the beginning of the robot movement 
 		long waitTimeBeforeStart =50;
-		int lightSensorThreshold = 5 ;// how sensitive sensor should be when it detects changes
+		int lightSensorThreshold = 7 ;// how sensitive sensor should be when it detects changes
 		int ignorePeriod = 500 ; //time in ms to ignore further input 
 		boolean hasDetected = ((previousSensedValue - currentSensedValue ) > lightSensorThreshold) ;
 		boolean result;
@@ -97,6 +97,8 @@ public class LineReader extends Thread{
 		}
 		//reset the time between detection .
 		diffInDectectionTime = 0 ;
+		
+		
 		return result ; 
 	}
 	
