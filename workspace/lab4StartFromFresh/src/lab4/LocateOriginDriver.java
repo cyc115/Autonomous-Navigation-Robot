@@ -1,5 +1,7 @@
 package lab4;
 
+import lejos.nxt.comm.RConsole;
+
 public abstract class LocateOriginDriver extends Driver {
 	int deg = 360 ;
 	int turningDeg = 2;
@@ -32,8 +34,11 @@ public abstract class LocateOriginDriver extends Driver {
 		//MOVE FORWARD UNTIL SEE A LINE 
 		RobotConfiguration.LEFT_MOTOR.forward();
 		RobotConfiguration.RIGHT_MOTOR.forward();
-		while( !config.getLineReader().isPassedLine() ){ /*wait*/	} 
-		
+		while( !config.getLineReader().isPassedLine() ){
+			/*wait*/	
+			RConsole.println("forward\t"+config.getLineReader().getLightValue());
+		} 
+		RConsole.println("Rotate\t"+config.getLineReader().getLightValue() + "");
 		config.stopMotor();
 		
 		//go back 11 cm for the wheel to be about the center
@@ -42,7 +47,10 @@ public abstract class LocateOriginDriver extends Driver {
 		//rotate left to see line and set that line to be the origin
 		rotateToRelatively(-180, true);
 		
-		while(!config.getLineReader().isPassedLine()){ /*do nothing */	}
+		while(!config.getLineReader().isPassedLine()){ /*do nothing */	
+			RConsole.println("Rotate\t"+config.getLineReader().getLightValue() + "");
+		}
+		RConsole.println("Rotate\t"+config.getLineReader().getLightValue() + "");
 		config.stopMotor();
 		
 		

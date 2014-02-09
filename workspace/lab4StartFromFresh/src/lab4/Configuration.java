@@ -6,6 +6,7 @@ import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.comm.LCPBTResponder;
+import lejos.nxt.comm.RConsole;
 
 public class Configuration implements RobotConfiguration{
 
@@ -53,8 +54,8 @@ public class Configuration implements RobotConfiguration{
 		config.odometer = new Odometer(config);
 		config.monitor = new LCDWriter(config);
 		config.usPoller = new UsPoller(config);
-//		config.driver = new FallingEdge(config);
 		config.lineRreader = new LineReader(config);
+		RConsole.openUSB(10000);
 		
 		return config;
 	}

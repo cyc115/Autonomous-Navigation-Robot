@@ -29,7 +29,7 @@ public class Lab4 {
 			// ask the user whether the motors should drive in a square or float
 			LCD.drawString("< Left | Right >", 0, 0);
 			LCD.drawString("       |        ", 0, 1);
-			LCD.drawString(" rising| Fallin ", 0, 2);
+			LCD.drawString(" Fallin| Raisin ", 0, 2);
 			LCD.drawString("       |        ", 0, 3);
 			LCD.drawString("       |        ", 0, 4);
 			
@@ -38,31 +38,26 @@ public class Lab4 {
 				&& buttonChoice != Button.ID_RIGHT);
 
 		if (buttonChoice == Button.ID_LEFT) {
-
 			lab4.initializeMotor();			//start 
 			lab4.config.leftButtonPressed(); 
 
 			Odometer odo = lab4.config.getOdometer();
 			while(!lab4.config.driveComplete()){
-				
 				lab4.config.writeToMonitor("DIS" + lab4.config.getUsPoller().getDistance(), 3);
 				lab4.config.writeToMonitor("O " + lab4.config.getCurrentLocation(), 7);
 				lab4.config.writeToMonitor("LT " + String.valueOf(lab4.config.getLineReader().getLightValue()) , 1);
-
-
 			}
 			
 		}
 		else if (buttonChoice == Button.ID_RIGHT){
 			lab4.initializeMotor();			//start 
-			lab4.config.getDriver().rotateToRelatively(180, true);
-			lab4.config.getMonitor().start();
-			 lab4.config.getLineReader().start();
-			while(true){
-				if(lab4.config.getLineReader().isPassedLine())
-					lab4.config.stopMotor();
-				lab4.config.writeToMonitor("Lt " + lab4.config.getLineReader().getLightValue(), 1);
-				lab4.config.writeToMonitor("PLine " + (lab4.config.getLineReader().isPassedLine() ? String.valueOf(true) : String.valueOf(false)), 0);
+			lab4.config.rightButtonPressed(); 
+
+			Odometer odo = lab4.config.getOdometer();
+			while(!lab4.config.driveComplete()){
+				lab4.config.writeToMonitor("DIS" + lab4.config.getUsPoller().getDistance(), 3);
+				lab4.config.writeToMonitor("O " + lab4.config.getCurrentLocation(), 7);
+				lab4.config.writeToMonitor("LT " + String.valueOf(lab4.config.getLineReader().getLightValue()) , 1);
 			}
 		}
 		
