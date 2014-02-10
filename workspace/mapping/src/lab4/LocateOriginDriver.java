@@ -42,7 +42,7 @@ public abstract class LocateOriginDriver extends Driver {
 		config.stopMotor();
 		
 		//go back 11 cm for the wheel to be about the center
-		config.getDriver().travel(-10.9);
+		config.getDriver().travel(-10.5);
 		
 		//rotate left to see line and set that line to be the origin
 		rotateToRelatively(-180, true);
@@ -81,8 +81,8 @@ public abstract class LocateOriginDriver extends Driver {
 		RConsole.println("t4\t"+Math.toDegrees(t4));
 		//calculate x 
 		double x , y ;
-		x = -10.9 *Math.cos((t3-t1)/2);
-		y = -10.9 *Math.cos((t4-t2)/2);
+		x = -10.5 *Math.cos((t3-t1)/2);
+		y = -10.5 *Math.cos((t4-t2)/2);
 		RConsole.println("X\t" + x);
 		RConsole.println("y\t" + y);
 		
@@ -95,12 +95,12 @@ public abstract class LocateOriginDriver extends Driver {
 		RConsole.println("current Coordi" + config.getCurrentLocation().toString());
 		try{Thread.sleep(1000);}catch(Exception e){};
 		config.getDriver().travel(-x);
-		config.getDriver().rotateToRelatively(120, true);
+		config.getDriver().rotateToRelatively(100, true);
 		while(!config.getLineReader().isPassedLine()){try{Thread.sleep(15);}catch(Exception e){}};
 		
 		try{Thread.sleep(1000);}catch(Exception e){};
 		config.getDriver().travel(-y);
-		config.getDriver().rotateToRelatively(-120, true);
+		config.getDriver().rotateToRelatively(-100, true);
 		while(!config.getLineReader().isPassedLine()){try{Thread.sleep(15);}catch(Exception e){}};
 		config.stopMotor();
 		config.getDriver().rotateToRelatively(5, false);

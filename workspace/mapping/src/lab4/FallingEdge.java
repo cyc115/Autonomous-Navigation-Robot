@@ -1,7 +1,5 @@
 package lab4;
 
-import lejos.nxt.comm.RConsole;
-
 public class FallingEdge extends LocateOriginDriver implements Drivable {
 
 	public FallingEdge(RobotConfiguration config) {
@@ -10,18 +8,6 @@ public class FallingEdge extends LocateOriginDriver implements Drivable {
 	
 	public void run(){
 		//falling , see nothing -> see something 
-		
-		//if this faces the wall 
-		config.stopMotor();
-		
-		try{Thread.sleep(500);}catch(Exception e) {};
-		
-		while(config.getUsPoller().getDistance() < distance){
-			config.getDriver().rotateToRelatively(45, false);
-		}
-		RConsole.println(config.getUsPoller().getDistance()+"");
-		
-		config.getCurrentLocation().setTheta(0).setX(0).setY(0);
 		
 		t1 = Math.toDegrees(findAngle1Falling());
 		t2 = Math.toDegrees(findAngle2Falling());

@@ -45,7 +45,18 @@ public class Configuration implements RobotConfiguration{
 		
 		return config;
 	}
-	
+	public static Configuration getDefaultMapping(){
+		Configuration config = new Configuration();
+		config.startLocation = new Coordinate(0,0,0); 
+		config.currentLocation = config.startLocation.clone();
+		
+//		config.odometer = new Odometer(config);
+		config.monitor = new LCDWriter(config);
+		config.usPoller = new UsPoller(config);
+//		config.lineRreader = new LineReader(config);
+		RConsole.openUSB(20000);
+		return config;
+	}
 	public static Configuration getDefaultLab4(){
 		Configuration config = new Configuration();
 		config.startLocation = new Coordinate(0,0,0); 
@@ -55,7 +66,7 @@ public class Configuration implements RobotConfiguration{
 		config.monitor = new LCDWriter(config);
 		config.usPoller = new UsPoller(config);
 		config.lineRreader = new LineReader(config);
-		RConsole.openUSB(5000);
+		RConsole.openUSB(10000);
 		
 		return config;
 	}
