@@ -10,35 +10,40 @@ public class FallingEdge extends LocateOriginDriver implements Drivable {
 	
 	public void run(){
 		//falling , see nothing -> see something 
-		
-		//if this faces the wall 
 		config.stopMotor();
-		
 		try{Thread.sleep(500);}catch(Exception e) {};
-		
+
+		//if this faces the wall then rotate 		
 		while(config.getUsPoller().getDistance() < distance){
 			config.getDriver().rotateToRelatively(45, false);
 		}
+
 		RConsole.println(config.getUsPoller().getDistance()+"");
-		
+		//SET CURRENT LOCATION TO ORIGIN
 		config.getCurrentLocation().setTheta(0).setX(0).setY(0);
 		
+		//DO THE ANGLE FINDING
 		t1 = Math.toDegrees(findAngle1Falling());
 		t2 = Math.toDegrees(findAngle2Falling());
 		config.writeToMonitor( "T1: " + String.valueOf(t1), 4);
 		config.writeToMonitor( "T2: " + String.valueOf(t2), 3);
 		
-		//find the slop 
-			//assume origin is the heading of the beginning robot oritation
+		//assume origin is the heading of the beginning robot oritation 
+		/**
+		 * angleFromOrigin is the angle between the two measured angles
+		 */
 		double angleFromOrigin = ((t1 + t2)/2) ;
-		config.writeToMonitor( "AFO " + String.valueOf(angleFromOrigin), 5);
+		config.writeToMonitor( "AFO " + String.valueOf(angleFromOrigin), 5); 
 		
-		rotateToRelatively(-(t2-angleFromOrigin));
-
+		//rotate to be parallel to the diagonal line 
+		config.getDriver().rotateToRelatively(-(t2-angleFromOrigin), false);
 		//do the rest of localization
 		driveAndLocate();
 	}
-	
+	/**
+	 * Do the actions to find the second angle 
+	 * @return angle in radian
+	 */
 	private double findAngle2Falling() {
 		config.resetMotorSpeed();
 		double result = -1 ;
@@ -57,7 +62,10 @@ public class FallingEdge extends LocateOriginDriver implements Drivable {
 		return result;
 	}
 			
-
+	/**
+	 * Do the actions to find the first angle 
+	 * @return angle in radian
+	 */
 	private double findAngle1Falling() {
 		double result = -1 ;
 		for (int i = 0 ; i <= deg ; i+=turningDeg ){
@@ -77,7 +85,7 @@ public class FallingEdge extends LocateOriginDriver implements Drivable {
 
 	@Override
 	protected void handleObsticle() {
-		// TODO Auto-generated method stub
+		// not used in this lab 
 		
 	}
 	

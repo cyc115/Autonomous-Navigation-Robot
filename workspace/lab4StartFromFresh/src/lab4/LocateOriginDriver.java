@@ -24,7 +24,7 @@ public abstract class LocateOriginDriver extends Driver {
 	 */
 	protected void driveAndLocate(){
 		/**
-		 * TODO line reader need to be initialized here or else it has 
+		 * FIXME line reader need to be initialized here or else it has 
 		 * a nullpointer exception. I think there is some problem withe 
 		 * the order of which i initialize things in config.
 		 */

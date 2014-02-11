@@ -1,5 +1,6 @@
 package lab4;
 
+
 import lejos.nxt.Button;
 import lejos.nxt.ColorSensor.Color;
 import lejos.nxt.ColorSensor;

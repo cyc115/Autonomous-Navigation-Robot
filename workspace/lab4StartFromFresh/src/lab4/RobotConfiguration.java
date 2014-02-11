@@ -106,9 +106,7 @@ public interface RobotConfiguration {
 	
 	public RobotConfiguration setDriver(Drivable driver);
 	public Drivable getDriver();
-	
-	public Planner getPlanner();
-	public void setPlanner(Planner p);
+
 	/**
 	 * change the motor speed to this configuration's default 
 	 */

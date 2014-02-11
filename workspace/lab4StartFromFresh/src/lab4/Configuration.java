@@ -18,7 +18,6 @@ public class Configuration implements RobotConfiguration{
 	//Threads to be started 
 	private Odometer odometer;
 	private LCDWriter monitor;
-	private Planner planner ;
 	private Drivable driver ;
 	private UsPoller usPoller ;
 	private LineReader lineRreader;
@@ -38,11 +37,9 @@ public class Configuration implements RobotConfiguration{
 		
 		config.odometer = new Odometer(config);
 		config.monitor = new LCDWriter(config);
-		config.planner = new UltraSonicPlanner(config);
+//		untrasonic planner is removed from lab 4's code
+//		config.planner = new UltraSonicPlanner(config);
 		config.usPoller = new UsPoller(config);
-//		config.driver = new ZigZag(config);
-//		config.lightSensor = new LightSensor(SensorPort.S2);
-		
 		return config;
 	}
 	
@@ -157,16 +154,6 @@ public class Configuration implements RobotConfiguration{
 		return driver;
 	}
 
-	@Override
-	public Planner getPlanner() {
-		return planner;
-	}
-
-	@Override
-	public void setPlanner(Planner p) {
-		planner = p;
-	}
-	
 	public void leftButtonPressed(){
 		this.driver = new FallingEdge(this);
 		//really important ... don't forget to start 
