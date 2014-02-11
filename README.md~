@@ -1,6 +1,5 @@
 ecse211 - design principle methods
 =======
-
 Readme file for the ecse 211 project
 ===
 Class diagram of important classes as  of lab 4 
@@ -55,6 +54,8 @@ for lab 5 :
 - make classes that implement threads singletons. Also make them instantiated from static factories to avoid having to keep a big configuration class. The threads should be instatiated (once and only once) implicitly by the factory methods and return to who ever calls it.
 - RoboConfig should only contain current/destination/start coordinates and robot wheel sizes and such.
 - not sure how event driven works but it seems the way to do if many object need to get the same data from lineReader
+
+
 
 ###lab 2 
 
