@@ -6,7 +6,7 @@ Readme file for the ecse 211 project
 Class diagram of important classes as  of lab 4 
 ---
 
-![Alt text](data:image,local://Class.png)
+![Alt text](Class.jpg)
 
 **RobotConfiguration:** contains a reference to all the important components such as:
 
