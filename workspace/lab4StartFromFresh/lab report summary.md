@@ -14,11 +14,11 @@ Error Calc
 
 Future improvements
 ---
-1.@TODO need to ask ta about this  learn more about clipping "use wikiPedia"
+1.use mean filter , WIKI this, it's better since it will average out the noise 
 
 2. lasor is a better sensor and gives less error and more accurate.depends less on temp , air and stuff...  wiki for more .
 
-3. do a combination of raising and falling edge and take the average angle should give a better result.
+3. use light sensor and turn to find the first and second minimal distance and angle (use a mean filter to determin the exact distance ). you now know this is your x and y coordinate from the wall. based on this information. you can just move to the origin at (30,30) and adjust the angle to the defined position
 
 ```
 Sensing conditions
