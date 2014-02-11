@@ -15,7 +15,9 @@ Error Calc
 Future improvements
 ---
 1.@TODO need to ask ta about this  learn more about clipping "use wikiPedia"
+
 2. lasor is a better sensor and gives less error and more accurate.depends less on temp , air and stuff...  wiki for more .
+
 3. do a combination of raising and falling edge and take the average angle should give a better result.
 
 ```
