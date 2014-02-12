@@ -6,7 +6,11 @@ import lejos.nxt.UltrasonicSensor;
 
 
 /**
- * TODO this class is incomplete and is not yet Event driven 
+ * ultrasonicPoller will poll the ultrasonic sensor periodically and call which ever UltrasonicListener 
+ * that should run when reaching certain distance. this is a event driven approach and should be (hopefully) faster 
+ * than the while loop setting flag approach 
+ * 
+ * TODO test this class's event driven approach 
  * @author yuechuan
  *
  */

@@ -42,7 +42,10 @@ public class UltrasonicSubscriberWrapper {
 	 * @return true when equal 
 	 */
 	public boolean equals(UltrasonicSubscriberWrapper usw){
-		return (usw.listener == this.listener) ? true : false ;
+		if (usw instanceof UltrasonicSubscriberWrapper){
+			return (usw.listener == this.listener) ? true : false ;
+		}
+		else return false;
 	}
 	/**
 	 * equals if the uslistener is contains in this wrapper 
@@ -50,7 +53,10 @@ public class UltrasonicSubscriberWrapper {
 	 * @return true when equal 
 	 */
 	public boolean equals(UltrasonicListener usl){
-		return (this.listener == usl)? true : false ;
+		if (usl instanceof UltrasonicListener){
+			return (this.listener == usl)? true : false ;
+		}
+		else return false;
 	}
 	public int getDistanceOnInvoke() {
 		return distanceOnInvoke;
