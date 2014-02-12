@@ -127,6 +127,7 @@ public abstract class Driver {
 				-convertAngle(AbstractConfig.RIGHT_RADIUS,config.WIDTH , degree)
 				, returnRightAway);
 	}
+	
 	/**
 	 * 
 	 * @param radius radius of the wheel 
@@ -148,22 +149,5 @@ public abstract class Driver {
 	 */
 	public void turnTo(double theata) {
 		rotateToRelatively(theata);
-	}
-	public boolean isNagivating() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-	
-	public AbstractConfig getConfig() {
-		return config;
-	}
-	public void setConfig(AbstractConfig config) {
-		this.config = config;
-	}
-	public Coordinate getCurrentCoordinate() {
-		return currentCoordinate;
-	}
-	public void setCurrentCoordinatel(Coordinate currentCoordinate) {
-		this.currentCoordinate = currentCoordinate;
 	}
 }

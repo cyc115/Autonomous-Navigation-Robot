@@ -10,6 +10,8 @@ public class Lab5 {
 		LCDWriter.getInstance().writeToScreen("done", 0);
 		LineReader.getInstance().start();
 		
+		//TODO driver need to be tested 
+		
 		//TODO add a getter to the threadStart
 		//TODO how to stop a thread . right now threadStart will never return to false...
 		

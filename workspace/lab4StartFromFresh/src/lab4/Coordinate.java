@@ -20,7 +20,6 @@ public class Coordinate extends Point{
 	public double getTheta() {
 		return theta;
 	}
-
 	public Coordinate setTheta(double position) {
 		this.theta = position;
 		return this;
@@ -94,6 +93,7 @@ public class Coordinate extends Point{
 		}
 		return normalized;
 	}
+	
 	public double calcSlop(Coordinate c){
 		return (c.getY() - this.getY()) / (c.getX() - this.getX());
 	}
