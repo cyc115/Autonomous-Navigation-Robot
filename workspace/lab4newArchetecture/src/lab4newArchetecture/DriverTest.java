@@ -1,5 +1,6 @@
 package lab4newArchetecture;
 
+
 public class DriverTest extends Driver implements Drivable{
 
 	public DriverTest() {
@@ -8,10 +9,10 @@ public class DriverTest extends Driver implements Drivable{
 
 	public void run(){
 		
-		travelTo(30,0);
-		travelTo(30,30);
-		travelTo(0,30);
-		travelTo(0,0);
+		travelTo(new Coordinate(60,30,0)); //up 30 cm 
+		travelTo(new Coordinate(30,30,0));
+		travelTo(new Coordinate(30,60,0));
+		travelTo(new Coordinate(60,-2,0));
 		AbstractConfig.getInstance().setDriveComplete();
 	}
 

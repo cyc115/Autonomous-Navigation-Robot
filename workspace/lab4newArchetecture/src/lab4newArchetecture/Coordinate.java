@@ -29,12 +29,21 @@ public class Coordinate extends Point{
 		return this;
 	}
 	
+	
+
+	@Override
+	public String toString() {
+		return "t" + String.valueOf(Math.toDegrees(getTheta())).substring(0, 3) + ",X" + String.valueOf(getX()).substring(0, 3) 
+				+ ",Y" + String.valueOf(getY()).substring(0, 3);
+	}
+
+	
 	/**
 	 * @param currentLocation (x,y,theata wrt y axes)
 	 * @param nextLocation (x,y, and some bogus theata)
-	 * @return the concave turning angle in <b> degree </b>where the head of the
+	 * @return the concave turning angle where the head of the
 	 * robot points to the next location. where neg means counter
-	 * clockwise turn and positive means clockwise turns  
+	 * clockwise turn and positive means clockwise turns 
 	 */
 	public static double calculateRotationAngle( Coordinate currentLocation
 										, Coordinate nextLocation){
@@ -45,51 +54,24 @@ public class Coordinate extends Point{
 		double result = -currentAngle ;		//not yet finished 
 //		double result = 0;
 		if (dX > 0 ){
-			if (dY > 0){ 
+			if (dY > 0) 
 				result += (Math.atan(dX/dY) * 180 /Math.PI);
-				RConsole.println("case0");
-			}
 			else // (dY <= 0) 
-				RConsole.println("case1");
 				result += (90 - (Math.atan(dY/dX) * 180 /Math.PI));
 		}
 		else if (dX < 0){
-			if (dY > 0){
-				RConsole.println("case2");
+			if (dY > 0)
 				result +=(-(Math.atan(dX/dY) * 180 /Math.PI) -90);
-			}
-			else {//(dY <=0)
+			else //(dY <=0)
 				result +=(-90-(Math.atan(dY/dX) * 180 /Math.PI));
-				RConsole.println("case3");
-			}
-				
 		}
 		//should never reach this case, but keep it to make sure nothing goes wrong
 		else if (dX==0 && dY == 0){
 			result = 0 ;
-			RConsole.println("case4");
 		}
-		else {
-			RConsole.println("case 5");
-			RConsole.println("dx :" + dX);
-			RConsole.println("dY :" + dY);
-			RConsole.println("result:" + result);
-			if (dY > 0){ //moving straight up
-				//do nothing since there's already correction
-			}
-			else { //dy < 0 ,straight down
-				result = -result;
-			}
-		}
+		
 		return normalize(result);
 	}
-	@Override
-	public String toString() {
-		return "t" + String.valueOf(Math.toDegrees(getTheta())).substring(0, 3) + ",X" + String.valueOf(getX()).substring(0, 3) 
-				+ ",Y" + String.valueOf(getY()).substring(0, 3);
-	}
-
-
 
 	/**
 	 * @param start

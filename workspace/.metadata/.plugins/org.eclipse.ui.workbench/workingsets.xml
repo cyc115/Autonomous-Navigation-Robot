@@ -8,4 +8,5 @@
 <workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1389820814075_2" label="Window Working Set" name="Aggregate for window 1389820814075">
 <workingSet IMemento.internal.id="task"/>
 </workingSet>
+<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1392209342406_4" label="Window Working Set" name="Aggregate for window 1392209342406"/>
 </workingSetManager>

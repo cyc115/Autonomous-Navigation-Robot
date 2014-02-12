@@ -1,6 +1,7 @@
 package lab3StartFromFresh;
 
 import lejos.nxt.NXTRegulatedMotor;
+import lejos.nxt.comm.RConsole;
 
 public abstract class Driver extends Thread implements Drivable {
 	protected RobotConfiguration config ;
@@ -41,6 +42,12 @@ public abstract class Driver extends Thread implements Drivable {
 		double distance = Coordinate.calculateDistance(currentCoordinate, nextLocation);
 		double turningAngle = Coordinate.calculateRotationAngle(currentCoordinate, nextLocation);
 		
+		RConsole.println("Driver:travelTo:CurrentCoord: " + currentCoordinate.toString());
+		RConsole.println("Driver:travelTo:NxtCoord: " + nextLocation.toString());
+		RConsole.println("Driver:travelTo:traveling dist: " + distance);
+		RConsole.println("Driver:travelTo:turning Angle: " + turningAngle);
+	
+
 		//TODO remove debugging information 
 		config.writeToMonitor( ((Double)distance).toString(), 1);
 		config.writeToMonitor( ((Double)turningAngle).toString(), 2);	
@@ -100,6 +107,11 @@ public abstract class Driver extends Thread implements Drivable {
 					Coordinate.normalize((currentCoordinate.getTheta() + turningAngle))
 				);
 		currentCoordinate = temp ;
+		RConsole.println("Driver:travelTo:currentCoordinate : x " + config.getCurrentLocation().getX()
+			+"\ty " + config.getCurrentLocation().getY() 
+			+ "\ttheata " +config.getCurrentLocation().getTheta());
+			RConsole.println("=======");
+		
 	}
 
 	/**

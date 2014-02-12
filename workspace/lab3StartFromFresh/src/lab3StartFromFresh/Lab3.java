@@ -5,6 +5,7 @@ import lejos.nxt.LCD;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
+import lejos.nxt.comm.RConsole;
 
 public class Lab3 {
 	RobotConfiguration config ;
@@ -18,7 +19,7 @@ public class Lab3 {
 	
 	public static void main (String [] args){
 		Lab3 lab3 = new Lab3();  //the top most monitor class	
-		
+		RConsole.openAny(5000);
 		int buttonChoice ;
 		
 		

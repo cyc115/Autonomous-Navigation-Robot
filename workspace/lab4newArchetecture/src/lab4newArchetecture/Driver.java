@@ -27,8 +27,8 @@ public abstract class Driver extends Thread{
 	 */
 	public void travelTo(Coordinate nextLocation) {
 		config.setNextLocation(nextLocation);
-		config.setCurrentLocation(currentCoordinate.clone());
-
+		config.setStartLocation(currentCoordinate.clone());
+				
 		double distance = Coordinate.calculateDistance(currentCoordinate, nextLocation);
 		double turningAngle = Coordinate.calculateRotationAngle(currentCoordinate, nextLocation);
 		
@@ -36,39 +36,30 @@ public abstract class Driver extends Thread{
 		RConsole.println("Driver:travelTo:NxtCoord: " + nextLocation.toString());
 		RConsole.println("Driver:travelTo:traveling dist: " + distance);
 		RConsole.println("Driver:travelTo:turning Angle: " + turningAngle);
-		
 		//make turn
 		rotateToRelatively(turningAngle);
-		//set to forward speed 
-		RConsole.println("Driver:travelTo:setting speed: " + config.getForwardSpeed());
-		AbstractConfig.LEFT_MOTOR.setSpeed(config.getForwardSpeed());
-		AbstractConfig.RIGHT_MOTOR.setSpeed(config.getForwardSpeed());
+		setSpeed(config.getForwardSpeed());
 		
-		travel(distance);
+		forward(distance);
 		
 		Coordinate temp = new Coordinate(
-					nextLocation.getX(), nextLocation.getY() ,
-					Coordinate.normalize((currentCoordinate.getTheta()
-							+ turningAngle  //TODO i think this is where my angle is wrong , turningAngle is in degree and Theta is in rad
-							))
-				);
+			nextLocation.getX(), nextLocation.getY() ,
+			Coordinate.normalize((currentCoordinate.getTheta() + turningAngle))
+		);
 		currentCoordinate = temp ;
 		RConsole.println("Driver:travelTo:currentCoordinate : x " + config.getCurrentLocation().getX()
-				+"\ty " + config.getCurrentLocation().getY() 
-				+ "\ttheata " +config.getCurrentLocation().getTheta());
+			+"\ty " + config.getCurrentLocation().getY() 
+			+ "\ttheata " +config.getCurrentLocation().getTheta());
+			RConsole.println("=======");
 		
-		RConsole.println("=======");
-	}
-	
+			
+		}
+		
 	/**
-	 * move forward x cm 
+	 * move wheel forward at the same speed it was running at before 
 	 * @param dist
 	 */
-	public void travel(double dist){
-		
-		rightMotor.setSpeed(config.getForwardSpeed());
-		leftMotor.setSpeed(config.getForwardSpeed());
-		
+	private void forward(double dist){
 		leftMotor.rotate(
 				convertDistance(AbstractConfig.LEFT_RADIUS, dist), 
 				true
@@ -134,5 +125,9 @@ public abstract class Driver extends Thread{
 	 */
 	public void turnTo(double theata) {
 		rotateToRelatively(theata);
+	}
+	public void setSpeed(int speed){
+		leftMotor.setSpeed(speed);
+		rightMotor.setSpeed(speed);
 	}
 }
