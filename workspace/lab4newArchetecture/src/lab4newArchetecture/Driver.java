@@ -130,4 +130,14 @@ public abstract class Driver extends Thread{
 		leftMotor.setSpeed(speed);
 		rightMotor.setSpeed(speed);
 	}
+	
+	public static void motorForward(){
+		AbstractConfig.LEFT_MOTOR.forward();
+		AbstractConfig.RIGHT_MOTOR.forward();
+	}
+	public static void motorStop(){
+		AbstractConfig.LEFT_MOTOR.stop();
+		AbstractConfig.RIGHT_MOTOR.stop();
+	}
+	
 }

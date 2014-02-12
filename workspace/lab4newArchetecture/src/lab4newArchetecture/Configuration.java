@@ -13,7 +13,7 @@ public class Configuration extends AbstractConfig{
 	private Configuration (){
 		setCurrentLocation(new Coordinate(0, 0, 0));
 		setStartLocation(new Coordinate(0, 0, 0));
-		RConsole.openUSB(5000);
+		RConsole.openUSB(1000);
 	}
 
 	public static AbstractConfig getInstance() {

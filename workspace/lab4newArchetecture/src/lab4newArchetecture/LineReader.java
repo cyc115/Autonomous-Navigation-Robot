@@ -14,7 +14,7 @@ public class LineReader extends Thread{
 	
 	private static LineReader lineReader ;
 	private static boolean threadStarted;
-	
+
 	/**
 	 * contains a list of classes to call when a line is detected. A
 	 * linkedList is used in this implementation since there seem to be 
@@ -33,7 +33,7 @@ public class LineReader extends Thread{
 		}
 		return lineReader;
 	}
-	
+
 	public void run (){
 		threadStarted = true;
 		colorSensor.setFloodlight(true);
@@ -137,5 +137,15 @@ public class LineReader extends Thread{
 		
 		return result ; 
 	}
+	
+	
+	public static boolean isThreadStarted() {
+		return threadStarted;
+	}
+
+	public static void setThreadStarted(boolean threadStarted) {
+		LineReader.threadStarted = threadStarted;
+	}
+
 	
 }
