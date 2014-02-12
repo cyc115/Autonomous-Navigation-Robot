@@ -40,7 +40,6 @@ public class Coordinate extends Point{
 				currentAngle = currentLocation.getTheta();
 		
 		double result = -currentAngle ;		//not yet finished 
-//		double result = 0;
 		if (dX > 0 ){
 			if (dY > 0) 
 				result += (Math.atan(dX/dY) * 180 /Math.PI);

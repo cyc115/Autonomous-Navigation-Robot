@@ -1,35 +1,20 @@
-package lab4;
+package lab4newArchetecture;
 
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.comm.RConsole;
- 
-public abstract class Driver extends Thread {
 
-	protected RobotConfiguration config ;
+public abstract class Driver {
+	protected AbstractConfig config ;
 	protected Coordinate currentCoordinate, startCoord , endCoord;
 	protected NXTRegulatedMotor leftMotor , rightMotor;
-	/**
-	 * should the driver be paused ?
-	 */
-	protected boolean pause = false ;
-	private final int CHECK_DISTANCE = 100;
 
-	public Driver(RobotConfiguration config){
+	public Driver(AbstractConfig config){
 		this.config = config ;
-		leftMotor = RobotConfiguration.LEFT_MOTOR;	// this is very frequently used
-		rightMotor = RobotConfiguration.RIGHT_MOTOR;
+		leftMotor = AbstractConfig.LEFT_MOTOR;
+		rightMotor = AbstractConfig.RIGHT_MOTOR;
 		
 		currentCoordinate = config.getCurrentLocation();
-		endCoord = config.getStartingCoordinate();
-	}
-
-
-	/**
-	 * travel to wrt to the global (0,0) coordinate.
-	 * @param nextLocation
-	 */
-	public void travelTo(double x, double y) {
-		travelTo(new Coordinate(x,y,0));
+		endCoord = config.getStartLocation();
 	}
 
 	/**
@@ -38,21 +23,21 @@ public abstract class Driver extends Thread {
 	 */
 	public void travelTo(Coordinate nextLocation) {
 		config.setNextLocation(nextLocation);
-		config.setStartingCoordinate(currentCoordinate.clone());
+		config.setCurrentLocation(currentCoordinate);
 
 		double distance = Coordinate.calculateDistance(currentCoordinate, nextLocation);
 		double turningAngle = Coordinate.calculateRotationAngle(currentCoordinate, nextLocation);
+
 		RConsole.println("Driver:travelTo:NxtCoord: " + nextLocation.toString());
 		RConsole.println("Driver:travelTo:traveling dist: " + distance);
 		RConsole.println("Driver:travelTo:turning Angle: " + turningAngle);
 		
 		//make turn
-		RConsole.println("Driver:travelTo:making turn: " + turningAngle);
 		rotateToRelatively(turningAngle);
 		//set to forward speed 
 		RConsole.println("Driver:travelTo:setting speed: " + config.getForwardSpeed());
-		RobotConfiguration.LEFT_MOTOR.setSpeed(config.getForwardSpeed());
-		RobotConfiguration.RIGHT_MOTOR.setSpeed(config.getForwardSpeed());
+		AbstractConfig.LEFT_MOTOR.setSpeed(config.getForwardSpeed());
+		AbstractConfig.RIGHT_MOTOR.setSpeed(config.getForwardSpeed());
 		
 		/* disabled obstacle avoidance during traveling 
 		boolean finishedTravelTo = false ;
@@ -100,11 +85,11 @@ public abstract class Driver extends Thread {
 		leftMotor.setSpeed(config.getForwardSpeed());
 		
 		leftMotor.rotate(
-				convertDistance(RobotConfiguration.LEFT_RADIUS, dist), 
+				convertDistance(AbstractConfig.LEFT_RADIUS, dist), 
 				true
 				);
 		rightMotor.rotate(
-				convertDistance(RobotConfiguration.RIGHT_RADIUS, dist), 
+				convertDistance(AbstractConfig.RIGHT_RADIUS, dist), 
 				false
 				);
 	}
@@ -136,10 +121,10 @@ public abstract class Driver extends Thread {
 		}
 		
 		leftMotor.rotate(
-				convertAngle(RobotConfiguration.LEFT_RADIUS, config.getWidth(), degree)
+				convertAngle(AbstractConfig.LEFT_RADIUS, config.WIDTH, degree)
 				, true);
 		rightMotor.rotate(
-				-convertAngle(RobotConfiguration.RIGHT_RADIUS,config.getWidth() , degree)
+				-convertAngle(AbstractConfig.RIGHT_RADIUS,config.WIDTH , degree)
 				, returnRightAway);
 	}
 	/**
@@ -169,10 +154,10 @@ public abstract class Driver extends Thread {
 		return true;
 	}
 	
-	public RobotConfiguration getConfig() {
+	public AbstractConfig getConfig() {
 		return config;
 	}
-	public void setConfig(RobotConfiguration config) {
+	public void setConfig(AbstractConfig config) {
 		this.config = config;
 	}
 	public Coordinate getCurrentCoordinate() {
@@ -181,5 +166,4 @@ public abstract class Driver extends Thread {
 	public void setCurrentCoordinatel(Coordinate currentCoordinate) {
 		this.currentCoordinate = currentCoordinate;
 	}
-
 }

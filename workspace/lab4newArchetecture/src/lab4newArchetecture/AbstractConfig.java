@@ -22,7 +22,14 @@ public abstract class AbstractConfig {
 	static final double LEFT_RADIUS = 2.090 ;
 	static final double RIGHT_RADIUS =2.090;
 	static final double WIDTH = 15.24 ;
-
+	
+	/**
+	 * @return a instance of config
+	 */
+	public static AbstractConfig getInstance(){
+		return Configuration.getInstance();
+	}
+	
 	/**
 	 * 
 	 * @return average radius of the wheels of robot 

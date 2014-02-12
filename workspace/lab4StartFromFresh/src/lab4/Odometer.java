@@ -149,23 +149,6 @@ public class Odometer extends Thread {
 		}
 	}
 
-	public void setY(double x) {
-		synchronized (lock) {
-			cCoord.setX(x);
-		}
-	}
-
-	public void setX(double y) {
-		synchronized (lock) {
-			cCoord.setY(y);
-		}
-	}
-
-	public void setTheta(double theta) {
-		synchronized (lock) {
-			cCoord.setTheta(theta);
-		}
-	}
 	
 	public double getThetaInDeg(){
 		return getTheta() * 57.2957795131;
