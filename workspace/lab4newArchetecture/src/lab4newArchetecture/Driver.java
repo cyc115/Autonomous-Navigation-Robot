@@ -3,10 +3,10 @@ package lab4newArchetecture;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.comm.RConsole;
 
-public abstract class Driver {
-	protected AbstractConfig config ;
-	protected Coordinate currentCoordinate, startCoord , endCoord;
-	protected NXTRegulatedMotor leftMotor , rightMotor;
+public abstract class Driver extends Thread{
+	private AbstractConfig config ;
+	private Coordinate currentCoordinate, startCoord , endCoord;
+	private NXTRegulatedMotor leftMotor , rightMotor;
 
 	public Driver(AbstractConfig config){
 		this.config = config ;
@@ -17,13 +17,17 @@ public abstract class Driver {
 		endCoord = config.getStartLocation();
 	}
 
+	public void travelTo(int x, int y){
+		travelTo(new Coordinate(x, y, 0));
+	}
+	
 	/**
 	 * travel to wrt to the global (0,0) coordinate
 	 * @param nextLocationg
 	 */
 	public void travelTo(Coordinate nextLocation) {
 		config.setNextLocation(nextLocation);
-		config.setCurrentLocation(currentCoordinate);
+		config.setCurrentLocation(currentCoordinate.clone());
 
 		double distance = Coordinate.calculateDistance(currentCoordinate, nextLocation);
 		double turningAngle = Coordinate.calculateRotationAngle(currentCoordinate, nextLocation);
@@ -66,7 +70,7 @@ public abstract class Driver {
 		Coordinate temp = new Coordinate(
 					nextLocation.getX(), nextLocation.getY() ,
 					Coordinate.normalize((currentCoordinate.getTheta()
-//							+ turningAngle  //TODO i think this is where my angle is wrong , turningAngle is in degree and Theta is in rad
+							+ turningAngle  //TODO i think this is where my angle is wrong , turningAngle is in degree and Theta is in rad
 							))
 				);
 		currentCoordinate = temp ;

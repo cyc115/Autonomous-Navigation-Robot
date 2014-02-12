@@ -7,9 +7,17 @@ public class Lab5 {
 		AbstractConfig config = Configuration.getInstance();
 		LCDWriter.getInstance().start();;
 		Odometer.getInstance().start();
-		LCDWriter.getInstance().writeToScreen("done", 0);
 		LineReader.getInstance().start();
+		DriverTest dt = new DriverTest();
+		dt.start();
 		
+		LCDWriter lcd = LCDWriter.getInstance();
+		while(!config.isDriveComplete()){
+			lcd.writeToScreen("x " + Odometer.getInstance().getX() + "", 0);
+			lcd.writeToScreen("Y " + Odometer.getInstance().getY() + "", 1);
+			lcd.writeToScreen("T " + Odometer.getInstance().getTheta(), 2);
+			
+		}
 		//TODO driver need to be tested 
 		
 		//TODO add a getter to the threadStart
