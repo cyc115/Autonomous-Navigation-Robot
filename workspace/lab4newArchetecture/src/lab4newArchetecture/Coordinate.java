@@ -1,5 +1,7 @@
 package lab4newArchetecture;
 
+import lejos.nxt.comm.RConsole;
+
 
 /**
  * location x , y and theata in degrees 
@@ -43,22 +45,42 @@ public class Coordinate extends Point{
 		double result = -currentAngle ;		//not yet finished 
 //		double result = 0;
 		if (dX > 0 ){
-			if (dY > 0) 
+			if (dY > 0){ 
 				result += (Math.atan(dX/dY) * 180 /Math.PI);
+				RConsole.println("case0");
+			}
 			else // (dY <= 0) 
+				RConsole.println("case1");
 				result += (90 - (Math.atan(dY/dX) * 180 /Math.PI));
 		}
 		else if (dX < 0){
-			if (dY > 0)
+			if (dY > 0){
+				RConsole.println("case2");
 				result +=(-(Math.atan(dX/dY) * 180 /Math.PI) -90);
-			else //(dY <=0)
+			}
+			else {//(dY <=0)
 				result +=(-90-(Math.atan(dY/dX) * 180 /Math.PI));
+				RConsole.println("case3");
+			}
+				
 		}
 		//should never reach this case, but keep it to make sure nothing goes wrong
 		else if (dX==0 && dY == 0){
 			result = 0 ;
+			RConsole.println("case4");
 		}
-		
+		else {
+			RConsole.println("case 5");
+			RConsole.println("dx :" + dX);
+			RConsole.println("dY :" + dY);
+			RConsole.println("result:" + result);
+			if (dY > 0){ //moving straight up
+				//do nothing since there's already correction
+			}
+			else { //dy < 0 ,straight down
+				result = -result;
+			}
+		}
 		return normalize(result);
 	}
 	@Override

@@ -9,6 +9,8 @@ public class Lab5 {
 		Odometer.getInstance().start();
 		LineReader.getInstance().start();
 		DriverTest dt = new DriverTest();
+		
+		while(Button.waitForAnyPress() != Button.ID_ENTER){}
 		dt.start();
 		
 		LCDWriter lcd = LCDWriter.getInstance();

@@ -31,7 +31,8 @@ public abstract class Driver extends Thread{
 
 		double distance = Coordinate.calculateDistance(currentCoordinate, nextLocation);
 		double turningAngle = Coordinate.calculateRotationAngle(currentCoordinate, nextLocation);
-
+		
+		RConsole.println("Driver:travelTo:CurrentCoord: " + currentCoordinate.toString());
 		RConsole.println("Driver:travelTo:NxtCoord: " + nextLocation.toString());
 		RConsole.println("Driver:travelTo:traveling dist: " + distance);
 		RConsole.println("Driver:travelTo:turning Angle: " + turningAngle);
@@ -43,30 +44,8 @@ public abstract class Driver extends Thread{
 		AbstractConfig.LEFT_MOTOR.setSpeed(config.getForwardSpeed());
 		AbstractConfig.RIGHT_MOTOR.setSpeed(config.getForwardSpeed());
 		
-		/* disabled obstacle avoidance during traveling 
-		boolean finishedTravelTo = false ;
-		
-		while(!finishedTravelTo){
-			
-			//when navigating
-			while(true){
-				double moveDist;
-				//move x cm forward if distance is bigger then 1cm
-				if (distance > CHECK_DISTANCE ){
-					moveDist = CHECK_DISTANCE;
-					distance -= CHECK_DISTANCE;	
-				}
-				else {
-					moveDist = distance ;
-					finishedTravelTo = true ;
-					break;
-				}
-				travel(moveDist);
-			}
-		}
-		*/
-		
 		travel(distance);
+		
 		Coordinate temp = new Coordinate(
 					nextLocation.getX(), nextLocation.getY() ,
 					Coordinate.normalize((currentCoordinate.getTheta()
@@ -77,6 +56,8 @@ public abstract class Driver extends Thread{
 		RConsole.println("Driver:travelTo:currentCoordinate : x " + config.getCurrentLocation().getX()
 				+"\ty " + config.getCurrentLocation().getY() 
 				+ "\ttheata " +config.getCurrentLocation().getTheta());
+		
+		RConsole.println("=======");
 	}
 	
 	/**
