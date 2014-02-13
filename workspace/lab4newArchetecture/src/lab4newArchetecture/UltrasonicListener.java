@@ -9,6 +9,19 @@ package lab4newArchetecture;
  */
 public interface UltrasonicListener {
 	
+	
+	
 	public void ultrasonicDistance(int distanceFromObsticle);
+	
+	public int getDistanceOnInvoke ();
+	public UltrasonicListener setDistanceOnInvoke (int distance);
+	
+	public boolean isContinuous();
+	public UltrasonicListener setContinuous(boolean continuous );
+
+	public boolean isCalled();
+	public UltrasonicListener setCalled(boolean called);
+	
+	
 
 }

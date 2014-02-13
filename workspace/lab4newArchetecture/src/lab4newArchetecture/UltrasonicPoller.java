@@ -21,7 +21,7 @@ public class UltrasonicPoller extends Thread implements UltrasonicPlanner {
 	private int distance = 25; //initialize the distance read to 25
 	private static UltrasonicPoller instance ;
 	private static boolean threadStarted = false ;
-	private ArrayList <UltrasonicSubscriberWrapper> listenerWrappers = new ArrayList<UltrasonicSubscriberWrapper>();
+	private ArrayList <UltrasonicListener> usListenerList = new ArrayList<UltrasonicListener>();
 
 	private UltrasonicPoller (AbstractConfig config){
 		this.config = config;
@@ -45,19 +45,20 @@ public class UltrasonicPoller extends Thread implements UltrasonicPlanner {
 	
 	public void run (){
 		threadStarted = true ;
-		while (true){
+		while (!AbstractConfig.getInstance().isDriveComplete()){
 			distance = uSensor.getDistance();
-			for (UltrasonicSubscriberWrapper usw : listenerWrappers){
+			for (UltrasonicListener usw : usListenerList){
 				//if the distance is within range.
 				//if it has not been called
 				//or if it should be called continuously
-				if (usw.getDistanceOnInvoke() <= distance && (!usw.isCalled() || usw.isContinueous())){
-					usw.getListener().ultrasonicDistance(distance);
+				if (usw.getDistanceOnInvoke() >= distance && (!usw.isCalled() || usw.isContinuous())){
+					usw.ultrasonicDistance(distance);
 					usw.setCalled(true);
 				}
 			}
 			try { Thread.sleep(SLEEP_INTERVAL); } catch(Exception e){};
-		}
+		} 
+		threadStarted = false;
 	}
 	/**
 	 * subscribe the listener iff there is no doublecates in the list.
@@ -65,21 +66,20 @@ public class UltrasonicPoller extends Thread implements UltrasonicPlanner {
 	 * @param uListener
 	 * @param distanceOnInvoke
 	 * @param continuous
+	 * @return true if subscriber is doublecated 
 	 */
-	public void subscribe(UltrasonicListener uListener , int distanceOnInvoke,boolean continuous){
-		
+	public boolean subscribe(UltrasonicListener uListener){
 		boolean doublecate = false ;
-		for (UltrasonicSubscriberWrapper wrapper : listenerWrappers){
-			if (wrapper.equals(uListener)) {
-				wrapper.setDistanceOnInvoke(distanceOnInvoke);
-				wrapper.setContinueous(continuous);
+		for (UltrasonicListener usl : usListenerList){
+			if (usl.equals(uListener)) {
 				doublecate = true ;
 				break ;
 			}
 		}
 		if (!doublecate){
-			listenerWrappers.add(new UltrasonicSubscriberWrapper(uListener, distanceOnInvoke,continuous));
+			usListenerList.add(uListener);
 		}
+		return doublecate;
 	}
 	/**
 	 * 
@@ -88,9 +88,9 @@ public class UltrasonicPoller extends Thread implements UltrasonicPlanner {
 	 */
 	public boolean unsubscribe(UltrasonicListener ulistener){
 		boolean removed = false ;
-		for (UltrasonicSubscriberWrapper wrapper : listenerWrappers){
-			if (wrapper.equals(ulistener)){
-				listenerWrappers.remove(wrapper);
+		for (UltrasonicListener usl: usListenerList){
+			if (usl.equals(ulistener)){
+				usListenerList.remove(usl);
 				removed = true ;
 			}
 		}

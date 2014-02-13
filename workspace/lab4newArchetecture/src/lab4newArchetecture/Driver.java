@@ -3,12 +3,21 @@ package lab4newArchetecture;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.comm.RConsole;
 
-public abstract class Driver extends Thread{
+public class Driver extends Thread{
 	private AbstractConfig config ;
-	private Coordinate currentCoordinate, startCoord , endCoord;
-	private NXTRegulatedMotor leftMotor , rightMotor;
-
-	public Driver(AbstractConfig config){
+	private static Coordinate currentCoordinate, startCoord , endCoord;
+	private static NXTRegulatedMotor leftMotor , rightMotor;
+	private static Driver driver = new Driver(AbstractConfig.getInstance());
+	
+	public static Driver getInstance(){
+		return driver;
+	}
+	/**
+	 * do not use this to initialize another instance 
+	 * @param config
+	 */
+	@Deprecated
+	protected Driver(AbstractConfig config){
 		this.config = config ;
 		leftMotor = AbstractConfig.LEFT_MOTOR;
 		rightMotor = AbstractConfig.RIGHT_MOTOR;
@@ -126,9 +135,9 @@ public abstract class Driver extends Thread{
 	public void turnTo(double theata) {
 		rotateToRelatively(theata);
 	}
-	public void setSpeed(int speed){
-		leftMotor.setSpeed(speed);
-		rightMotor.setSpeed(speed);
+	public static void setSpeed(int speed){
+		AbstractConfig.LEFT_MOTOR.setSpeed(speed);
+		AbstractConfig.RIGHT_MOTOR.setSpeed(speed);
 	}
 	
 	public static void motorForward(){
