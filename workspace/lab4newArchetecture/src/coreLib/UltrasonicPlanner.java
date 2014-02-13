@@ -1,4 +1,4 @@
-package lab4newArchetecture;
+package coreLib;
 
 /**
  * this interface defines the behavior of an ultrasonic planner

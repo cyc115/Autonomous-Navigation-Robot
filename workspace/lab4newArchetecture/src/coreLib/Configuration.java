@@ -1,4 +1,4 @@
-package lab4newArchetecture;
+package coreLib;
 
 import lejos.nxt.comm.RConsole;
 
@@ -13,7 +13,7 @@ public class Configuration extends AbstractConfig{
 	private Configuration (){
 		setCurrentLocation(new Coordinate(0, 0, 0));
 		setStartLocation(new Coordinate(0, 0, 0));
-		RConsole.openUSB(1000);
+		RConsole.openUSB(5000);
 	}
 
 	public static AbstractConfig getInstance() {

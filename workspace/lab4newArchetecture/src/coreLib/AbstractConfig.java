@@ -1,4 +1,4 @@
-package lab4newArchetecture;
+package coreLib;
 
 import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
@@ -14,11 +14,11 @@ public abstract class AbstractConfig {
 	private int ROTATE_SPEED = 100 ;
 	private int FORWARD_SPEED = 200;
 	//robot hardware
-	static final NXTRegulatedMotor LEFT_MOTOR = Motor.A;
-	static final NXTRegulatedMotor RIGHT_MOTOR = Motor.B;
-	static final NXTRegulatedMotor SENSOR_MOTOR= Motor.C;
-	static final SensorPort ULTRASONIC_SENSOR_PORT = SensorPort.S1;
-	static final SensorPort LIGHT_SENSOR_PORT = SensorPort.S2;
+	public static final NXTRegulatedMotor LEFT_MOTOR = Motor.A;
+	public static final NXTRegulatedMotor RIGHT_MOTOR = Motor.B;
+	public static final NXTRegulatedMotor SENSOR_MOTOR= Motor.C;
+	public static final SensorPort ULTRASONIC_SENSOR_PORT = SensorPort.S1;
+	public static final SensorPort LIGHT_SENSOR_PORT = SensorPort.S2;
 	static final double LEFT_RADIUS = 2.090 ;
 	static final double RIGHT_RADIUS =2.090;
 	static final double WIDTH = 15.24 ;

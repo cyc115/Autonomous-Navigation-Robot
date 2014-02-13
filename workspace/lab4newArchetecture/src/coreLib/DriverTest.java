@@ -1,4 +1,4 @@
-package lab4newArchetecture;
+package coreLib;
 
 
 public class DriverTest extends Driver implements Drivable{

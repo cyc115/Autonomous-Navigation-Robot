@@ -1,5 +1,11 @@
-package lab4newArchetecture;
+package ultrasonicListeners;
 
+import coreLib.AbstractConfig;
+import coreLib.Configuration;
+import coreLib.Driver;
+import coreLib.LCDWriter;
+import coreLib.UltrasonicListener;
+import coreLib.UltrasonicPoller;
 import lejos.nxt.Button;
 import lejos.nxt.ColorSensor;
 import lejos.robotics.Color;

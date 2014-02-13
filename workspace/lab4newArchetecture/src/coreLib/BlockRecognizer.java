@@ -1,4 +1,4 @@
-package lab4newArchetecture;
+package coreLib;
 
 import lejos.nxt.ColorSensor;
 import lejos.nxt.SensorPort;

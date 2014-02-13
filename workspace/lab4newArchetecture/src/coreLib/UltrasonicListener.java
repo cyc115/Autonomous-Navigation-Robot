@@ -1,4 +1,4 @@
-package lab4newArchetecture;
+package coreLib;
 
 /**
  * these are the interface for classes that listens to the ultrasonic poller

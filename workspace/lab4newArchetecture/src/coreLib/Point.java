@@ -1,4 +1,4 @@
-package lab4newArchetecture;
+package coreLib;
 
 public class Point {
 	private double x , y ;

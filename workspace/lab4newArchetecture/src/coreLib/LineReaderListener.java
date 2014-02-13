@@ -1,7 +1,7 @@
 /**
  * 
  */
-package lab4newArchetecture;
+package coreLib;
 
 /**
  * LineReaderListener is the interface that contains the method signiture 

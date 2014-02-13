@@ -1,4 +1,4 @@
-package lab4newArchetecture;
+package coreLib;
 
 
 import java.util.LinkedList;

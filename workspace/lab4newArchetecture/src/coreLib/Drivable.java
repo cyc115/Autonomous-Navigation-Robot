@@ -1,7 +1,7 @@
 /**
  * 
  */
-package lab4newArchetecture;
+package coreLib;
 
 /**
  * Drivable marks that the class is the final Driver of the robot 

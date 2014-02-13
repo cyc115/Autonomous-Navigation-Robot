@@ -1,7 +1,8 @@
-package lab4newArchetecture;
+package coreLib;
 
 /**
  * this is the hanging motor that moves the sensor 
+ * TODO incomplete class 
  * @author yuechuan
  *
  */

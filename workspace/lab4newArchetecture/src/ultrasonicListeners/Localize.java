@@ -1,4 +1,10 @@
-package lab4newArchetecture;
+package ultrasonicListeners;
+
+import coreLib.AbstractConfig;
+import coreLib.Driver;
+import coreLib.LCDWriter;
+import coreLib.UltrasonicListener;
+import lejos.nxt.comm.RConsole;
 
 /**
  * host a public method that does the localization
@@ -18,27 +24,31 @@ public class Localize implements UltrasonicListener{
 		this.distanceOnInvoke = distanceOnInvoke;
 		this.continuous = continuous;
 	}
+	int i = 0 ;
 	@Override
 	public void ultrasonicDistance(int distanceFromObsticle) {
 		Driver.motorStop();
+		RConsole.println("localization entered " + ++i + "times");
 		if (!secondAngle){
 			angle1 = AbstractConfig.getInstance().getCurrentLocation().getTheta();
-			LCDWriter.getInstance().writeToScreen("ang1" + angle1 , 6);
+			LCDWriter.getInstance().writeToScreen("ang1 " + Math.toDegrees(angle1) , 6);
 			//rotate back 
-			Driver.getInstance().rotateToRelatively(-360, true);
+			Driver.rotateToRelatively(-360, true);
 			try {Thread.sleep(400);} catch ( Exception e ){};
 			secondAngle = true;
 			called = false;
 		}
 		else {
 			angle2 = AbstractConfig.getInstance().getCurrentLocation().getTheta();
-			LCDWriter.getInstance().writeToScreen("ang2" + angle1 , 5);
+			LCDWriter.getInstance().writeToScreen("ang2 " + Math.toDegrees(angle2) , 5);
 			//rotate to middle 
-			double angleFromOrigin = ((angle1 + angle2)/2) ;
-			LCDWriter.getInstance().writeToScreen("AFO " +angleFromOrigin , 0);
-			continuous = true;
+			double angleFromOrigin = ((angle1 + angle2)/2)- angle2 ;
+			LCDWriter.getInstance().writeToScreen("AFO " +Math.toDegrees(angleFromOrigin) , 0);
+			Driver.rotateToRelatively(Math.toDegrees(angleFromOrigin));
+			continuous = false;
 		}
 	}
+	
 	public int getDistanceOnInvoke() {
 		return distanceOnInvoke;
 	}
@@ -64,5 +74,9 @@ public class Localize implements UltrasonicListener{
 	public UltrasonicListener setCalled(boolean called) {
 		this.called = called;
 		return this ;
+	}
+	
+	public boolean isDone(){
+		return (!continuous && secondAngle);
 	}
 }

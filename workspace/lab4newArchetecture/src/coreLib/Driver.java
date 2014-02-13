@@ -1,17 +1,14 @@
-package lab4newArchetecture;
+package coreLib;
 
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.comm.RConsole;
 
-public class Driver extends Thread{
+public abstract class Driver extends Thread{
 	private AbstractConfig config ;
 	private static Coordinate currentCoordinate, startCoord , endCoord;
-	private static NXTRegulatedMotor leftMotor , rightMotor;
-	private static Driver driver = new Driver(AbstractConfig.getInstance());
+	private static NXTRegulatedMotor leftMotor = AbstractConfig.LEFT_MOTOR, 
+									rightMotor = AbstractConfig.RIGHT_MOTOR;
 	
-	public static Driver getInstance(){
-		return driver;
-	}
 	/**
 	 * do not use this to initialize another instance 
 	 * @param config
@@ -32,9 +29,13 @@ public class Driver extends Thread{
 	
 	/**
 	 * travel to wrt to the global (0,0) coordinate
+	 * . Since this method use currentCoordinate which is \
+	 * initialized during object initialization. this method is 
+	 * made an instance method to avoid undefined behavior
 	 * @param nextLocationg
 	 */
 	public void travelTo(Coordinate nextLocation) {
+		AbstractConfig config = AbstractConfig.getInstance();
 		config.setNextLocation(nextLocation);
 		config.setStartLocation(currentCoordinate.clone());
 				
@@ -68,7 +69,7 @@ public class Driver extends Thread{
 	 * move wheel forward at the same speed it was running at before 
 	 * @param dist
 	 */
-	private void forward(double dist){
+	private static void forward(double dist){
 		leftMotor.rotate(
 				convertDistance(AbstractConfig.LEFT_RADIUS, dist), 
 				true
@@ -86,7 +87,7 @@ public class Driver extends Thread{
 	 *	when ever possible 
 	 * @param degree
 	 */
-	protected void rotateToRelatively(double degree){
+	public static void rotateToRelatively(double degree){
 		rotateToRelatively(degree, false);
 	}
 	/**
@@ -95,9 +96,9 @@ public class Driver extends Thread{
 	 * @param degree 
 	 * @param returnRightAway should the function finish before finishing the turn 
 	 */
-	public void rotateToRelatively(double degree, boolean returnRightAway){
-		rightMotor.setSpeed(config.getRotationSpeed());
-		leftMotor.setSpeed(config.getRotationSpeed());
+	public static void rotateToRelatively(double degree, boolean returnRightAway){
+		rightMotor.setSpeed(AbstractConfig.getInstance().getRotationSpeed());
+		leftMotor.setSpeed(AbstractConfig.getInstance().getRotationSpeed());
 		
 		
 		if (degree < 0){		//if degree is negative then rotate back ward
@@ -106,10 +107,10 @@ public class Driver extends Thread{
 		}
 		
 		leftMotor.rotate(
-				convertAngle(AbstractConfig.LEFT_RADIUS, config.WIDTH, degree)
+				convertAngle(AbstractConfig.LEFT_RADIUS, AbstractConfig.WIDTH, degree)
 				, true);
 		rightMotor.rotate(
-				-convertAngle(AbstractConfig.RIGHT_RADIUS,config.WIDTH , degree)
+				-convertAngle(AbstractConfig.RIGHT_RADIUS,AbstractConfig.WIDTH , degree)
 				, returnRightAway);
 	}
 	
@@ -132,7 +133,7 @@ public class Driver extends Thread{
 	/**
 	 * turn to angle wrt to the y axies 
 	 */
-	public void turnTo(double theata) {
+	public static void turnTo(double theata) {
 		rotateToRelatively(theata);
 	}
 	public static void setSpeed(int speed){
