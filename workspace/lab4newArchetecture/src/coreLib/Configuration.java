@@ -5,7 +5,6 @@ import lejos.nxt.comm.RConsole;
 public class Configuration extends AbstractConfig{
 
 	private static Configuration config = new Configuration();
-	
 	/**
 	 * set the default location ans open RConsole.
 	 * 

@@ -18,7 +18,7 @@ public class Localize implements UltrasonicListener{
 	private boolean called ;
 	double angle1 , angle2 , middle ;
 	boolean secondAngle = false ;	// if this is called a second time then turn back 
-
+	Driver driver = Driver.getInstance();
 	
 	public Localize(int distanceOnInvoke , boolean continuous){
 		this.distanceOnInvoke = distanceOnInvoke;
@@ -27,13 +27,13 @@ public class Localize implements UltrasonicListener{
 	int i = 0 ;
 	@Override
 	public void ultrasonicDistance(int distanceFromObsticle) {
-		Driver.motorStop();
+		driver.motorStop();
 		RConsole.println("localization entered " + ++i + "times");
 		if (!secondAngle){
 			angle1 = AbstractConfig.getInstance().getCurrentLocation().getTheta();
 			LCDWriter.getInstance().writeToScreen("ang1 " + Math.toDegrees(angle1) , 6);
 			//rotate back 
-			Driver.rotateToRelatively(-360, true);
+			driver.rotateToRelatively(-360, true);
 			try {Thread.sleep(400);} catch ( Exception e ){};
 			secondAngle = true;
 			called = false;
@@ -44,7 +44,7 @@ public class Localize implements UltrasonicListener{
 			//rotate to middle 
 			double angleFromOrigin = ((angle1 + angle2)/2)- angle2 ;
 			LCDWriter.getInstance().writeToScreen("AFO " +Math.toDegrees(angleFromOrigin) , 0);
-			Driver.rotateToRelatively(Math.toDegrees(angleFromOrigin));
+			driver.rotateToRelatively(Math.toDegrees(angleFromOrigin));
 			continuous = false;
 		}
 	}

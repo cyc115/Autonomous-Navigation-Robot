@@ -3,6 +3,7 @@ package coreLib;
 import java.util.ArrayList;
 
 import lejos.nxt.UltrasonicSensor;
+import lejos.nxt.comm.RConsole;
 
 
 /**
@@ -47,6 +48,8 @@ public class UltrasonicPoller extends Thread implements UltrasonicPlanner {
 		threadStarted = true ;
 		while (!AbstractConfig.getInstance().isDriveComplete()){
 			distance = uSensor.getDistance();
+			
+			LCDWriter.getInstance().writeToScreen("Dist " + distance, 7);
 			for (UltrasonicListener usw : usListenerList){
 				//if the distance is within range.
 				//if it has not been called

@@ -33,7 +33,7 @@ public class Lab5Part1 implements UltrasonicListener{
 		lcd.writeToScreen("press start", 0);
 		while(Button.waitForAnyPress() != Button.ID_ENTER){}
 		Driver.setSpeed(config.getForwardSpeed());
-		Driver.motorForward();
+		Driver.getInstance().motorForward();
 		uspoller.subscribe(lab5);
 
 		while(Button.waitForAnyPress() != Button.ID_ESCAPE){}
@@ -43,7 +43,7 @@ public class Lab5Part1 implements UltrasonicListener{
 
 	@Override
 	public void ultrasonicDistance(int distanceFromObsticle) {
-		Driver.motorStop();
+		Driver.getInstance().motorStop();
 		LCDWriter.getInstance().writeToScreen("see smt["+ distanceFromObsticle + "]", 3);
 		ColorSensor cs = new ColorSensor(AbstractConfig.LIGHT_SENSOR_PORT);
 		cs.setFloodlight(true);
