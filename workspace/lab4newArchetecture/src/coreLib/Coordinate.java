@@ -11,7 +11,7 @@ import lejos.nxt.comm.RConsole;
 public class Coordinate extends Point{
 	double theta;
 	
-	Coordinate(double x, double y , double d ){
+	public Coordinate(double x, double y , double d ){
 		super (x,y);
 		this.theta = d ;
 	}

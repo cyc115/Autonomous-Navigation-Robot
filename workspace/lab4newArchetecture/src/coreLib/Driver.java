@@ -22,7 +22,7 @@ public class Driver extends Thread{
 	 * @param config
 	 */
 	@Deprecated
-	protected Driver(AbstractConfig config){
+	public Driver(AbstractConfig config){
 		this.config = config ;
 		leftMotor = AbstractConfig.LEFT_MOTOR;
 		rightMotor = AbstractConfig.RIGHT_MOTOR;
@@ -41,10 +41,7 @@ public class Driver extends Thread{
 	}
 
 	public void travelTo(int x, int y){
-		synchronized (lock){
 			travelTo(new Coordinate(x, y, 0));			
-		}
-
 	}
 	
 	/**
@@ -58,46 +55,45 @@ public class Driver extends Thread{
 	 * @param nextLocationg
 	 */
 	public void travelTo(Coordinate nextLocation) {
-		synchronized (lock){
+//		synchronized (lock){
 			AbstractConfig config = AbstractConfig.getInstance();
 			config.setNextLocation(nextLocation);
 			config.setStartLocation(currentCoordinate.clone());
-
-			double distance = Coordinate.calculateDistance(currentCoordinate, nextLocation);
-			double turningAngle = Coordinate.calculateRotationAngle(currentCoordinate, nextLocation);
-
-			RConsole.println("Driver:travelTo:CurrentCoord: " + currentCoordinate.toString());
-			RConsole.println("Driver:travelTo:NxtCoord: " + nextLocation.toString());
-			RConsole.println("Driver:travelTo:traveling dist: " + distance);
-			RConsole.println("Driver:travelTo:turning Angle: " + turningAngle);
-		//make turn
-			rotateToRelatively(turningAngle);
-			setSpeed(config.getForwardSpeed());
-
-			forward(distance);
-
-			/*
-			Coordinate temp = new Coordinate(
-				nextLocation.getX(), nextLocation.getY() ,
-				Coordinate.normalize((currentCoordinate.getTheta() + turningAngle))
-				);
-			currentCoordinate = temp ;
-			
-			*/
-			RConsole.println("Driver:travelTo:currentCoordinate : x " + config.getCurrentLocation().getX()
-				+"\ty " + config.getCurrentLocation().getY() 
-				+ "\ttheata " +config.getCurrentLocation().getTheta());
-			RConsole.println("=======");
-		}
+//		}
 		
-		}
+		double distance = Coordinate.calculateDistance(currentCoordinate, nextLocation);
+		double turningAngle = Coordinate.calculateRotationAngle(currentCoordinate, nextLocation);
+
+		RConsole.println("Driver:travelTo:CurrentCoord: " + currentCoordinate.toString());
+		RConsole.println("Driver:travelTo:NxtCoord: " + nextLocation.toString());
+		RConsole.println("Driver:travelTo:traveling dist: " + distance);
+		RConsole.println("Driver:travelTo:turning Angle: " + turningAngle);
+	//make turn
+		rotateToRelatively(turningAngle);
+		setSpeed(config.getForwardSpeed());
+
+		forward(distance);
+
+		/*
+		Coordinate temp = new Coordinate(
+			nextLocation.getX(), nextLocation.getY() ,
+			Coordinate.normalize((currentCoordinate.getTheta() + turningAngle))
+			);
+		currentCoordinate = temp ;
+		
+		*/
+		RConsole.println("Driver:travelTo:currentCoordinate : x " + config.getCurrentLocation().getX()
+			+"\ty " + config.getCurrentLocation().getY() 
+			+ "\ttheata " +config.getCurrentLocation().getTheta());
+		RConsole.println("=======");
+	}
 		
 	/**
 	 * move wheel forward at the same speed it was running at before 
 	 * @param dist
 	 */
 	private void forward(double dist){
-		synchronized(lock){
+//		synchronized(lock){
 			leftMotor.rotate(
 				convertDistance(AbstractConfig.LEFT_RADIUS, dist), 
 				true
@@ -106,7 +102,7 @@ public class Driver extends Thread{
 				convertDistance(AbstractConfig.RIGHT_RADIUS, dist), 
 				false
 				);
-		}
+//		}
 
 	}
 	/**
@@ -118,10 +114,7 @@ public class Driver extends Thread{
 	 * @param degree
 	 */
 	public void rotateToRelatively(double degree){
-		synchronized(lock){
-			rotateToRelatively(degree, false);			
-		}
-
+		rotateToRelatively(degree, false);			
 	}
 	/**
 	 * rotate to the angle wrt to the current robot angle.
@@ -130,9 +123,10 @@ public class Driver extends Thread{
 	 * @param returnRightAway should the function finish before finishing the turn 
 	 */
 	public void rotateToRelatively(double degree, boolean returnRightAway){
-		synchronized(lock){
-			rightMotor.setSpeed(AbstractConfig.getInstance().getRotationSpeed());
-			leftMotor.setSpeed(AbstractConfig.getInstance().getRotationSpeed());	
+
+		rightMotor.setSpeed(AbstractConfig.getInstance().getRotationSpeed());
+		leftMotor.setSpeed(AbstractConfig.getInstance().getRotationSpeed());
+//		synchronized(lock){
 	        if (degree < 0){		//if degree is negative then rotate back ward
 	        	leftMotor.backward();
 	        	rightMotor.backward();
@@ -144,7 +138,7 @@ public class Driver extends Thread{
 	        rightMotor.rotate(
 	        	-convertAngle(AbstractConfig.RIGHT_RADIUS,AbstractConfig.WIDTH , degree)
 	        	, returnRightAway);
-	    }
+//		}
 	}
 	
 	/**
@@ -167,22 +161,18 @@ public class Driver extends Thread{
 	 * turn to angle wrt to the y axies 
 	 */
 	public void turnTo(double theata) {
-		synchronized(lock){	
 		rotateToRelatively(theata);		
-		}
-
 	}
 	public static void setSpeed(int speed){
 		AbstractConfig.LEFT_MOTOR.setSpeed(speed);
 		AbstractConfig.RIGHT_MOTOR.setSpeed(speed);
-
 	}
 	
 	public void motorForward(){
-		synchronized(lock){
+//		synchronized(lock){
 			AbstractConfig.LEFT_MOTOR.forward();
 			AbstractConfig.RIGHT_MOTOR.forward();			
-		}
+//		}
 
 	}
 	public void motorStop(){

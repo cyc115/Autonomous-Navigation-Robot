@@ -11,7 +11,7 @@ import lejos.nxt.comm.RConsole;
  * that should run when reaching certain distance. this is a event driven approach and should be (hopefully) faster 
  * than the while loop setting flag approach 
  * 
- * TODO test this class's event driven approach 
+ * TODO add public enable() pause()
  * @author yuechuan
  *
  */
