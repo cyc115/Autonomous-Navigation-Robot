@@ -76,11 +76,14 @@ public class Driver extends Thread{
 
 			forward(distance);
 
+			/*
 			Coordinate temp = new Coordinate(
 				nextLocation.getX(), nextLocation.getY() ,
 				Coordinate.normalize((currentCoordinate.getTheta() + turningAngle))
 				);
 			currentCoordinate = temp ;
+			
+			*/
 			RConsole.println("Driver:travelTo:currentCoordinate : x " + config.getCurrentLocation().getX()
 				+"\ty " + config.getCurrentLocation().getY() 
 				+ "\ttheata " +config.getCurrentLocation().getTheta());
