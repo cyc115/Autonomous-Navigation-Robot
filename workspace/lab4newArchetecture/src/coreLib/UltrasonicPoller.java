@@ -16,10 +16,16 @@ import lejos.nxt.comm.RConsole;
  *
  */
 public class UltrasonicPoller extends Thread implements UltrasonicPlanner {
-	private int SLEEP_INTERVAL = 25 ;
+	private int SLEEP_INTERVAL = 50 ;
 	AbstractConfig config;
 	UltrasonicSensor uSensor;
+
+	
 	private int distance = 25; //initialize the distance read to 25
+	/**
+	 * the previous distance 
+	 */
+	private int prevDist = distance;
 	private static UltrasonicPoller instance ;
 	private static boolean threadStarted = false ;
 	private ArrayList <UltrasonicListener> usListenerList = new ArrayList<UltrasonicListener>();
@@ -47,6 +53,7 @@ public class UltrasonicPoller extends Thread implements UltrasonicPlanner {
 	public void run (){
 		threadStarted = true ;
 		while (!AbstractConfig.getInstance().isDriveComplete()){
+			prevDist = distance;
 			distance = uSensor.getDistance();
 			
 			LCDWriter.getInstance().writeToScreen("Dist " + distance, 7);
@@ -106,6 +113,20 @@ public class UltrasonicPoller extends Thread implements UltrasonicPlanner {
 	 */
 	public int getDistance() {
 		return distance;
+	}
+	
+
+	/**
+	 * check for threashold and return true if there is a possible block 
+	 * @return 
+	 */
+	public boolean objectDetected(){
+		boolean result = false;
+		if (Math.abs(prevDist - distance) > 9 && distance < 100  ){
+			result = true ;
+		}
+		return result;
+		
 	}
 	
 	public static boolean isThreadStarted() {

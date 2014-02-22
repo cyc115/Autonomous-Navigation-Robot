@@ -45,6 +45,9 @@ public class Localize implements UltrasonicListener{
 			double angleFromOrigin = ((angle1 + angle2)/2)- angle2 ;
 			LCDWriter.getInstance().writeToScreen("AFO " +Math.toDegrees(angleFromOrigin) , 0);
 			driver.rotateToRelatively(Math.toDegrees(angleFromOrigin));
+			
+			//rotate to face the y axis 
+			driver.rotateToRelatively(-45);
 			continuous = false;
 		}
 	}

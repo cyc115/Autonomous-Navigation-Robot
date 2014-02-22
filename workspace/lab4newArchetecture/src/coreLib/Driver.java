@@ -92,8 +92,7 @@ public class Driver extends Thread{
 	 * move wheel forward at the same speed it was running at before 
 	 * @param dist
 	 */
-	private void forward(double dist){
-//		synchronized(lock){
+	public void forward(double dist){
 			leftMotor.rotate(
 				convertDistance(AbstractConfig.LEFT_RADIUS, dist), 
 				true
@@ -102,8 +101,21 @@ public class Driver extends Thread{
 				convertDistance(AbstractConfig.RIGHT_RADIUS, dist), 
 				false
 				);
-//		}
-
+	}
+	
+	/**
+	 * move wheel backward at the same speed it was running at before 
+	 * @param dist
+	 */
+	public void backward(double dist){
+			leftMotor.rotate(-
+				convertDistance(AbstractConfig.LEFT_RADIUS, dist), 
+				true
+				);
+			rightMotor.rotate(-
+				convertDistance(AbstractConfig.RIGHT_RADIUS, dist), 
+				false
+				);
 	}
 	/**
 	 * rotate to the angle wrt to the current robot angle.

@@ -1,40 +1,55 @@
 package other;
 
 import coreLib.AbstractConfig;
+import coreLib.ArmMotor;
 import coreLib.Configuration;
+import coreLib.Coordinate;
 import coreLib.Driver;
 import coreLib.LCDWriter;
 import coreLib.Odometer;
 import coreLib.UltrasonicPoller;
 import ultrasonicListeners.Localize;
 import lejos.nxt.Button;
+import lejos.nxt.ColorSensor;
+import lejos.nxt.ColorSensor.Color;
 import lejos.nxt.comm.RConsole;
 
 public class Lab5P2 {
 	private static Driver driver = Driver.getInstance();
-	private static boolean styrofoamFound = false ;
+	private static AbstractConfig config = Configuration.getInstance();
+	private static ColorSensor cs = new ColorSensor(AbstractConfig.LIGHT_SENSOR_PORT);
 	
 	public static void main(String[] args) {
 		
 		LCDWriter lcd = LCDWriter.getInstance();
 		Odometer odo = Odometer.getInstance();
 		UltrasonicPoller usp = UltrasonicPoller.getInstance();
+		Driver driver = Driver.getInstance();
+		driver.start();
 		lcd.start();
 		odo.start();
 		usp.start();
+		
+		AbstractConfig.getInstance().setCurrentLocation(new Coordinate(30, 30, 0));
 		
 		lcd.writeToScreen("start" , 1);
 		while(Button.waitForAnyPress() != Button.ID_ENTER){}
 		
 //		localize(); //now facing the diagonal  //works 
+
+		ArmMotor.open();
+		try {Thread.sleep(500);} catch(Exception e){};
 		
-		Driver driver = Driver.getInstance();
-		driver.start();
-		driver.turnTo(-45);
 		driver.rotateToRelatively(90, true);
-		
-		while(!itemDetected()){
-			try {Thread.sleep(25);} catch(Exception e){};
+		int dist = usp.getDistance();
+		while (true){
+			RConsole.println(Math.toDegrees(odo.getTheta()) + "\t\t" + dist +"");
+			if (usp.objectDetected()) 	{
+				try {Thread.sleep(500);}catch(Exception e){};
+				RConsole.println("item found. stop motor and move forward");
+				break;	//break out and continue 
+			}
+			try {Thread.sleep(50);} catch(Exception e){};
 		}
 		
 		//go to block 
@@ -42,27 +57,42 @@ public class Lab5P2 {
 		try {Thread.sleep(100);} catch(Exception e){};
 		driver.motorForward();
 		
-		while(!itemInfront()){	try {Thread.sleep(100);} catch(Exception e){}; } 			//don't stop 
-		
-		//if item is styrofoam 
-		if(recognizeItem()){
-			//grab and go to destination
-		} 
-		else {
-			// do other things 
+		//check color 
+		while (true){
+			if (usp.getDistance() <= 6){
+				driver.motorStop();
+				
+				if (isStyrofoam()){
+					grab();
+				}
+				else { // !is styrofoam 
+					goToNextWayPoint();
+				}
+				break ;
+			}
+			else{RConsole.println(Math.toDegrees(dist)+"");}
 		}
-		
-		
-		
-		
-//		Driver.setSpeed(70);
 
-//		while (!styrofoamFound){
-//			lookForBlock();
-//			styrofoamFound = isStyrofoam();
-//		}
-		pushToCorner();	}
-	
+		pushToCorner();	
+		
+	}
+	private static void goToNextWayPoint() {
+		driver.backward(10);
+	}
+	private static void grab() {
+		ArmMotor.close();
+	}
+	private static void openArm() {
+		ArmMotor.open();
+	}
+	/**
+	 * returns true if the distance detected is a wall.
+	 * @return
+	 */
+	private static boolean isWall() {
+		return false;
+	}
+
 	/**
 	 * recognize if the item is a block or styrofoam 
 	 * @return true if styrofoam 
@@ -92,13 +122,36 @@ public class Lab5P2 {
 	 * @return
 	 */
 	private static boolean isStyrofoam() {
-		// TODO Auto-generated method stub
-		return false ;
+		boolean isStyrofoam = false ;
+		boolean found = false ;
+		
+		cs.setFloodlight(true);
+		try{Thread.sleep(500);}catch(Exception e){};
+		Color c = cs.getColor();
+		
+		while (!found){
+			if (c.getRed() < 10 || c.getBlue() <10 || c.getGreen() < 10 ){
+				LCDWriter.getInstance().writeToScreen("nothing found", 2);
+			}
+
+			else if ((double)c.getRed()/c.getBlue() >1.2){
+				found = true ;
+				isStyrofoam = false ;
+			}
+			else {
+				found = true;
+				isStyrofoam = true ;
+			}
+			LCDWriter.getInstance().writeToScreen((((double)c.getRed()/c.getBlue() >1.2) ? 
+					"brick" : "foam" ), 2);
+		}
+
+		return isStyrofoam ;
 		
 	}
 
 	private static void pushToCorner() {
-		// TODO Auto-generated method stub
+		driver.travelTo(30,90);
 		
 	}
 
@@ -163,7 +216,7 @@ public class Lab5P2 {
 	}
 
 	private static void localize(){
-		AbstractConfig config = Configuration.getInstance();
+		
 		Driver.setSpeed(config.getRotationSpeed());
 		UltrasonicPoller upoller = UltrasonicPoller.getInstance();
 		upoller.start();		
