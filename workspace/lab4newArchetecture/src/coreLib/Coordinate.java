@@ -51,18 +51,20 @@ public class Coordinate extends Point{
 	 * robot points to the next location. where neg means counter
 	 * clockwise turn and positive means clockwise turns 
 	 */
-	public static double calculateRotationAngle( Coordinate currentLocation
-										, Coordinate nextLocation){
+		public static double calculateRotationAngle( Coordinate currentLocation
+			, Coordinate nextLocation){
 		double	 dX = nextLocation.getX() - currentLocation.getX()
 				,dY = nextLocation.getY() - currentLocation.getY(),
 				currentAngle = currentLocation.getTheta();
 		
-		RConsole.println("dX" + dX  + "\t\tdY" + dY );
-		if (Math.abs(dX) < 0.1)		dX = 0;
-		if (Math.abs(dY) < 0.1) 	dY = 0;
+		RConsole.println("dX" + dX);
+		RConsole.println("dY" + dY);
 		
 		double result = -currentAngle ;		//not yet finished 
-		if (dX > 0 ){
+		
+		
+		//double result = 0;
+		if (dX >= 0 ){
 			if (dY > 0) 
 				result += (Math.atan(dX/dY) * 180 /Math.PI);
 			else // (dY <= 0) 
@@ -78,9 +80,9 @@ public class Coordinate extends Point{
 		else if (dX==0 && dY == 0){
 			result = 0 ;
 		}
-		
-		return normalize(result);
-	}
+	
+	return normalize(result);
+}
 
 	/**
 	 * @param start
@@ -109,6 +111,7 @@ public class Coordinate extends Point{
 		}
 		return normalized;
 	}
+	
 	public double calcSlop(Coordinate c){
 		return (c.getY() - this.getY()) / (c.getX() - this.getX());
 	}

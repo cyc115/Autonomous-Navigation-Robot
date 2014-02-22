@@ -53,40 +53,34 @@ public class Driver extends Thread{
 	 * @param nextLocationg
 	 */
 	public void travelTo(Coordinate nextLocation) {
-//		synchronized (lock){
-			AbstractConfig config = AbstractConfig.getInstance();
-			config.setNextLocation(nextLocation);
-			config.setStartLocation(currentCoordinate.clone());
-//		}
-		
+		config.setNextLocation(nextLocation);
+		config.setStartLocation(currentCoordinate.clone());
+				
 		double distance = Coordinate.calculateDistance(currentCoordinate, nextLocation);
 		double turningAngle = Coordinate.calculateRotationAngle(currentCoordinate, nextLocation);
-		turningAngle = (turningAngle >  Math.PI) ? turningAngle : (turningAngle*180/Math.PI);
 		
-		
-		RConsole.println("Driver:travelTo:CurrentCoord: " + currentCoordinate.toString2());
-		RConsole.println("Driver:travelTo:NxtCoord: " + nextLocation.toString2());
+		RConsole.println("Driver:travelTo:CurrentCoord: " + currentCoordinate.toString());
+		RConsole.println("Driver:travelTo:NxtCoord: " + nextLocation.toString());
 		RConsole.println("Driver:travelTo:traveling dist: " + distance);
-		RConsole.println("Driver:travelTo:turning Angle: " +turningAngle);
-	//make turn
+		RConsole.println("Driver:travelTo:turning Angle: " + turningAngle);
+		//make turn
 		rotateToRelatively(turningAngle);
 		setSpeed(config.getForwardSpeed());
-
+		
 		forward(distance);
-
-		/*
+		
 		Coordinate temp = new Coordinate(
 			nextLocation.getX(), nextLocation.getY() ,
 			Coordinate.normalize((currentCoordinate.getTheta() + turningAngle))
-			);
+		);
 		currentCoordinate = temp ;
-		
-		*/
 		RConsole.println("Driver:travelTo:currentCoordinate : x " + config.getCurrentLocation().getX()
 			+"\ty " + config.getCurrentLocation().getY() 
 			+ "\ttheata " +config.getCurrentLocation().getTheta());
-		RConsole.println("=======");
-	}
+			RConsole.println("=======");
+		
+			
+		}
 		
 	/**
 	 * move wheel forward at the same speed it was running at before 
