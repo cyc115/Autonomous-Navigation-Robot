@@ -158,7 +158,8 @@ public class Driver extends Thread{
 		return convertDistance(radius, Math.PI * width * angle / 360.0);
 	}
 	/**
-	 * turn to angle wrt to the y axies 
+	 * turn to angle wrt to the y axies
+	 * @param in degrees 
 	 */
 	public void turnTo(double theata) {
 		rotateToRelatively(theata);		

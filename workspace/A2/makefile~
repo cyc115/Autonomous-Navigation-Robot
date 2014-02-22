@@ -1,0 +1,4 @@
+build:
+		g++ -o exec_name wikiGraphStudent.cpp 
+run:
+		./exec_name

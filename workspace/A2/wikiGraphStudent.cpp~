@@ -1,0 +1,63 @@
+
+#include <iostream>
+#include <list>
+#include <vector>
+#include <map>
+
+using namespace std;
+
+
+struct WikiPage {
+  int ID;
+  string title;
+  string html_location;
+  string txt_location;
+};
+
+struct Edge {
+	Edge(int o , int d , int w){
+		origin = o ;
+		destination = d ;
+		weight = w;
+	}
+  int origin;
+  int destination;
+  int weight;
+};
+
+typedef vector<list<Edge> > adjacencyList;
+typedef map<int,WikiPage> idToWikiMap;
+
+
+void print(list <Edge> & lst){
+	list <Edge> :: const_iterator iterator ;
+	for (iterator = lst.begin() ; iterator != lst.end() ; iterator++){
+		cout << "{" <<endl ;
+		cout << "\t origin " << iterator->origin <<endl;
+		cout << "\t destination " << iterator->destination <<endl;
+		cout << "\t weight " << iterator->weight <<endl;
+		cout << "}" <<endl <<endl;
+	}
+}
+
+
+adjacencyList organizeList(list<Edge>& lst, int numberVertices){
+	
+}
+
+
+
+
+int main() {
+	// your code goes here
+	struct Edge *e1 = new Edge(1,2,-1);
+	struct Edge *e2 = new Edge(1,23,-1);
+	struct Edge *e3 = new Edge(1,22,-1);
+	list <Edge> lst;
+	lst.push_back(*e1);
+	lst.push_back(*e2);
+	lst.push_back(*e3);
+	
+	print (lst);
+	return 0;
+}
