@@ -50,8 +50,6 @@ public class Driver extends Thread{
 	 * initialized during object initialization. this method is 
 	 * made an instance method to avoid undefined behavior.
 	 * 
-	 * FIXME this method must be complete before any action to change the motor movement 
-	 * or else the odo coordinate will be screwed up
 	 * @param nextLocationg
 	 */
 	public void travelTo(Coordinate nextLocation) {
@@ -63,11 +61,13 @@ public class Driver extends Thread{
 		
 		double distance = Coordinate.calculateDistance(currentCoordinate, nextLocation);
 		double turningAngle = Coordinate.calculateRotationAngle(currentCoordinate, nextLocation);
-
-		RConsole.println("Driver:travelTo:CurrentCoord: " + currentCoordinate.toString());
-		RConsole.println("Driver:travelTo:NxtCoord: " + nextLocation.toString());
+		turningAngle = (turningAngle >  Math.PI) ? turningAngle : (turningAngle*180/Math.PI);
+		
+		
+		RConsole.println("Driver:travelTo:CurrentCoord: " + currentCoordinate.toString2());
+		RConsole.println("Driver:travelTo:NxtCoord: " + nextLocation.toString2());
 		RConsole.println("Driver:travelTo:traveling dist: " + distance);
-		RConsole.println("Driver:travelTo:turning Angle: " + turningAngle);
+		RConsole.println("Driver:travelTo:turning Angle: " +turningAngle);
 	//make turn
 		rotateToRelatively(turningAngle);
 		setSpeed(config.getForwardSpeed());

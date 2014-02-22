@@ -17,6 +17,10 @@ public class Tester {
 	private static AbstractConfig config = Configuration.getInstance();
 	
 	public static void main(String[] args) {
+		//has to be placed before driver initialization 
+//		config.setCurrentLocation(new 
+//		Coordinate(30, 30, 0));
+		
 		LCDWriter lcd = LCDWriter.getInstance();
 		Odometer odo = Odometer.getInstance();
 		UltrasonicPoller usp = UltrasonicPoller.getInstance();
@@ -31,15 +35,36 @@ public class Tester {
 		while(Button.waitForAnyPress() != Button.ID_ENTER){}
 		lcd.writeToScreen("started", 0);
 		
-		config.setCurrentLocation(new Coordinate(30, 30, 0));
+		
 		
 		Stack<Coordinate> st = new Stack<Coordinate>();
+		st.push(new Coordinate(30, 30, 0));
 		st.push(new Coordinate(30, 90, 0));
 		st.push(new Coordinate(90, 90, 0));
 		st.push(new Coordinate(90, 30, 0));
-		st.push(new Coordinate(30, 30, 0));
+
+		driver.travelTo(30,0);
+		driver.travelTo(30,30);
+		driver.travelTo(0,30);
+		driver.travelTo(00,00);
 		
+//		
+//		driver.travelTo(new Coordinate(60, 00, 0));
+//		driver.travelTo(new Coordinate(60, 60, 0));
+//		driver.travelTo(new Coordinate(0, 60, 0));
+//		driver.travelTo(new Coordinate(00, 00, 0));
 		
+//		while (!st.empty()){
+//			RConsole.println("current :" + config.getCurrentLocation().toString() + "\t\tdestination : "  + st.peek().toString() );
+//			lcd.writeToScreen(odo.getX()+"", 1);
+//			lcd.writeToScreen(odo.getY()+"", 2);
+//			lcd.writeToScreen(odo.getTheta()+"", 3);
+//			driver.travelTo(st.peek());
+//			RConsole.println("current :" + config.getCurrentLocation().toString() + "\t\tdestination : "  + st.peek().toString() );
+//			st.pop();
+//		}
+		
+		lcd.writeToScreen("done", 6);
 		
 	}
 

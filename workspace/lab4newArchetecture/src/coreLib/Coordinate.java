@@ -36,6 +36,12 @@ public class Coordinate extends Point{
 		return "t" + String.valueOf(Math.toDegrees(getTheta())).substring(0, 3) + ",X" + String.valueOf(getX()).substring(0, 3) 
 				+ ",Y" + String.valueOf(getY()).substring(0, 3);
 	}
+	
+
+	public String toString2() {
+		return "t" + String.valueOf(Math.toDegrees(getTheta())) + ",X" + String.valueOf(getX())
+				+ ",Y" + String.valueOf(getY());
+	}
 
 	
 	/**
@@ -51,8 +57,11 @@ public class Coordinate extends Point{
 				,dY = nextLocation.getY() - currentLocation.getY(),
 				currentAngle = currentLocation.getTheta();
 		
+		RConsole.println("dX" + dX  + "\t\tdY" + dY );
+		if (Math.abs(dX) < 0.1)		dX = 0;
+		if (Math.abs(dY) < 0.1) 	dY = 0;
+		
 		double result = -currentAngle ;		//not yet finished 
-//		double result = 0;
 		if (dX > 0 ){
 			if (dY > 0) 
 				result += (Math.atan(dX/dY) * 180 /Math.PI);
