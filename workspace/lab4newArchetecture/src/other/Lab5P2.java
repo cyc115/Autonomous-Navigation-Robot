@@ -30,15 +30,13 @@ public class Lab5P2 {
 		odo.start();
 		usp.start();
 		
-		AbstractConfig.getInstance().setCurrentLocation(new Coordinate(30, 30, 0));
-		
 		lcd.writeToScreen("start" , 1);
 		while(Button.waitForAnyPress() != Button.ID_ENTER){}
 		
 //		localize(); //now facing the diagonal  //works 
 
 		ArmMotor.open();
-		try {Thread.sleep(500);} catch(Exception e){};
+		try {Thread.sleep(1000);} catch(Exception e){};
 		
 		driver.rotateToRelatively(90, true);
 		int dist = usp.getDistance();
@@ -53,27 +51,31 @@ public class Lab5P2 {
 		}
 		
 		//go to block 
+		try {Thread.sleep(500);} catch(Exception e){};
 		driver.motorStop();
 		try {Thread.sleep(100);} catch(Exception e){};
 		driver.motorForward();
 		
 		//check color 
 		while (true){
-			if (usp.getDistance() <= 6){
+			
+			if (usp.getDistance() <= 11){
 				driver.motorStop();
 				
 				if (isStyrofoam()){
 					grab();
+					cs.setFloodlight(false);
+					pushToCorner();	
+					break;
 				}
 				else { // !is styrofoam 
 					goToNextWayPoint();
 				}
-				break ;
 			}
-			else{RConsole.println(Math.toDegrees(dist)+"");}
+			else{RConsole.println("dist:" +(dist)+"");}
+			try {Thread.sleep(50);} catch(Exception e){};
 		}
-
-		pushToCorner();	
+		
 		
 	}
 	private static void goToNextWayPoint() {
@@ -130,20 +132,27 @@ public class Lab5P2 {
 		Color c = cs.getColor();
 		
 		while (!found){
-			if (c.getRed() < 10 || c.getBlue() <10 || c.getGreen() < 10 ){
+			int r = c.getRed();
+			int g = c.getGreen();
+			int b = c.getBlue();
+			if (c.getRed() < 10 || b <10 || b < 10 ){
 				LCDWriter.getInstance().writeToScreen("nothing found", 2);
 			}
 
 			else if ((double)c.getRed()/c.getBlue() >1.2){
+				RConsole.println("RGB" + r + "\t" + g + "\t" + b);
 				found = true ;
 				isStyrofoam = false ;
+				break ;
 			}
 			else {
+				RConsole.println("RGB" + r + "\t" + g + "\t" + b);
 				found = true;
 				isStyrofoam = true ;
+				break;
 			}
-			LCDWriter.getInstance().writeToScreen((((double)c.getRed()/c.getBlue() >1.2) ? 
-					"brick" : "foam" ), 2);
+			LCDWriter.getInstance().writeToScreen((((double)r/b >1.2) ? 
+					"br" : "fo" ) + r + " " + g, 2);
 		}
 
 		return isStyrofoam ;

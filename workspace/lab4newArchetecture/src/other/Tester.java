@@ -38,28 +38,28 @@ public class Tester {
 		
 		
 		Stack<Coordinate> st = new Stack<Coordinate>();
-		st.push(new Coordinate(30, 30, 0));
-		st.push(new Coordinate(30, 90, 0));
-		st.push(new Coordinate(90, 90, 0));
-		st.push(new Coordinate(90, 30, 0));
-
+//		st.push(new Coordinate(0, 0, 0));
+//		st.push(new Coordinate(30, 0, 0));
+		st.push(new Coordinate(60, 90, 0));
+		st.push(new Coordinate(0, 60, 0));
+		
 		driver.travelTo(30,0);
 		driver.travelTo(30,30);
 		driver.travelTo(0,30);
-		driver.travelTo(00,00);
+		driver.travelTo(0,0);
+		driver.travelTo(30,60);
+		driver.travelTo(0,60);
 		
-//		
-//		driver.travelTo(new Coordinate(60, 00, 0));
-//		driver.travelTo(new Coordinate(60, 60, 0));
-//		driver.travelTo(new Coordinate(0, 60, 0));
-//		driver.travelTo(new Coordinate(00, 00, 0));
-		
+
 //		while (!st.empty()){
 //			RConsole.println("current :" + config.getCurrentLocation().toString() + "\t\tdestination : "  + st.peek().toString() );
 //			lcd.writeToScreen(odo.getX()+"", 1);
 //			lcd.writeToScreen(odo.getY()+"", 2);
 //			lcd.writeToScreen(odo.getTheta()+"", 3);
 //			driver.travelTo(st.peek());
+//			
+//			while(usp.getDistance() > 15 ){}
+//			
 //			RConsole.println("current :" + config.getCurrentLocation().toString() + "\t\tdestination : "  + st.peek().toString() );
 //			st.pop();
 //		}

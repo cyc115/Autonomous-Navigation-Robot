@@ -48,6 +48,7 @@ public class Odometer extends Thread {
 		double deltaY;
 		
 		while (true) {
+			LCDWriter.getInstance().writeToScreen("OdoT " + getTheta(), 5);
 			updateStart = System.currentTimeMillis();
 				updateStart = System.currentTimeMillis();
 				//get the starting tacho count
@@ -73,8 +74,8 @@ public class Odometer extends Thread {
 				
 				currentTheta = getTheta();
 				//computes the dist made on the x and y axes since last check 
-				deltaX = displacement * Math.cos(currentTheta + deltaTheta / 2);
-				deltaY = displacement * Math.sin(currentTheta + deltaTheta / 2);
+				deltaX = displacement * Math.sin(currentTheta + deltaTheta / 2);
+				deltaY = displacement * Math.cos(currentTheta + deltaTheta / 2);
 		
 				synchronized (lock) {			
 					//update location (x.y)
@@ -109,8 +110,8 @@ public class Odometer extends Thread {
 		return Math.toRadians(deltaTachometerCount) * radius;
 	}
 
-	
-	public double getY() {
+	//TODO 
+	public double getX() {
 		double result;
 
 		synchronized (lock) {
@@ -120,7 +121,7 @@ public class Odometer extends Thread {
 		return result;
 	}
 
-	public double getX() {
+	public double getY() {
 		double result;
 
 		synchronized (lock) {
@@ -138,15 +139,15 @@ public class Odometer extends Thread {
 		}
 		return result;
 	}
-	
-	private Coordinate setY(double x) {
+	//TODO
+	private Coordinate setX(double x) {
 		synchronized (lock) {
 			cCoord.setX(x);
 		}
 		return cCoord;
 	}
 
-	private Coordinate setX(double y) {
+	private Coordinate setY(double y) {
 		synchronized (lock) {
 			cCoord.setY(y);
 		}
@@ -154,6 +155,13 @@ public class Odometer extends Thread {
 	}
 
 	private Coordinate setTheta(double theta) {
+		if (Math.abs(theta) >= 2*Math.PI){
+			if (theta < 0 ) 
+				theta = theta + 2*Math.PI;
+			else 
+				theta = theta - 2*Math.PI;
+		}
+		
 		synchronized (lock) {
 			cCoord.setTheta(theta);
 		}

@@ -123,6 +123,7 @@ public class UltrasonicPoller extends Thread implements UltrasonicPlanner {
 	public boolean objectDetected(){
 		boolean result = false;
 		if (Math.abs(prevDist - distance) > 9 && distance < 100  ){
+			RConsole.println("prevDist" + prevDist + "\t\tcurrentDist" + distance );
 			result = true ;
 		}
 		return result;

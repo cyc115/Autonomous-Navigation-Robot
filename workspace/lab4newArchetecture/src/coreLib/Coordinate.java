@@ -49,30 +49,34 @@ public class Coordinate extends Point{
 	 * @param nextLocation (x,y, and some bogus theata)
 	 * @return the concave turning angle where the head of the
 	 * robot points to the next location. where neg means counter
-	 * clockwise turn and positive means clockwise turns 
+	 * clockwise turn and positive means clockwise turns <b> in deg</b>
 	 */
 		public static double calculateRotationAngle( Coordinate currentLocation
 			, Coordinate nextLocation){
 		double	 dX = nextLocation.getX() - currentLocation.getX()
 				,dY = nextLocation.getY() - currentLocation.getY(),
-				currentAngle = currentLocation.getTheta();
+				/**
+				 * in degree 
+				 */
+				currentAngle = Math.toDegrees(currentLocation.getTheta());
 		
 		RConsole.println("dX" + dX);
 		RConsole.println("dY" + dY);
 		
-		double result = -currentAngle ;		//not yet finished 
+		double result = -currentAngle ;
 		
 		
 		//double result = 0;
 		if (dX >= 0 ){
-			if (dY > 0) 
+			if (dY >= 0) 
 				result += (Math.atan(dX/dY) * 180 /Math.PI);
 			else // (dY <= 0) 
 				result += (90 - (Math.atan(dY/dX) * 180 /Math.PI));
 		}
 		else if (dX < 0){
-			if (dY > 0)
-				result +=(-(Math.atan(dX/dY) * 180 /Math.PI) -90);
+			if (dY >= 0)
+				result +=(Math.atan(dX/dY) * 180 /Math.PI) ;
+//			result +=(-(Math.atan(dX/dY) * 180 /Math.PI) -90);
 			else //(dY <=0)
 				result +=(-90-(Math.atan(dY/dX) * 180 /Math.PI));
 		}

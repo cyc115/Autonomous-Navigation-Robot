@@ -16,6 +16,7 @@ public class Driver extends Thread{
 								rightMotor ;
 	private static Driver instance ;
 	private Object lock ;
+	private Odometer odo = Odometer.getInstance();
 	
 	/**
 	 * do not use this to initialize another instance. only used for extension 
@@ -26,8 +27,7 @@ public class Driver extends Thread{
 		this.config = config ;
 		leftMotor = AbstractConfig.LEFT_MOTOR;
 		rightMotor = AbstractConfig.RIGHT_MOTOR;
-		
-		currentCoordinate = config.getCurrentLocation();
+
 		endCoord = config.getStartLocation();
 	}
 	
@@ -53,27 +53,24 @@ public class Driver extends Thread{
 	 * @param nextLocationg
 	 */
 	public void travelTo(Coordinate nextLocation) {
+		Coordinate currentLoc  = new Coordinate(odo.getX(), odo.getY(), odo.getTheta());
 		config.setNextLocation(nextLocation);
-		config.setStartLocation(currentCoordinate.clone());
-				
-		double distance = Coordinate.calculateDistance(currentCoordinate, nextLocation);
-		double turningAngle = Coordinate.calculateRotationAngle(currentCoordinate, nextLocation);
+		config.setStartLocation(currentLoc.clone());
 		
-		RConsole.println("Driver:travelTo:CurrentCoord: " + currentCoordinate.toString());
-		RConsole.println("Driver:travelTo:NxtCoord: " + nextLocation.toString());
+		double distance = Coordinate.calculateDistance(currentLoc, nextLocation);
+		double turningAngle = Coordinate.calculateRotationAngle(currentLoc, nextLocation);
+		
+		RConsole.println("Driver:travelTo:CurrentCoord: " + currentLoc.toString2());
+		RConsole.println("Driver:travelTo:NxtCoord: " + nextLocation.toString2());
 		RConsole.println("Driver:travelTo:traveling dist: " + distance);
 		RConsole.println("Driver:travelTo:turning Angle: " + turningAngle);
 		//make turn
 		rotateToRelatively(turningAngle);
+
 		setSpeed(config.getForwardSpeed());
 		
 		forward(distance);
 		
-		Coordinate temp = new Coordinate(
-			nextLocation.getX(), nextLocation.getY() ,
-			Coordinate.normalize((currentCoordinate.getTheta() + turningAngle))
-		);
-		currentCoordinate = temp ;
 		RConsole.println("Driver:travelTo:currentCoordinate : x " + config.getCurrentLocation().getX()
 			+"\ty " + config.getCurrentLocation().getY() 
 			+ "\ttheata " +config.getCurrentLocation().getTheta());

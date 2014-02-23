@@ -23,11 +23,13 @@ public class ArmMotor {
 	public static void open(){
 		if(!isOpen){
 			ARM_M.rotate(-movementDeg,false);
+			isOpen = true;
 		}
 	}
 	public static void close (){
 		if (isOpen){
 			ARM_M.rotate(movementDeg,false);	
+			isOpen = false ;
 		}
 	}
 }
