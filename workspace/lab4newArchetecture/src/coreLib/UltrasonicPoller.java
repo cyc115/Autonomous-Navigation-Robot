@@ -62,7 +62,12 @@ public class UltrasonicPoller extends Thread implements UltrasonicPlanner {
 				//if it has not been called
 				//or if it should be called continuously
 				if (usw.getDistanceOnInvoke() >= distance && (!usw.isCalled() || usw.isContinuous())){
-					usw.ultrasonicDistance(distance);
+//					new Thread (){
+//						public void run(){
+//							usw.ultrasonicDistance(distance);		
+//						}
+//					}.run();
+					usw.ultrasonicDistance(distance);	
 					usw.setCalled(true);
 				}
 			}
@@ -79,22 +84,34 @@ public class UltrasonicPoller extends Thread implements UltrasonicPlanner {
 	 * @return true if subscriber is doublecated 
 	 */
 	public boolean subscribe(UltrasonicListener uListener){
-		boolean doublecate = false ;
-		for (UltrasonicListener usl : usListenerList){
-			if (usl.equals(uListener)) {
-				doublecate = true ;
-				break ;
-			}
-		}
-		if (!doublecate){
+		boolean subscribe =!containsListener(uListener);
+		if (subscribe){
 			usListenerList.add(uListener);
 		}
-		return doublecate;
+		return subscribe;
 	}
+	
+	/**
+	 * 
+	 * @param ulistener
+	 * @return true if the listener exist 
+	 */
+	public boolean containsListener (UltrasonicListener ulistener ){
+		boolean exist = false ;
+		for (UltrasonicListener usl : usListenerList){
+			if (usl.equals(ulistener)){
+				exist = true;
+				break;
+			}
+		}
+		return exist ;
+	}
+	
 	/**
 	 * 
 	 * @param ulistener 
-	 * @return true when unsubscribe successful
+	 * @return true when unsubscribe successful, if the item does not exist in the 
+	 * stack then return false 
 	 */
 	public boolean unsubscribe(UltrasonicListener ulistener){
 		boolean removed = false ;
@@ -122,7 +139,7 @@ public class UltrasonicPoller extends Thread implements UltrasonicPlanner {
 	 */
 	public boolean objectDetected(){
 		boolean result = false;
-		if (Math.abs(prevDist - distance) > 9 && distance < 100  ){
+		if (Math.abs(prevDist - distance) > 5 && distance < 100  ){
 			RConsole.println("prevDist" + prevDist + "\t\tcurrentDist" + distance );
 			result = true ;
 		}

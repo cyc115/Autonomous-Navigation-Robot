@@ -1,5 +1,7 @@
 package other;
 
+import java.util.Stack;
+
 import coreLib.AbstractConfig;
 import coreLib.ArmMotor;
 import coreLib.Configuration;
@@ -7,17 +9,21 @@ import coreLib.Coordinate;
 import coreLib.Driver;
 import coreLib.LCDWriter;
 import coreLib.Odometer;
+import coreLib.Point;
 import coreLib.UltrasonicPoller;
+import ultrasonicListeners.BlockInFrontInterrupt;
 import ultrasonicListeners.Localize;
 import lejos.nxt.Button;
 import lejos.nxt.ColorSensor;
 import lejos.nxt.ColorSensor.Color;
+import lejos.nxt.Sound;
 import lejos.nxt.comm.RConsole;
 
 public class Lab5P2 {
 	private static Driver driver = Driver.getInstance();
 	private static AbstractConfig config = Configuration.getInstance();
 	private static ColorSensor cs = new ColorSensor(AbstractConfig.LIGHT_SENSOR_PORT);
+	private static Stack <Coordinate> wayPoints = new Stack<Coordinate>();
 	
 	public static void main(String[] args) {
 		
@@ -25,100 +31,161 @@ public class Lab5P2 {
 		Odometer odo = Odometer.getInstance();
 		UltrasonicPoller usp = UltrasonicPoller.getInstance();
 		Driver driver = Driver.getInstance();
+		BlockInFrontInterrupt bifi = new BlockInFrontInterrupt();
+		bifi.setCalled(false).setContinuous(true).setDistanceOnInvoke(15);
 		driver.start();
 		lcd.start();
 		odo.start();
 		usp.start();
+		
+
 		
 		lcd.writeToScreen("start" , 1);
 		while(Button.waitForAnyPress() != Button.ID_ENTER){}
 		
 //		localize(); //now facing the diagonal  //works 
 
+		//handles the movement when there's a block in front
+		usp.subscribe(bifi);
+		if (usp.containsListener(bifi)){
+			Sound.beep();
+			RConsole.println("dOnInv" + bifi.getDistanceOnInvoke() );
+		}
+
+		wayPoints.push(new Coordinate(60, 180, 0));
+		wayPoints.push(new Coordinate(0, 150, 0));
+		wayPoints.push(new Coordinate(60,90,0));
+		
+		while (!wayPoints.empty()){
+			driver.travelTo(wayPoints.peek());
+			/**
+			 * TODO during travelTo if we see a block, 
+			 * the avoidance code will execute. but the travelTo()
+			 * code is not stopped ... there's a conflict 
+			 * TODO change the forward() in Driver to use forward instead of rotateTo
+			 */
+			if (wayPoints.peek().isNear(new Coordinate (odo.getX(),odo.getY(),0))){
+				wayPoints.pop();
+			}
+		}
+		
+		////////////////////
+		
+		System.exit(0);
+		
+		atWayPoint();
+		
 		ArmMotor.open();
 		try {Thread.sleep(1000);} catch(Exception e){};
 		
-		driver.rotateToRelatively(90, true);
-		int dist = usp.getDistance();
-		while (true){
-			RConsole.println(Math.toDegrees(odo.getTheta()) + "\t\t" + dist +"");
-			if (usp.objectDetected()) 	{
-				try {Thread.sleep(500);}catch(Exception e){};
-				RConsole.println("item found. stop motor and move forward");
-				break;	//break out and continue 
-			}
-			try {Thread.sleep(50);} catch(Exception e){};
-		}
+		//scan for item 
+		scanForItem(usp,odo);
 		
-		//go to block 
+		
+		
+		action1(usp);
+
+		
+		
+		
+		System.exit(0);
+	}
+	/**
+	 * moves the robot to the item, checks if the item is 
+	 * a block 
+	 * 			-(true)->
+	 *  			backUp and goto NextWayPoint.
+	 * <br> 	-(false)-> a foam 
+	 * 				grab and move to destination 				
+	 * 
+	 * @param usp
+	 */
+	public static void action1(UltrasonicPoller usp) {
+		if (goToItemAndCheck(usp)){
+			grab();
+			pushToCorner();	
+		}
+		else {
+			backUp();
+			goToNextWayPoint();
+		}
+	}
+	
+	/**
+	 * clears the wayPoint stack 
+	 */
+	public static void clearStack(){
+		while (!wayPoints.empty()){
+			wayPoints.pop();
+		}
+	}
+	private static void atWayPoint() {
+		// TODO Auto-generated method stub
+		
+	}
+	/**
+	 * goes to the item infront and check 
+	 * if it is a foam or brick
+	 * @return true if is froam
+	 */
+	private static boolean goToItemAndCheck(UltrasonicPoller usp) {
+		boolean isFoam = false ;
+		
+		//go to item 
 		try {Thread.sleep(500);} catch(Exception e){};
 		driver.motorStop();
 		try {Thread.sleep(100);} catch(Exception e){};
 		driver.motorForward();
 		
-		//check color 
 		while (true){
-			
+			//move towards block
 			if (usp.getDistance() <= 11){
 				driver.motorStop();
 				
 				if (isStyrofoam()){
-					grab();
-					cs.setFloodlight(false);
-					pushToCorner();	
+					isFoam = true ;
 					break;
 				}
 				else { // !is styrofoam 
-					goToNextWayPoint();
+					isFoam = false ;
+					break;
 				}
 			}
-			else{RConsole.println("dist:" +(dist)+"");}
+			else{RConsole.println("dist:" +(usp.getDistance())+"");}
 			try {Thread.sleep(50);} catch(Exception e){};
 		}
-		
-		
+		return isFoam;
+	}
+	private static void scanForItem(UltrasonicPoller usp,Odometer odo ) {
+		driver.rotateToRelatively(90, true);
+		int dist = usp.getDistance();
+		while (true){
+			RConsole.println(Math.toDegrees(odo.getTheta()) + "\t\t" + dist +"");
+			if (usp.objectDetected()) 	{
+				try {Thread.sleep(300);}catch(Exception e){};
+				RConsole.println("item found. stop motor and move forward");
+				break;	//break out and continue 
+			}
+			try {Thread.sleep(50);} catch(Exception e){};
+		}
+	}
+	private static void backUp() {
+		driver.backward(15);
 	}
 	private static void goToNextWayPoint() {
 		driver.backward(10);
 	}
 	private static void grab() {
+		driver.forward(5);
+		//close light 
+		cs.setFloodlight(false);
 		ArmMotor.close();
 	}
 	private static void openArm() {
 		ArmMotor.open();
 	}
-	/**
-	 * returns true if the distance detected is a wall.
-	 * @return
-	 */
-	private static boolean isWall() {
-		return false;
-	}
 
-	/**
-	 * recognize if the item is a block or styrofoam 
-	 * @return true if styrofoam 
-	 */
-	private static boolean recognizeItem() {
-		
-		return false;
-	}
-	/**
-	 * return true if there is an item in front, 
-	 * an item is a block, not a wall 
-	 * @return
-	 */
-	private static boolean itemInfront() {
-		return false;
-	}
-	/**
-	 * if the robot is close enough to the block and can turn on color senor
-	 * @return
-	 */
-	private static boolean itemDetected() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 	/**
 	 * return true if this is a styrofoam 
 	 * @return

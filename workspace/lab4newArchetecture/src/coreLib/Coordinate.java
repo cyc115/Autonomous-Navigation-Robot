@@ -124,4 +124,15 @@ public class Coordinate extends Point{
 		return new Coordinate(this.getX(),this.getY() , this.getTheta());
 	}
 	
+	/**
+	 * return true if current coordinate is near the given coordinate 
+	 * @param c 
+	 * @return true if c is near the given Coordination
+	 */
+	public boolean isNear(Coordinate c) {
+		double deltaDist = (this.getX()-c.getX()) *(this.getX()-c.getX()) 
+				+ (this.getY()-c.getY()) *(this.getY()-c.getY()) ;
+		return deltaDist <= 10 ? true : false ;
+	}
+	
 }

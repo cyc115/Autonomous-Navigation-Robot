@@ -7,6 +7,7 @@ import coreLib.UltrasonicListener;
 import lejos.nxt.comm.RConsole;
 
 /**
+ * TODO no idea who uses this ... 
  * host a public method that does the localization
  * @author yuechuan
  *
