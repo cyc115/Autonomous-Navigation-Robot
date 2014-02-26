@@ -11,7 +11,7 @@ public abstract class AbstractConfig {
 	private Coordinate nextLocation; //current location ;
 	private boolean driveComplete  = false ;
 	
-	private int ROTATE_SPEED = 100 ;
+	private int ROTATE_SPEED = 60 ;
 	private int FORWARD_SPEED = 200;
 	//robot hardware
 	public static final NXTRegulatedMotor LEFT_MOTOR = Motor.A;

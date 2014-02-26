@@ -24,6 +24,7 @@ public class Lab5P2 {
 	private static AbstractConfig config = Configuration.getInstance();
 	private static ColorSensor cs = new ColorSensor(AbstractConfig.LIGHT_SENSOR_PORT);
 	private static Stack <Coordinate> wayPoints = new Stack<Coordinate>();
+
 	
 	private static LCDWriter lcd = LCDWriter.getInstance();
 	private static Odometer odo = Odometer.getInstance();
@@ -46,7 +47,7 @@ public class Lab5P2 {
 		lcd.writeToScreen("start" , 1);
 		while(Button.waitForAnyPress() != Button.ID_ENTER){}
 		
-//		localize(); //now facing the diagonal  //works 
+		localize(); //now facing the diagonal  //works 
 
 		//handles the movement when there's a block in front
 		usp.subscribe(bifi);
@@ -54,18 +55,31 @@ public class Lab5P2 {
 			Sound.beep();
 			RConsole.println("dOnInv" + bifi.getDistanceOnInvoke() );
 		}
-		wayPoints.push(new Coordinate(60, 180, 0));
+		wayPoints.push(new Coordinate(80, 180, 0));
 		wayPoints.push(new Coordinate(0, 165, 0));
+		wayPoints.push(new Coordinate(30, 165, 0));
 		wayPoints.push(new Coordinate(60, 165, 0));
 		wayPoints.push(new Coordinate(60, 135, 0));
+		wayPoints.push(new Coordinate(30, 135, 0));
 		wayPoints.push(new Coordinate(0, 135, 0));
 		wayPoints.push(new Coordinate(0, 105, 0));
-		wayPoints.push(new Coordinate(60,105,0));
-		wayPoints.push(new Coordinate(60,60,0));
+		wayPoints.push(new Coordinate(30,105,0));
+		wayPoints.push(new Coordinate(30,60,0));
 		
 		while (!wayPoints.empty()){
 			if (!navigationInterrupted){
 				scanAtWayPoint();
+				int len = wayPoints.size();
+				//if current y is bigger than the waypoint's y then pop
+				for (int i = 0  ; i < len ; i++ ){ 
+					try {
+						if (odo.getY() > wayPoints.elementAt(i).getY() ){
+							wayPoints.pop();
+						}
+					} catch(Exception e){
+						//TODO Stack.size() dies not return the correct size..... so catch the exception and move on  
+					} 
+				} 
 				driver.travelTo(wayPoints.peek());	
 			}
 			else {try {Thread.sleep(500);} catch (Exception e){}; }
@@ -80,27 +94,13 @@ public class Lab5P2 {
 		config.setDriveComplete();
 		System.exit(0);
 
-		////////////////////
-		atWayPoint();
-		
-		ArmMotor.open();
-		try {Thread.sleep(1000);} catch(Exception e){};
-		
-		//scan for item 
-		scanForItem(usp,odo);
-		
-		
-		
-		action1(usp);
-
-		System.exit(0);
 	}
 	/**
 	 * Scan for block or foam at the waypoint 
 	 */
 	private static void scanAtWayPoint() {
-		if (!navigationInterrupted)	driver.rotateToRelatively(30);
-		if (!navigationInterrupted) driver.rotateToRelatively(-60);
+		if (!navigationInterrupted)	driver.rotateToRelatively(55);
+		if (!navigationInterrupted) driver.rotateToRelatively(-110);
 	}
 	private static void atWayPoint() {
 		// TODO Auto-generated method stub
@@ -120,7 +120,7 @@ public class Lab5P2 {
 		navigationInterrupted = true ;
 		driver.motorStop();
 		
-		
+//		driver.forward(3);
 		if (goToItemAndCheck(usp)){
 			cs.setFloodlight(false);
 			grab();
@@ -155,27 +155,33 @@ public class Lab5P2 {
 		//go to item 
 		driver.motorStop();
 		
-		//TODO revert this
-		//make scan for the center of the brick 
-		driver.setSpeed(100);
-		driver.rotateToRelatively(-30);
-		driver.rotateToRelatively(60,true);
+		/*
+		driver.rotateToRelatively(-60);
+		driver.rotateToRelatively(180,true);
 		int cDist = usp.getDistance(), pDist = cDist; 
-				
-		while( cDist >= pDist && !driver.isMotorStopped()){
+		RConsole.println("Rotating======");
+		int count = 0 ; //make sure the loop always breaks 
+		while( cDist >= pDist && !driver.isMotorStopped() && count < 200){
 			pDist = cDist ;
 			cDist = usp.getDistance();
-			
+			RConsole.println("CD/PD: " + cDist + "  " + pDist );
 			try{Thread.sleep(10);} catch (Exception e){};
+			count ++ ;
 		}
-		driver.motorStop();
-
-		//move 5 cm to get closer to the block 
-		driver.forward(5);
+		
+		*/
+		
 		
 		Sound.beep();
-		try {Thread.sleep(100);} catch(Exception e){};
-		
+		driver.motorStop();
+		RConsole.println("motor is stoped");
+		try{Thread.sleep(100);} catch (Exception e){};
+		//move 5 cm to get closer to the block 
+		RConsole.println("Drive forward 5");
+		driver.forward(5);
+		try{Thread.sleep(1000);} catch (Exception e){};
+		RConsole.println("check for foam");
+		driver.motorStop();
 		isFoam = isStyrofoam();
 		return isFoam;
 		
@@ -194,18 +200,18 @@ public class Lab5P2 {
 		}
 	}
 	private static void backUp() {
-		driver.backward(12);
+		driver.backward(17);
 	}
 	private static void goToNextWayPoint() {
 		int shift = 0 ;
 		if (odo.getX() > 45 ) {
-			shift = -25;
+			shift = -35;
 			Sound.beep();
 			Sound.beep();
 			
 		}
 		else {
-			shift = 25;
+			shift = 35;
 			Sound.beep();
 		}
 		wayPoints.push(new Coordinate(odo.getX() + shift, odo.getY() + Math.abs(shift) , 0 ) );
@@ -233,19 +239,20 @@ public class Lab5P2 {
 		boolean isStyrofoam = false ;
 		boolean found = false ;
 		
+		driver.motorStop();
+		
 		cs.setFloodlight(true);
 		try{Thread.sleep(500);}catch(Exception e){};
 		Color c = cs.getColor();
 
-		driver.motorStop();
-		int numberOfFalseDetection = 0 ;
+		long time = System.currentTimeMillis();
 		while (!found){
 			int r = c.getRed();
 			int g = c.getGreen();
 			int b = c.getBlue();
 			
 			if(r >=5 && b >= 5){
-				RConsole.println("RGB" + r + "\t" + g + "\t" + b);
+				LCDWriter.getInstance().writeToScreen(r + " " + g + " " + b ,2 );
 				if ( r/(double)b > 1.2){
 					found = true ;
 					isStyrofoam = false ;
@@ -256,16 +263,14 @@ public class Lab5P2 {
 					break;
 				}
 			} 
-			else {
+			else { //if can't find something for 4s break 
 				LCDWriter.getInstance().writeToScreen("nothing found", 2);
-				if (numberOfFalseDetection > 20){
-					numberOfFalseDetection = 0 ;
-					driver.forward(5);
+				if (System.currentTimeMillis() - time > 4000 ) {
+					isStyrofoam = false;
+					Sound.beepSequenceUp();
+					break ;
 				}
-				numberOfFalseDetection ++ ;
 			}
-			LCDWriter.getInstance().writeToScreen((((double)r/b >1.2) ? 
-					"br" : "fo" ) + r + " " + g, 2);
 		}
 
 		return isStyrofoam ;
@@ -274,7 +279,7 @@ public class Lab5P2 {
 
 	private static void pushToCorner() {
 			clearStack();
-			wayPoints.push(new Coordinate (60,180,0));
+			wayPoints.push(new Coordinate (80,180,0));
 	}
 
 	private static void lookForBlock() {
@@ -341,7 +346,6 @@ public class Lab5P2 {
 		
 		Driver.setSpeed(config.getRotationSpeed());
 		UltrasonicPoller upoller = UltrasonicPoller.getInstance();
-		upoller.start();		
 		
 		Localize loc = new Localize(30, true);
 		upoller.subscribe(loc);
@@ -349,7 +353,6 @@ public class Lab5P2 {
 		//start rotating 
 		driver.rotateToRelatively(360);
 		//localization process is called when the uspoller have certain value
-				
 		while (!loc.isDone()) {/* wait for localization to be finished */ try{Thread.sleep(1000);}catch(Exception e){}}		
 		//clean up and unsbuscribe from uspoller 
 		LCDWriter.getInstance().writeToScreen(upoller.unsubscribe(loc)? "unsubscribed" : "error ", 1);;

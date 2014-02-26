@@ -20,7 +20,7 @@ import coreLib.UltrasonicPoller;
  *
  */
 public class BlockInFrontInterrupt implements UltrasonicListener{
-	private int distanceOnInvoke = 18;
+	private int distanceOnInvoke = 20;
 	private boolean continuous = true ;
 	private boolean called = false ;
 	/**

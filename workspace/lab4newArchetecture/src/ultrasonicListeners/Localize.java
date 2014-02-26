@@ -48,7 +48,7 @@ public class Localize implements UltrasonicListener{
 			driver.rotateToRelatively(Math.toDegrees(angleFromOrigin));
 			
 			//rotate to face the y axis 
-			driver.rotateToRelatively(-45);
+			driver.rotateToRelatively(-135);
 			continuous = false;
 		}
 	}
