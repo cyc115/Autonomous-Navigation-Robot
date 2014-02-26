@@ -90,25 +90,16 @@ public class Driver extends Thread{
 	 * @param dist
 	 */
 	public void forward(double dist){
-		/*
-		 * this should not be used since it's impossible to stop  the motor 
-		 * leftMotor.rotate(
-				convertDistance(AbstractConfig.LEFT_RADIUS, dist), 
-				true
-				);
-			rightMotor.rotate(
-				convertDistance(AbstractConfig.RIGHT_RADIUS, dist), 
-				false
-				);
-	*/
-		
 //		here is better 
-		int finalTachoCount = (int) (AbstractConfig.LEFT_MOTOR.getTachoCount() + 
-				(2*Math.PI*	(AbstractConfig.LEFT_RADIUS + AbstractConfig.RIGHT_RADIUS)/2
-				)*360) ;
+		int currentT = AbstractConfig.LEFT_MOTOR.getTachoCount();
+		double rotations = dist/ (2*Math.PI*(+ AbstractConfig.RIGHT_RADIUS)) ;
+		RConsole.println("rotations" + rotations );
 		
+		int finalTachoCount =  currentT+ (int) (rotations * 360 );
+		RConsole.println("current Tacho " + AbstractConfig.LEFT_MOTOR.getTachoCount() + "\t\tfinal Tacho"  + finalTachoCount );
 		motorForward();
 		while(!motorStopped && finalTachoCount- leftMotor.getTachoCount() > 0 ){
+			RConsole.println("current Tacho " + AbstractConfig.LEFT_MOTOR.getTachoCount() );
 			try{Thread.sleep(20);} catch (Exception e){};
 		}
 		motorStop();
@@ -119,21 +110,26 @@ public class Driver extends Thread{
 	 * @param dist
 	 */
 	public void backward(double dist){
-		int finalTachoCount = (int) (AbstractConfig.LEFT_MOTOR.getTachoCount() + 
-				(2*Math.PI*	(AbstractConfig.LEFT_RADIUS + AbstractConfig.RIGHT_RADIUS)/2
-				)*360) ;
+		RConsole.println("BackWard" );
+		int currentT = AbstractConfig.LEFT_MOTOR.getTachoCount();
+		double rotations = dist/ (2*Math.PI*(+ AbstractConfig.RIGHT_RADIUS)) ;
+		RConsole.println("rotations" + rotations );
 		
+		int finalTachoCount =  currentT- (int) (rotations * 360 );
+		RConsole.println("current Tacho " + AbstractConfig.LEFT_MOTOR.getTachoCount() + "\t\tfinal Tacho"  + finalTachoCount );
 		motorBackward();
-		while(!motorStopped && finalTachoCount- leftMotor.getTachoCount() > 0 ){
+		while(!motorStopped && leftMotor.getTachoCount() - finalTachoCount > 0 ){
+			RConsole.println("current Tacho " + AbstractConfig.LEFT_MOTOR.getTachoCount() );
 			try{Thread.sleep(20);} catch (Exception e){};
 		}
 		motorStop();
+		
 	}
 	/**
 	 * rotate to the angle wrt to the current robot angle.
 	 * the method will only finish after rotating is over.
 	 *	<br> this method is here only for comparability.
-	 *	<br> use rotateToRelatively (doubel degree , boolean returnRightAway);
+	 *	<br> use rotateToRelatively (double degree , boolean returnRightAway);
 	 *	when ever possible 
 	 * @param degree
 	 */
@@ -213,6 +209,7 @@ public class Driver extends Thread{
 	}
 	public void motorStop(){
 		motorStopped = true ;
+		RConsole.println("Motor Stopped");
 		AbstractConfig.LEFT_MOTOR.stop();
 		AbstractConfig.RIGHT_MOTOR.stop();
 	}

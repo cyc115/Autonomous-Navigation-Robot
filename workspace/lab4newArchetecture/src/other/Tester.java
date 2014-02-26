@@ -37,18 +37,18 @@ public class Tester {
 		
 		
 		
-		Stack<Coordinate> st = new Stack<Coordinate>();
+//		Stack<Coordinate> st = new Stack<Coordinate>();
 //		st.push(new Coordinate(0, 0, 0));
 //		st.push(new Coordinate(30, 0, 0));
-		st.push(new Coordinate(60, 90, 0));
-		st.push(new Coordinate(0, 60, 0));
+//		st.push(new Coordinate(60, 90, 0));
+//		st.push(new Coordinate(0, 60, 0));
 		
 		driver.travelTo(30,0);
 		driver.travelTo(30,30);
 		driver.travelTo(0,30);
-		driver.travelTo(0,0);
-		driver.travelTo(30,60);
-		driver.travelTo(0,60);
+//		driver.travelTo(0,0);
+//		driver.travelTo(30,60);
+//		driver.travelTo(0,60);
 		
 
 //		while (!st.empty()){

@@ -29,7 +29,8 @@ public class UltrasonicPoller extends Thread implements UltrasonicPlanner {
 	private static UltrasonicPoller instance ;
 	private static boolean threadStarted = false ;
 	private ArrayList <UltrasonicListener> usListenerList = new ArrayList<UltrasonicListener>();
-
+	private static boolean listenerExecutionDisabled = false ;
+	
 	private UltrasonicPoller (AbstractConfig config){
 		this.config = config;
 		uSensor = new UltrasonicSensor(AbstractConfig.ULTRASONIC_SENSOR_PORT);
@@ -55,22 +56,24 @@ public class UltrasonicPoller extends Thread implements UltrasonicPlanner {
 		while (!AbstractConfig.getInstance().isDriveComplete()){
 			prevDist = distance;
 			distance = uSensor.getDistance();
-			
+
 			LCDWriter.getInstance().writeToScreen("Dist " + distance, 7);
-			for (UltrasonicListener usw : usListenerList){
-				//if the distance is within range.
-				//if it has not been called
-				//or if it should be called continuously
-				if (usw.getDistanceOnInvoke() >= distance && (!usw.isCalled() || usw.isContinuous())){
-//					new Thread (){
-//						public void run(){
-//							usw.ultrasonicDistance(distance);		
-//						}
-//					}.run();
-					usw.ultrasonicDistance(distance);	
-					usw.setCalled(true);
+			if (!listenerExecutionDisabled){
+				for (final UltrasonicListener usw : usListenerList){
+					//if the distance is within range.
+					//if it has not been called
+					//or if it should be called continuously
+					if (usw.getDistanceOnInvoke() >= distance && (!usw.isCalled() || usw.isContinuous())){
+						new Thread (){
+							public void run(){
+								usw.ultrasonicDistance(distance);		
+							}
+						}.run();
+						usw.setCalled(true);
+					}
 				}
 			}
+			
 			try { Thread.sleep(SLEEP_INTERVAL); } catch(Exception e){};
 		} 
 		threadStarted = false;
@@ -89,6 +92,12 @@ public class UltrasonicPoller extends Thread implements UltrasonicPlanner {
 			usListenerList.add(uListener);
 		}
 		return subscribe;
+	}
+	public static void enableULinsteners(){
+		listenerExecutionDisabled = false;
+	}
+	public static void disableULinsteners(){
+		listenerExecutionDisabled = true;
 	}
 	
 	/**

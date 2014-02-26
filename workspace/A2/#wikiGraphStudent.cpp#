@@ -56,30 +56,30 @@ adjacencyList organizeList(list<Edge>& lst, int numberVertices){
 
 typedef map<int,WikiPage> idToWikiMap;
 
-// void printOrganized(adjacencyList& lst , idToWikiMap page_ofID ){
+void printOrganized(adjacencyList& lst , idToWikiMap page_ofID ){
 
-//     list<Edge> listOfEdges;
-//     for(int i = 0; i < lst.size(); i ++){
-// 	listOfEdges = lst.at(i);
-// 	cout << " page :" << page_ofID.at(i+1).title << endl; 
+    list<Edge> listOfEdges;
+    for(int i = 0; i < lst.size(); i ++){
+	listOfEdges = lst.at(i);
+	cout << " page :" << page_ofID.at(i+1).title << endl; 
 	
-// 	//iterate throught the e
-// 	list<Edge>::iterator it = listOfEdges.begin();
-// 	for(it; it != listOfEdges.end(); it++){
-// 	    if(it->origin == i+1){
-// 		cout << page_ofID.at(it->destination).title << ":" << it->weight;
-// 	    }
-// 	    else{
-// 		cout << page_ofID.at(it->origin).title << ":" << it->weight;
-// 	    }
+	//iterate throught the e
+	list<Edge>::iterator it = listOfEdges.begin();
+	for(it; it != listOfEdges.end(); it++){
+	    if(it->origin == i+1){
+		cout << page_ofID.at(it->destination).title << ":" << it->weight;
+	    }
+	    else{
+		cout << page_ofID.at(it->origin).title << ":" << it->weight;
+	    }
 
-// 	    if(it != listOfEdges.end()){
-// 		cout << ", ";
-// 	    }
-// 	}
-//     }
+	    if(it != listOfEdges.end()){
+		cout << ", ";
+	    }
+	}
+    }
 
-// }
+}
 
 
 

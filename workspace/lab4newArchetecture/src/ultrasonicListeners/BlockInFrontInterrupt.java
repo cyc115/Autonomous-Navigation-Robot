@@ -6,7 +6,9 @@ package ultrasonicListeners;
 import lejos.nxt.Motor;
 import lejos.nxt.Sound;
 import other.Lab5P2;
+import coreLib.Coordinate;
 import coreLib.Driver;
+import coreLib.Odometer;
 import coreLib.UltrasonicListener;
 import coreLib.UltrasonicPoller;
 
@@ -18,8 +20,8 @@ import coreLib.UltrasonicPoller;
  *
  */
 public class BlockInFrontInterrupt implements UltrasonicListener{
-	private int distanceOnInvoke = 20;
-	private boolean continuous = false ;
+	private int distanceOnInvoke = 30;
+	private boolean continuous = true ;
 	private boolean called = false ;
 	/**
 	 *  if the interrupt is running
@@ -34,23 +36,25 @@ public class BlockInFrontInterrupt implements UltrasonicListener{
 	 * also refer to the state diagram on page 151 
 	 * {@link  other.Lab5P2#action1 }
 	 * TODO fking link does not work ...
-	 */
+	 */	
 	public void ultrasonicDistance(int distanceFromObsticle) {
 		if (! running){
 			running = true ;
-			
-			Sound.beep();
-			try{Thread.sleep(500);} catch (Exception e){};
-			Sound.beep();
-			try{Thread.sleep(500);} catch (Exception e){};
-			Sound.beep();
+			called = true;
 			
 			//actions to do 
+			Driver.getInstance().motorStop();
+			try{Thread.sleep(500);} catch (Exception e){};
+			UltrasonicPoller.disableULinsteners();
+			//if the next waypoint is on a block (15 cm near)
+			if (new Coordinate(Odometer.getInstance().getX(),Odometer.getInstance().getY(),0).isNear(Lab5P2.getWayPoints().peek(),25)){
+				Lab5P2.getWayPoints().pop();
+			}
 			Lab5P2.action1(UltrasonicPoller.getInstance());
 				
 			running = false ;
-		}
 
+		}
 	}
 
 	@Override

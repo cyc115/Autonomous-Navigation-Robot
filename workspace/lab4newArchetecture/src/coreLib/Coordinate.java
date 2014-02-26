@@ -130,9 +130,17 @@ public class Coordinate extends Point{
 	 * @return true if c is near the given Coordination
 	 */
 	public boolean isNear(Coordinate c) {
+		
 		double deltaDist = (this.getX()-c.getX()) *(this.getX()-c.getX()) 
 				+ (this.getY()-c.getY()) *(this.getY()-c.getY()) ;
+		RConsole.println("is Near distance : " + deltaDist);
 		return deltaDist <= 10 ? true : false ;
 	}
-	
+
+	public boolean isNear(Coordinate c , int maxDist) {
+		double deltaDist = (this.getX()-c.getX()) *(this.getX()-c.getX()) 
+				+ (this.getY()-c.getY()) *(this.getY()-c.getY()) ;
+		RConsole.println("is Near distance : " + deltaDist);
+		return deltaDist <= maxDist ? true : false ;
+	}
 }

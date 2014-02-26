@@ -25,12 +25,17 @@ public class Lab5P2 {
 	private static ColorSensor cs = new ColorSensor(AbstractConfig.LIGHT_SENSOR_PORT);
 	private static Stack <Coordinate> wayPoints = new Stack<Coordinate>();
 	
+
+
+	private static LCDWriter lcd = LCDWriter.getInstance();
+	private static Odometer odo = Odometer.getInstance();
+	private static UltrasonicPoller usp = UltrasonicPoller.getInstance();
+	
+	private static boolean navigationInterrupted = false ;
+	
 	public static void main(String[] args) {
 		
-		LCDWriter lcd = LCDWriter.getInstance();
-		Odometer odo = Odometer.getInstance();
-		UltrasonicPoller usp = UltrasonicPoller.getInstance();
-		Driver driver = Driver.getInstance();
+
 		BlockInFrontInterrupt bifi = new BlockInFrontInterrupt();
 		bifi.setCalled(false).setContinuous(true).setDistanceOnInvoke(15);
 		driver.start();
@@ -51,28 +56,35 @@ public class Lab5P2 {
 			Sound.beep();
 			RConsole.println("dOnInv" + bifi.getDistanceOnInvoke() );
 		}
-
 		wayPoints.push(new Coordinate(60, 180, 0));
-		wayPoints.push(new Coordinate(0, 150, 0));
-		wayPoints.push(new Coordinate(60,90,0));
+		wayPoints.push(new Coordinate(0, 165, 0));
+		wayPoints.push(new Coordinate(60, 165, 0));
+		wayPoints.push(new Coordinate(60, 135, 0));
+		wayPoints.push(new Coordinate(0, 135, 0));
+		wayPoints.push(new Coordinate(0, 105, 0));
+		wayPoints.push(new Coordinate(60,105,0));
+		wayPoints.push(new Coordinate(60,60,0));
 		
 		while (!wayPoints.empty()){
-			driver.travelTo(wayPoints.peek());
-			/**
-			 * TODO during travelTo if we see a block, 
-			 * the avoidance code will execute. but the travelTo()
-			 * code is not stopped ... there's a conflict 
-			 * TODO change the forward() in Driver to use forward instead of rotateTo
-			 */
+			if (!navigationInterrupted){
+				driver.rotateToRelatively(45);
+				driver.rotateToRelatively(-90);
+				
+				driver.travelTo(wayPoints.peek());	
+			}
+			else {try {Thread.sleep(500);} catch (Exception e){}; }
+			
+			//if current location is near waypoint then consider it on dot and remove it 
 			if (wayPoints.peek().isNear(new Coordinate (odo.getX(),odo.getY(),0))){
 				wayPoints.pop();
 			}
 		}
 		
-		////////////////////
-		
+
+		config.setDriveComplete();
 		System.exit(0);
-		
+
+		////////////////////
 		atWayPoint();
 		
 		ArmMotor.open();
@@ -85,10 +97,11 @@ public class Lab5P2 {
 		
 		action1(usp);
 
-		
-		
-		
 		System.exit(0);
+	}
+	private static void atWayPoint() {
+		// TODO Auto-generated method stub
+		
 	}
 	/**
 	 * moves the robot to the item, checks if the item is 
@@ -101,14 +114,20 @@ public class Lab5P2 {
 	 * @param usp
 	 */
 	public static void action1(UltrasonicPoller usp) {
+		navigationInterrupted = true ;
+		
 		if (goToItemAndCheck(usp)){
+			cs.setFloodlight(false);
 			grab();
 			pushToCorner();	
 		}
 		else {
+			cs.setFloodlight(false);
 			backUp();
 			goToNextWayPoint();
 		}
+		
+		navigationInterrupted = false ;
 	}
 	
 	/**
@@ -119,10 +138,7 @@ public class Lab5P2 {
 			wayPoints.pop();
 		}
 	}
-	private static void atWayPoint() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	/**
 	 * goes to the item infront and check 
 	 * if it is a foam or brick
@@ -132,29 +148,13 @@ public class Lab5P2 {
 		boolean isFoam = false ;
 		
 		//go to item 
-		try {Thread.sleep(500);} catch(Exception e){};
 		driver.motorStop();
+		Sound.beep();
 		try {Thread.sleep(100);} catch(Exception e){};
-		driver.motorForward();
 		
-		while (true){
-			//move towards block
-			if (usp.getDistance() <= 11){
-				driver.motorStop();
-				
-				if (isStyrofoam()){
-					isFoam = true ;
-					break;
-				}
-				else { // !is styrofoam 
-					isFoam = false ;
-					break;
-				}
-			}
-			else{RConsole.println("dist:" +(usp.getDistance())+"");}
-			try {Thread.sleep(50);} catch(Exception e){};
-		}
+		isFoam = isStyrofoam();
 		return isFoam;
+		
 	}
 	private static void scanForItem(UltrasonicPoller usp,Odometer odo ) {
 		driver.rotateToRelatively(90, true);
@@ -170,12 +170,28 @@ public class Lab5P2 {
 		}
 	}
 	private static void backUp() {
-		driver.backward(15);
+		driver.backward(12);
 	}
 	private static void goToNextWayPoint() {
-		driver.backward(10);
+		int shift = 0 ;
+		if (odo.getX() > 45 ) {
+			shift = -25;
+			Sound.beep();
+			Sound.beep();
+			
+		}
+		else {
+			shift = 25;
+			Sound.beep();
+		}
+		wayPoints.push(new Coordinate(odo.getX() + shift, odo.getY() + Math.abs(shift) , 0 ) );
+		wayPoints.push(new Coordinate(odo.getX() + shift, odo.getY(), 0 ) );
+		
+		UltrasonicPoller.enableULinsteners();
+		navigationInterrupted = false ;
 	}
 	private static void grab() {
+		
 		driver.forward(5);
 		//close light 
 		cs.setFloodlight(false);
@@ -184,7 +200,6 @@ public class Lab5P2 {
 	private static void openArm() {
 		ArmMotor.open();
 	}
-
 
 	/**
 	 * return true if this is a styrofoam 
@@ -227,8 +242,8 @@ public class Lab5P2 {
 	}
 
 	private static void pushToCorner() {
-		driver.travelTo(30,90);
-		
+			clearStack();
+			wayPoints.push(new Coordinate (60,180,0));
 	}
 
 	private static void lookForBlock() {
@@ -308,6 +323,10 @@ public class Lab5P2 {
 		//clean up and unsbuscribe from uspoller 
 		LCDWriter.getInstance().writeToScreen(upoller.unsubscribe(loc)? "unsubscribed" : "error ", 1);;
 		
+	}
+	
+	public static Stack<Coordinate> getWayPoints() {
+		return wayPoints;
 	}
 }
 
