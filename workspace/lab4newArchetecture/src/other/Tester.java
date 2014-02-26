@@ -43,10 +43,10 @@ public class Tester {
 //		st.push(new Coordinate(60, 90, 0));
 //		st.push(new Coordinate(0, 60, 0));
 		
-		driver.travelTo(30,0);
-		driver.travelTo(30,30);
-		driver.travelTo(0,30);
-//		driver.travelTo(0,0);
+		driver.travelTo(60,0);
+		driver.travelTo(60,60);
+		driver.travelTo(0,60);
+		driver.travelTo(0,0);
 //		driver.travelTo(30,60);
 //		driver.travelTo(0,60);
 		

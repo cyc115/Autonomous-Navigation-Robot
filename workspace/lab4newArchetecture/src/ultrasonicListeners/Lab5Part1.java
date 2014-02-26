@@ -54,10 +54,10 @@ public class Lab5Part1 implements UltrasonicListener{
 			LCDWriter.getInstance().writeToScreen("B" +c.getBlue() , 6);
 			LCDWriter.getInstance().writeToScreen("R" +c.getRed() , 5);
 			LCDWriter.getInstance().writeToScreen("G" +c.getGreen() , 4);
-			if (c.getRed() < 10 || c.getBlue() <10 || c.getGreen() < 10 )
-				LCDWriter.getInstance().writeToScreen("nothing found", 2);
-			else 
+			if (c.getRed() >= 5 || c.getBlue() >= 5 )
 				LCDWriter.getInstance().writeToScreen((((double)c.getRed()/c.getBlue() >1.2) ? "brick" : "foam" ), 2);
+			else 
+				LCDWriter.getInstance().writeToScreen("nothing found", 2);
 			try{Thread.sleep(200);}catch(Exception e){};
 		}
 	}

@@ -31,7 +31,6 @@ public class Odometer extends Thread {
 		lock = new Object();
 		lMotor = Configuration.LEFT_MOTOR;
 		rMotor = Configuration.RIGHT_MOTOR;
-		
 		cCoord = config.getCurrentLocation();
 	}
 
@@ -83,7 +82,9 @@ public class Odometer extends Thread {
 					setY(getY() + deltaY);
 					setTheta(currentTheta + deltaTheta);
 				}
-			
+				
+				LCDWriter.getInstance().writeToScreen(cCoord.toString(), 2);
+				
 			// this ensures that the odometer only runs once every period
 			updateEnd = System.currentTimeMillis();
 			if (updateEnd - updateStart < UPDATE_PERIOD) {
@@ -130,7 +131,11 @@ public class Odometer extends Thread {
 
 		return result;
 	}
-
+	
+	/**
+	 * 
+	 * @return theta in Rad
+	 */
 	public double getTheta() {
 		double result;
 

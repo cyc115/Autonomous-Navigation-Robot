@@ -23,6 +23,7 @@ public class Driver extends Thread{
 	 * set by motorStop and motorForward
 	 */
 	private boolean motorStopped = true ;
+
 	private boolean termianteActions = false;
 	
 	/**
@@ -90,6 +91,8 @@ public class Driver extends Thread{
 	 * @param dist
 	 */
 	public void forward(double dist){
+		motorStopped = false ;
+		
 //		here is better 
 		int currentT = AbstractConfig.LEFT_MOTOR.getTachoCount();
 		double rotations = dist/ (2*Math.PI*(+ AbstractConfig.RIGHT_RADIUS)) ;
@@ -102,6 +105,7 @@ public class Driver extends Thread{
 			RConsole.println("current Tacho " + AbstractConfig.LEFT_MOTOR.getTachoCount() );
 			try{Thread.sleep(20);} catch (Exception e){};
 		}
+		
 		motorStop();
 	}
 	
@@ -110,6 +114,7 @@ public class Driver extends Thread{
 	 * @param dist
 	 */
 	public void backward(double dist){
+		
 		RConsole.println("BackWard" );
 		int currentT = AbstractConfig.LEFT_MOTOR.getTachoCount();
 		double rotations = dist/ (2*Math.PI*(+ AbstractConfig.RIGHT_RADIUS)) ;
@@ -143,19 +148,23 @@ public class Driver extends Thread{
 	 * @param returnRightAway should the function finish before finishing the turn 
 	 */
 	public void rotateToRelatively(double degree, boolean returnRightAway){
-
+		
+		motorStopped = false;
 		rightMotor.setSpeed(AbstractConfig.getInstance().getRotationSpeed());
 		leftMotor.setSpeed(AbstractConfig.getInstance().getRotationSpeed());
 	        if (degree < 0){		//if degree is negative then rotate back ward
 	        	motorBackward();
 	        }
+	        //set flage to indicate motor is running 
+	        motorStopped = false ;
+	        
 	        leftMotor.rotate(
 	        	convertAngle(AbstractConfig.LEFT_RADIUS, AbstractConfig.WIDTH, degree)
 	        	, true);
 	        rightMotor.rotate(
 	        	-convertAngle(AbstractConfig.RIGHT_RADIUS,AbstractConfig.WIDTH , degree)
 	        	, returnRightAway);
-	        
+	        //set flage to true 
 	        motorStop();
 	}
 	
@@ -206,6 +215,10 @@ public class Driver extends Thread{
 		motorStopped = false ;
 		AbstractConfig.LEFT_MOTOR.backward();
 		AbstractConfig.RIGHT_MOTOR.backward();
+	}
+	
+	public boolean isMotorStopped() {
+		return motorStopped;
 	}
 	public void motorStop(){
 		motorStopped = true ;

@@ -25,8 +25,6 @@ public class Lab5P2 {
 	private static ColorSensor cs = new ColorSensor(AbstractConfig.LIGHT_SENSOR_PORT);
 	private static Stack <Coordinate> wayPoints = new Stack<Coordinate>();
 	
-
-
 	private static LCDWriter lcd = LCDWriter.getInstance();
 	private static Odometer odo = Odometer.getInstance();
 	private static UltrasonicPoller usp = UltrasonicPoller.getInstance();
@@ -37,7 +35,7 @@ public class Lab5P2 {
 		
 
 		BlockInFrontInterrupt bifi = new BlockInFrontInterrupt();
-		bifi.setCalled(false).setContinuous(true).setDistanceOnInvoke(15);
+		bifi.setCalled(false).setContinuous(true);
 		driver.start();
 		lcd.start();
 		odo.start();
@@ -67,9 +65,7 @@ public class Lab5P2 {
 		
 		while (!wayPoints.empty()){
 			if (!navigationInterrupted){
-				driver.rotateToRelatively(45);
-				driver.rotateToRelatively(-90);
-				
+				scanAtWayPoint();
 				driver.travelTo(wayPoints.peek());	
 			}
 			else {try {Thread.sleep(500);} catch (Exception e){}; }
@@ -99,6 +95,13 @@ public class Lab5P2 {
 
 		System.exit(0);
 	}
+	/**
+	 * Scan for block or foam at the waypoint 
+	 */
+	private static void scanAtWayPoint() {
+		if (!navigationInterrupted)	driver.rotateToRelatively(30);
+		if (!navigationInterrupted) driver.rotateToRelatively(-60);
+	}
 	private static void atWayPoint() {
 		// TODO Auto-generated method stub
 		
@@ -115,6 +118,8 @@ public class Lab5P2 {
 	 */
 	public static void action1(UltrasonicPoller usp) {
 		navigationInterrupted = true ;
+		driver.motorStop();
+		
 		
 		if (goToItemAndCheck(usp)){
 			cs.setFloodlight(false);
@@ -140,15 +145,34 @@ public class Lab5P2 {
 	}
 	
 	/**
-	 * goes to the item infront and check 
+	 * goes to the item and stop infront of it. beep and stop motor 
+	 * then execute isStyrofoam()
 	 * if it is a foam or brick
 	 * @return true if is froam
 	 */
 	private static boolean goToItemAndCheck(UltrasonicPoller usp) {
 		boolean isFoam = false ;
-		
 		//go to item 
 		driver.motorStop();
+		
+		//TODO revert this
+		//make scan for the center of the brick 
+		driver.setSpeed(100);
+		driver.rotateToRelatively(-30);
+		driver.rotateToRelatively(60,true);
+		int cDist = usp.getDistance(), pDist = cDist; 
+				
+		while( cDist >= pDist && !driver.isMotorStopped()){
+			pDist = cDist ;
+			cDist = usp.getDistance();
+			
+			try{Thread.sleep(10);} catch (Exception e){};
+		}
+		driver.motorStop();
+
+		//move 5 cm to get closer to the block 
+		driver.forward(5);
+		
 		Sound.beep();
 		try {Thread.sleep(100);} catch(Exception e){};
 		
@@ -191,8 +215,8 @@ public class Lab5P2 {
 		navigationInterrupted = false ;
 	}
 	private static void grab() {
-		
-		driver.forward(5);
+		driver.motorStop();
+		try {Thread.sleep(200);} catch(Exception e){};
 		//close light 
 		cs.setFloodlight(false);
 		ArmMotor.close();
@@ -212,26 +236,33 @@ public class Lab5P2 {
 		cs.setFloodlight(true);
 		try{Thread.sleep(500);}catch(Exception e){};
 		Color c = cs.getColor();
-		
+
+		driver.motorStop();
+		int numberOfFalseDetection = 0 ;
 		while (!found){
 			int r = c.getRed();
 			int g = c.getGreen();
 			int b = c.getBlue();
-			if (c.getRed() < 10 || b <10 || b < 10 ){
-				LCDWriter.getInstance().writeToScreen("nothing found", 2);
-			}
-
-			else if ((double)c.getRed()/c.getBlue() >1.2){
+			
+			if(r >=5 && b >= 5){
 				RConsole.println("RGB" + r + "\t" + g + "\t" + b);
-				found = true ;
-				isStyrofoam = false ;
-				break ;
-			}
+				if ( r/(double)b > 1.2){
+					found = true ;
+					isStyrofoam = false ;
+					break ;
+				} else {
+					found = true;
+					isStyrofoam = true ;
+					break;
+				}
+			} 
 			else {
-				RConsole.println("RGB" + r + "\t" + g + "\t" + b);
-				found = true;
-				isStyrofoam = true ;
-				break;
+				LCDWriter.getInstance().writeToScreen("nothing found", 2);
+				if (numberOfFalseDetection > 20){
+					numberOfFalseDetection = 0 ;
+					driver.forward(5);
+				}
+				numberOfFalseDetection ++ ;
 			}
 			LCDWriter.getInstance().writeToScreen((((double)r/b >1.2) ? 
 					"br" : "fo" ) + r + " " + g, 2);

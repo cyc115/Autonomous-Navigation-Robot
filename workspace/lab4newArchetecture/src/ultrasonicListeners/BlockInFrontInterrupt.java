@@ -20,7 +20,7 @@ import coreLib.UltrasonicPoller;
  *
  */
 public class BlockInFrontInterrupt implements UltrasonicListener{
-	private int distanceOnInvoke = 30;
+	private int distanceOnInvoke = 18;
 	private boolean continuous = true ;
 	private boolean called = false ;
 	/**
@@ -39,21 +39,28 @@ public class BlockInFrontInterrupt implements UltrasonicListener{
 	 */	
 	public void ultrasonicDistance(int distanceFromObsticle) {
 		if (! running){
+			Sound.beep();
+			Sound.beep();
+			Sound.beep();
 			running = true ;
 			called = true;
-			
-			//actions to do 
+			//stop another instance of USListener from being called 
+			UltrasonicPoller.disableULinsteners();
+
+			//stop the motor 
 			Driver.getInstance().motorStop();
 			try{Thread.sleep(500);} catch (Exception e){};
-			UltrasonicPoller.disableULinsteners();
-			//if the next waypoint is on a block (15 cm near)
-			if (new Coordinate(Odometer.getInstance().getX(),Odometer.getInstance().getY(),0).isNear(Lab5P2.getWayPoints().peek(),25)){
+			
+			//if the next waypoint is on a block (25 cm near) then remove this waypoint and move to the next 
+			int tolerance = 42; 
+			if (new Coordinate(Odometer.getInstance().getX(),Odometer.getInstance().getY(),0)
+								.isNear(Lab5P2.getWayPoints().peek(),tolerance)){
 				Lab5P2.getWayPoints().pop();
 			}
+			
 			Lab5P2.action1(UltrasonicPoller.getInstance());
 				
 			running = false ;
-
 		}
 	}
 
