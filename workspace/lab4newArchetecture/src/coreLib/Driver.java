@@ -5,8 +5,8 @@ import lejos.nxt.comm.RConsole;
 
 /**
  * driver class that has the control of motor 
- * TODO solve the movement conflicts  with two calls to different movement 
  * @author yuechuan
+ * @version 1.8 
  *
  */
 public class Driver extends Thread{
@@ -15,19 +15,24 @@ public class Driver extends Thread{
 	private NXTRegulatedMotor leftMotor= AbstractConfig.LEFT_MOTOR , 
 								rightMotor = AbstractConfig.RIGHT_MOTOR;
 
+	
 	private static Driver instance ;
-	private Object lock ;
 	private Odometer odo = Odometer.getInstance();
+	/**
+	 * lock is not used because it causes a lejos bug... 
+	 */
+	private Object lock ;
+	
 	/**
 	 * indicate if the motor is running or not.
 	 * set by motorStop and motorForward
 	 */
 	private boolean motorStopped = true ;
 
-	private boolean termianteActions = false;
-	
 	/**
-	 * do not use this to initialize another instance. only used for extension 
+	 * do not use this to initialize another instance. only used for extension.
+	 * use getInstance to either generate a new instance on the fly or get the previously
+	 * generated instance 
 	 * @param config
 	 */
 	@Deprecated
@@ -38,8 +43,10 @@ public class Driver extends Thread{
 		endCoord = config.getStartLocation();
 	}
 	
-	
-	
+	/**
+	 * 
+	 * @return an instance of Driver 
+	 */
 	public static Driver getInstance(){
 		if (instance == null){
 			instance = new Driver(AbstractConfig.getInstance());
@@ -47,8 +54,13 @@ public class Driver extends Thread{
 		return instance;
 	}
 
+	/**
+	 * overloaded version of <br> {@code travelTo(new Coordinate(x, y, 0));			}
+	 * @param x
+	 * @param y
+	 */
 	public void travelTo(int x, int y){
-			travelTo(new Coordinate(x, y, 0));			
+		travelTo(new Coordinate(x, y, 0));			
 	}
 	
 	/**
@@ -62,7 +74,7 @@ public class Driver extends Thread{
 	public void travelTo(Coordinate nextLocation) {
 		Coordinate currentLoc  = new Coordinate(odo.getX(), odo.getY(), odo.getTheta());
 		config.setNextLocation(nextLocation);
-		config.setStartLocation(currentLoc.clone());
+		config.setStartLocation(currentLoc.copy());
 		
 		double distance = Coordinate.calculateDistance(currentLoc, nextLocation);
 		double turningAngle = Coordinate.calculateRotationAngle(currentLoc, nextLocation);
@@ -93,7 +105,6 @@ public class Driver extends Thread{
 	public void forward(double dist){
 		motorStopped = false ;
 		
-//		here is better 
 		int currentT = AbstractConfig.LEFT_MOTOR.getTachoCount();
 		double rotations = dist/ (2*Math.PI*(+ AbstractConfig.RIGHT_RADIUS)) ;
 		RConsole.println("rotations" + rotations );
@@ -128,8 +139,8 @@ public class Driver extends Thread{
 			try{Thread.sleep(20);} catch (Exception e){};
 		}
 		motorStop();
-		
 	}
+	
 	/**
 	 * rotate to the angle wrt to the current robot angle.
 	 * the method will only finish after rotating is over.
@@ -217,9 +228,16 @@ public class Driver extends Thread{
 		AbstractConfig.RIGHT_MOTOR.backward();
 	}
 	
+	/**
+	 * check if motor is stopped 
+	 * @return
+	 */
 	public boolean isMotorStopped() {
 		return motorStopped;
 	}
+	/**
+	 * stop motor 
+	 */
 	public void motorStop(){
 		motorStopped = true ;
 		RConsole.println("Motor Stopped");

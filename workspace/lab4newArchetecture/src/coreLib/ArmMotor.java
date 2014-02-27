@@ -3,24 +3,24 @@ package coreLib;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.Sound;
 
+/**
+ * this class is used to move the arm to grab object 
+ * @author yuechuan
+ *	@version 1.1
+ */
 public class ArmMotor {
 	private static AbstractConfig config ;
 	public static final NXTRegulatedMotor ARM_M= AbstractConfig.SENSOR_MOTOR;
 	static int movementDeg = 180 ;
 	private static boolean isOpen = true ;
-	//	private static ArmMotor arm = null;
 	
 	private ArmMotor(AbstractConfig conf){
 		config = conf;
 	}
-//	public ArmMotor getInstance(){
-//		if (arm == null ){
-//			arm = new ArmMotor(AbstractConfig.getInstance());
-//		}
-//		return arm ;
-//	}
-	
 
+	/**
+	 * open arm 
+	 */
 	public static void open(){
 		Sound.beep();
 		if(!isOpen){
@@ -28,6 +28,9 @@ public class ArmMotor {
 			isOpen = true;
 		}
 	}
+	/**
+	 * close arm 
+	 */
 	public static void close (){
 		Sound.beep();
 		if (isOpen){

@@ -13,6 +13,11 @@ import coreLib.LCDWriter;
 import coreLib.Odometer;
 import coreLib.UltrasonicPoller;
 
+/**
+ * test class used to calibrate the odometer and the wheels 
+ * @author yuechuan
+ *	@version 1.3
+ */
 public class Tester {
 	private static AbstractConfig config = Configuration.getInstance();
 	

@@ -9,19 +9,36 @@ import coreLib.UltrasonicPoller;
 import lejos.nxt.Button;
 import lejos.nxt.ColorSensor;
 import lejos.robotics.Color;
-
+/**
+ * lab 5 part 1, this class is a ultrasnicListener and 
+ * can subscribe to the ultrasonic poller. see the UltrasonicListener 
+ * interface for more information. 
+ * 
+ * @version 1.1 
+ * @date 22 -02 - 14
+ * @author yuechuan
+ *
+ */
 public class Lab5Part1 implements UltrasonicListener{
 	//following 3 vars are used for UltrasonicListeners
 	private int distanceOnInvoke;
 	private boolean continuous;
 	private boolean called ;
-
+	
+	/**
+	 * 
+	 * @param distanceOnInvoke
+	 * @param called
+	 */
 	public Lab5Part1(int distanceOnInvoke , boolean called ) {
 		this.distanceOnInvoke = distanceOnInvoke;
 		this.called = called;
 	}
 	
-	
+	/**
+	 * main class 
+	 * @param args
+	 */
 	public static void main(String [] args){
 		AbstractConfig config = Configuration.getInstance();
 		UltrasonicPoller uspoller = UltrasonicPoller.getInstance();
@@ -61,29 +78,29 @@ public class Lab5Part1 implements UltrasonicListener{
 			try{Thread.sleep(200);}catch(Exception e){};
 		}
 	}
-	
+	@Override
 	public int getDistanceOnInvoke() {
 		return distanceOnInvoke;
 	}
-
+	@Override
 	public UltrasonicListener setDistanceOnInvoke(int distanceOnInvoke) {
 		this.distanceOnInvoke = distanceOnInvoke;
 		return this;
 	}
-
+	@Override
 	public boolean isContinuous() {
 		return continuous;
 	}
-
+	@Override
 	public UltrasonicListener setContinuous(boolean continuous) {
 		this.continuous = continuous;
 		return this;
 	}
-
+	@Override
 	public boolean isCalled() {
 		return called;
 	}
-
+	@Override
 	public UltrasonicListener setCalled(boolean called) {
 		this.called = called;
 		return this;

@@ -4,7 +4,11 @@ package coreLib;
 import java.util.LinkedList;
 
 import lejos.nxt.ColorSensor;
-
+/**
+ * this is used to read line from the grund with the colorReader
+ * @author yuechuan
+ *	@version 1.3
+ */
 public class LineReader extends Thread{
 	private ColorSensor colorSensor; 
 	private AbstractConfig config;
@@ -13,7 +17,6 @@ public class LineReader extends Thread{
 	private long sensorStartTime;
 	
 	private static LineReader lineReader ;
-	private static boolean threadStarted;
 
 	/**
 	 * contains a list of classes to call when a line is detected. A
@@ -35,7 +38,6 @@ public class LineReader extends Thread{
 	}
 
 	public void run (){
-		threadStarted = true;
 		colorSensor.setFloodlight(true);
 		
 		previousSensedValue = currentSensedValue = colorSensor.getLightValue();
@@ -137,15 +139,5 @@ public class LineReader extends Thread{
 		
 		return result ; 
 	}
-	
-	
-	public static boolean isThreadStarted() {
-		return threadStarted;
-	}
 
-	public static void setThreadStarted(boolean threadStarted) {
-		LineReader.threadStarted = threadStarted;
-	}
-
-	
 }

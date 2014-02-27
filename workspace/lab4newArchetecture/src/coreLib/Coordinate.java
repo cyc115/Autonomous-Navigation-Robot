@@ -6,6 +6,7 @@ import lejos.nxt.comm.RConsole;
 /**
  * location x , y and theata in degrees 
  * @author yuechuan
+ * @version 1.7
  *
  */
 public class Coordinate extends Point{
@@ -28,16 +29,16 @@ public class Coordinate extends Point{
 		this.theta = position;
 		return this;
 	}
-	
-	
 
 	@Override
 	public String toString() {
 		return "t" + String.valueOf(Math.toDegrees(getTheta())).substring(0, 3) + ",X" + String.valueOf(getX()).substring(0, 3) 
 				+ ",Y" + String.valueOf(getY()).substring(0, 3);
 	}
-	
-
+	/**
+	 * returns a more precise string representation of the x y and theata values, this is optimized for Rconsole
+	 * @return
+	 */
 	public String toString2() {
 		return "t" + String.valueOf(Math.toDegrees(getTheta())) + ",X" + String.valueOf(getX())
 				+ ",Y" + String.valueOf(getY());
@@ -76,7 +77,6 @@ public class Coordinate extends Point{
 		else if (dX < 0){
 			if (dY >= 0)
 				result +=(Math.atan(dX/dY) * 180 /Math.PI) ;
-//			result +=(-(Math.atan(dX/dY) * 180 /Math.PI) -90);
 			else //(dY <=0)
 				result +=(-90-(Math.atan(dY/dX) * 180 /Math.PI));
 		}
@@ -115,12 +115,20 @@ public class Coordinate extends Point{
 		}
 		return normalized;
 	}
-	
-	public double calcSlop(Coordinate c){
+	/**
+	 * calculate the slop of this coordiante and given coordinate 
+	 * @param c
+	 * @deprecated unmaintained 
+	 * @return
+	 */
+	private double calcSlop(Coordinate c){
 		return (c.getY() - this.getY()) / (c.getX() - this.getX());
 	}
 	
-	public Coordinate clone(){
+	/**
+	 * copy the coordinate, this is used as a simple clone method 
+	 */
+	public Coordinate copy(){
 		return new Coordinate(this.getX(),this.getY() , this.getTheta());
 	}
 	
@@ -136,7 +144,9 @@ public class Coordinate extends Point{
 		RConsole.println("is Near distance : " + deltaDist);
 		return deltaDist <= 10 ? true : false ;
 	}
-
+	/**
+	 *  @return true if c is near current location at a maximum of maxDist 
+	 */
 	public boolean isNear(Coordinate c , int maxDist) {
 		double deltaDist = (this.getX()-c.getX()) *(this.getX()-c.getX()) 
 				+ (this.getY()-c.getY()) *(this.getY()-c.getY()) ;

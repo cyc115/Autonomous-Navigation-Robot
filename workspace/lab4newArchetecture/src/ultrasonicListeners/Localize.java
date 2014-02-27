@@ -7,9 +7,10 @@ import coreLib.UltrasonicListener;
 import lejos.nxt.comm.RConsole;
 
 /**
- * TODO no idea who uses this ... 
- * host a public method that does the localization
+ * This class hosts a public method that does the localization. 
+ * an instance of this class is used in the lab5 part 2 
  * @author yuechuan
+ * @version 1.2
  *
  */
 public class Localize implements UltrasonicListener{
@@ -19,6 +20,7 @@ public class Localize implements UltrasonicListener{
 	private boolean called ;
 	double angle1 , angle2 , middle ;
 	boolean secondAngle = false ;	// if this is called a second time then turn back 
+
 	Driver driver = Driver.getInstance();
 	
 	public Localize(int distanceOnInvoke , boolean continuous){

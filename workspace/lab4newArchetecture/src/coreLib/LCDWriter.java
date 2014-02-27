@@ -2,7 +2,12 @@ package coreLib;
 
 
 import lejos.nxt.LCD;
-
+/**
+ * high abstraction to facilate writing to LCD
+ * @author yuechuan
+ * @version 1.2 
+ *
+ */
 public class LCDWriter extends Thread {
 	private static final long DISPLAY_PERIOD = 250;
 	private AbstractConfig config;
@@ -19,14 +24,16 @@ public class LCDWriter extends Thread {
 			s[i] = "";
 		}
 	}
-	
+	/**
+	 * return an instance of LCDWriter
+	 * @return
+	 */
 	public static LCDWriter getInstance (){
 		if (lcd == null){
 			lcd = new LCDWriter(AbstractConfig.getInstance());
 		}
 		return lcd;
 	}
-	
 	
 	public void run(){
 		threadStarted = true;
@@ -52,12 +59,18 @@ public class LCDWriter extends Thread {
 			}
 		}
 	}
+	/**
+	 * write to screen on line lineNumber , first line is 0
+	 * @param str
+	 * @param lineNumber
+	 */
 	public void writeToScreen(String str, int lineNumber) {
 		synchronized (lock){
 			s[lineNumber] = ""+str;
 		}
 
 	}
+	
 	protected static String formattedDoubleToString(double x, int places) {
 		String result = "";
 		String stack = "";

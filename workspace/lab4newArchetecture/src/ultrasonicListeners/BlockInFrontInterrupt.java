@@ -38,27 +38,18 @@ public class BlockInFrontInterrupt implements UltrasonicListener{
 	 * TODO fking link does not work ...
 	 */	
 	public void ultrasonicDistance(int distanceFromObsticle) {
-		if (! running){
-			Sound.beep();
-			Sound.beep();
-			Sound.beep();
+		if (!running){
 			running = true ;
 			called = true;
 			//stop another instance of USListener from being called 
 			UltrasonicPoller.disableULinsteners();
-
 			//stop the motor 
 			Driver.getInstance().motorStop();
 			try{Thread.sleep(500);} catch (Exception e){};
-			
-			//if the next waypoint is on a block (25 cm near) then remove this waypoint and move to the next 
-			int tolerance = 42; 
-			if (new Coordinate(Odometer.getInstance().getX(),Odometer.getInstance().getY(),0)
-								.isNear(Lab5P2.getWayPoints().peek(),tolerance)){
-				Lab5P2.getWayPoints().pop();
-			}
-			
-			Lab5P2.action1(UltrasonicPoller.getInstance());
+
+			Driver.getInstance().motorStop();
+			try{Thread.sleep(500);} catch (Exception e){};
+			Lab5P2.detection(UltrasonicPoller.getInstance());
 				
 			running = false ;
 		}
